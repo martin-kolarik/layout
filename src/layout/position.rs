@@ -245,7 +245,7 @@ impl Add<&Size> for &Offset {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Quad {
     top: Option<Unit>,
     left: Option<Unit>,
@@ -363,10 +363,10 @@ impl Quad {
             offset.y_advance(self.top_size());
         }
         if let Some(size) = size {
-            if !size.x_dim().is_content() {
+            if size.x_dim().is_resolved() {
                 size.set_width(size.width() - self.width());
             }
-            if !size.y_dim().is_content() {
+            if size.y_dim().is_resolved() {
                 size.set_height(size.height() - self.height());
             }
         }
@@ -378,8 +378,12 @@ impl Quad {
             offset.y_advance(Unit::zero() - self.top_size());
         }
         if let Some(size) = size {
-            size.set_width(size.width() + self.width());
-            size.set_height(size.height() + self.height());
+            if size.x_dim().is_resolved() {
+                size.set_width(size.width() + self.width());
+            }
+            if size.y_dim().is_resolved() {
+                size.set_height(size.height() + self.height());
+            }
         }
     }
 }

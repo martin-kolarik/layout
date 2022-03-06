@@ -1,12 +1,20 @@
 use oklab::{oklab_to_srgb, srgb_to_oklab, Oklab, RGB};
 use rgb::RGBA;
 
-#[derive(Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Rgba(RGBA<u8, f32>);
 
 impl Rgba {
     pub fn black() -> &'static Rgba {
         &BLACK
+    }
+
+    pub fn gray_50() -> &'static Rgba {
+        &GRAY_50
+    }
+
+    pub fn gray_75() -> &'static Rgba {
+        &GRAY_75
     }
 
     pub fn white() -> &'static Rgba {
@@ -83,6 +91,20 @@ static BLACK: Rgba = Rgba(RGBA {
     r: 0,
     g: 0,
     b: 0,
+    a: 1.0,
+});
+
+static GRAY_50: Rgba = Rgba(RGBA {
+    r: 128,
+    g: 128,
+    b: 128,
+    a: 1.0,
+});
+
+static GRAY_75: Rgba = Rgba(RGBA {
+    r: 192,
+    g: 192,
+    b: 192,
     a: 1.0,
 });
 

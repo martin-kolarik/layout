@@ -1,6 +1,7 @@
 use rtext::Apply;
 
 use crate::{
+    dimension::{DimAutoOrParent, DimOrParent},
     position::{Offset, Size},
     unit::{Fill, Unit},
     Axis, ChildrenIterator, Error, Layout, LayoutBox, MeasureContext, Position, RenderContext,
@@ -32,17 +33,17 @@ impl DecoratedBox {
         self
     }
 
-    pub fn size(mut self, size: impl Into<Unit>) -> Self {
+    pub fn size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
         self.inner.axis().dim_mut(&mut self.size).set_basis(size);
         self
     }
 
-    pub fn min(mut self, size: impl Into<Unit>) -> Self {
+    pub fn min(mut self, size: impl Into<DimOrParent>) -> Self {
         self.inner.axis().dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn max(mut self, size: impl Into<Unit>) -> Self {
+    pub fn max(mut self, size: impl Into<DimOrParent>) -> Self {
         self.inner.axis().dim_mut(&mut self.size).set_max(size);
         self
     }
@@ -62,7 +63,7 @@ impl DecoratedBox {
         self
     }
 
-    pub fn cross_size(mut self, size: impl Into<Unit>) -> Self {
+    pub fn cross_size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
         self.inner
             .axis()
             .cross()
@@ -71,7 +72,7 @@ impl DecoratedBox {
         self
     }
 
-    pub fn cross_min(mut self, size: impl Into<Unit>) -> Self {
+    pub fn cross_min(mut self, size: impl Into<DimOrParent>) -> Self {
         self.inner
             .axis()
             .cross()
@@ -80,7 +81,7 @@ impl DecoratedBox {
         self
     }
 
-    pub fn cross_max(mut self, size: impl Into<Unit>) -> Self {
+    pub fn cross_max(mut self, size: impl Into<DimOrParent>) -> Self {
         self.inner
             .axis()
             .cross()
@@ -185,10 +186,15 @@ impl Styled for DecoratedBox {
     fn adopt_parent_style(&mut self, parent: &Style) {
         self.inner.adopt_parent_style(parent);
     }
+
+    fn override_style(&mut self, with: &Style) {
+        self.inner.override_style(with);
+    }
 }
 
 impl Layout for DecoratedBox {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, available: Size) -> Result<(), Error> {
+        self.inner.take_over_position(self.offset.clone(), self.size.clone());
         self.inner.measure(ctx, available)?;
 
         let mut native_size = self.inner.native_size().cloned().unwrap_or_else(Size::zero);

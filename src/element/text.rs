@@ -18,7 +18,7 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn with_mark(mut self, mark: &'static str) -> Self {
+    pub fn mark(mut self, mark: &'static str) -> Self {
         self.mark = Some(mark);
         self
     }
@@ -176,9 +176,9 @@ mod tests {
 
     #[test]
     fn text_in_hbox_in_hbox() {
-        let t1 = DefaultFactory::text("a").with_mark("t1");
-        let t2 = DefaultFactory::text("b").with_mark("t2");
-        let t3 = DefaultFactory::text("c").with_mark("t3");
+        let t1 = DefaultFactory::text("a").mark("t1");
+        let t2 = DefaultFactory::text("b").mark("t2");
+        let t3 = DefaultFactory::text("c").mark("t3");
 
         let mut hbox = DefaultFactory::hbox().mark("h1").child(
             DefaultFactory::hbox()

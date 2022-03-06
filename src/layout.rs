@@ -38,6 +38,7 @@ pub trait Styled {
     fn style_ref(&self) -> &Style;
     fn set_style(&mut self, style: Style);
     fn adopt_parent_style(&mut self, parent: &Style);
+    fn override_style(&mut self, with: &Style);
 }
 
 #[allow(unused_variables)]
@@ -156,6 +157,10 @@ macro_rules! styled {
 
             fn adopt_parent_style(&mut self, parent: &$crate::Style) {
                 self.style = self.style.merge(parent);
+            }
+
+            fn override_style(&mut self, with: &$crate::Style) {
+                self.style = with.merge(&self.style);
             }
         }
     };

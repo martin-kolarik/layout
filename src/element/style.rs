@@ -5,7 +5,7 @@ use crate::{
     Features, Rgba, Styled,
 };
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum AlignItems {
     Start,
     Baseline,
@@ -19,7 +19,7 @@ impl Default for AlignItems {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Font {
     name: &'static str,
     size: Pt,
@@ -60,7 +60,7 @@ impl Font {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Stroke {
     color: Rgba,
     thickness: Pt,
@@ -93,7 +93,7 @@ impl Stroke {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Border {
     top: Option<Stroke>,
     left: Option<Stroke>,
@@ -193,7 +193,7 @@ impl Border {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Style {
     font: Option<Font>,
     color: Option<Rgba>,
@@ -484,5 +484,9 @@ impl Styled for Style {
 
     fn adopt_parent_style(&mut self, parent: &Style) {
         *self = self.merge(parent);
+    }
+
+    fn override_style(&mut self, with: &Style) {
+        *self = with.merge(self);
     }
 }

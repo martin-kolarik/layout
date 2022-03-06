@@ -316,6 +316,10 @@ impl Dimension {
         self.is_content() || self.is_dyn()
     }
 
+    pub fn is_resolved(&self) -> bool {
+        self.basis.is_resolved()
+    }
+
     pub fn basis(&self) -> &DimAutoOrParent {
         &self.basis
     }
