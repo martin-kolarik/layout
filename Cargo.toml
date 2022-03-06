@@ -1,0 +1,24 @@
+[package]
+name = "layout"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["color", "layout"]
+color = ["oklab", "rgb", "ufmt"]
+layout = ["allsorts", "printpdf", "rtext", "thiserror"]
+
+[dependencies]
+rtext = { path = "../rtext", optional = true }
+
+oklab = { version = "^1.0", optional = true }
+rgb = { version = "^0.8", default-features = false, features = [
+    "argb",
+], optional = true }
+
+allsorts = { version = "^0.7", optional = true }
+printpdf = { version = "^0.5", optional = true }
+thiserror = { version = "^1.0", optional = true }
+ufmt = { version = "^0.1", features = [
+    "std",
+], default-features = false, optional = true }
