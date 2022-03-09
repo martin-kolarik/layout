@@ -26,7 +26,7 @@ impl LayoutBox {
             mark: None,
             axis,
             offset: Offset::zero(),
-            size: Size::new_auto(),
+            size: Size::none(),
             style: Style::new().with_align_items(if matches!(axis, Axis::Horizontal) {
                 AlignItems::Baseline
             } else {
@@ -117,26 +117,22 @@ impl LayoutBox {
         self.child_box(Box::new(child))
     }
 
-    pub fn children<L, IL, IIL>(mut self, children: IIL) -> Self
+    pub fn children<L, IL, IIL>(self, children: IIL) -> Self
     where
         IIL: IntoIterator<Item = IL>,
         IL: Into<L>,
         L: Layout + 'static,
     {
-        let children = children
-            .into_iter()
-            .map(|child| {
-                let mut child: Box<dyn Layout> = Box::new(child.into());
-                child.adopt_parent_style(self.style_ref());
-                child
-            })
-            .collect::<Vec<_>>();
-        self.children.extend(children);
-        self
+        self.children_box(children.into_iter().map(|child| {
+            let child: Box<dyn Layout> = Box::new(child.into());
+            child
+        }))
     }
 
     pub fn child_box(mut self, mut child: Box<dyn Layout>) -> Self {
-        child.adopt_parent_style(self.style_ref());
+        let style = child.style_ref().merge(self.style_ref());
+        child.size_mut().apply_style(self.axis, &style);
+        child.set_style(style);
         self.children.push(child);
         self
     }
@@ -148,7 +144,9 @@ impl LayoutBox {
         let children = children
             .into_iter()
             .map(|mut child| {
-                child.adopt_parent_style(self.style_ref());
+                let style = child.style_ref().merge(self.style_ref());
+                child.size_mut().apply_style(self.axis, &style);
+                child.set_style(style);
                 child
             })
             .collect::<Vec<_>>();
@@ -217,33 +215,37 @@ impl Position for LayoutBox {
 styled!(LayoutBox);
 
 impl Layout for LayoutBox {
-    fn measure(&mut self, ctx: &mut dyn MeasureContext, room: Size) -> Result<(), Error> {
-        if self.children.is_empty() {
-            return Ok(());
-        }
+    fn measure(&mut self, ctx: &mut dyn MeasureContext, mut room: Size) -> Result<(), Error> {
+        self.style_ref().padding().narrow(None, Some(&mut room));
 
         let axis = self.axis;
-        let given_axis_room = axis.size(&room);
-        let axis_room = axis.dim(&self.size).size_available(given_axis_room);
-        self.children
-            .iter_mut()
-            .for_each(|child| axis.dim_mut(child.size_mut()).resolve_parented(axis_room));
+        let axis_room = axis.size(&room);
+        axis.dim_mut(self.size_mut()).resolve_parented(axis_room);
 
         let cross = axis.cross();
-        let given_cross_room = cross.size(&room);
-        let cross_room = cross.dim(&self.size).size_available(given_cross_room);
-        self.children
-            .iter_mut()
-            .for_each(|child| cross.dim_mut(child.size_mut()).resolve_parented(cross_room));
+        let cross_room = cross.size(&room);
+        cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
-        for child in self.children.iter_mut() {
-            child.measure(ctx, room.clone())?;
-        }
+        let mut native_size = if self.children.is_empty() {
+            self.size.clone()
+        } else {
+            for child in self.children.iter_mut() {
+                child.measure(ctx, room.clone())?;
+            }
 
-        let gap = self.style_ref().gap_size();
-        let lines = lay_out_native(self.axis, &mut self.children, axis_room, gap);
-        let last = lines.last().unwrap();
-        self.native_size = Some(axis.extend_dim(last.size(), last.offset()));
+            let axis_room = axis.dim(&self.size).size_available(axis_room);
+            let gap = self.style_ref().gap_size();
+            let lines = lay_out_native(self.axis, &mut self.children, axis_room, gap);
+            let last = lines.last().unwrap();
+
+            axis.extend_dim(last.size(), last.offset())
+        };
+
+        self.style_ref()
+            .padding()
+            .widen(None, Some(&mut native_size));
+
+        self.native_size = Some(native_size);
 
         Ok(())
     }
@@ -251,20 +253,24 @@ impl Layout for LayoutBox {
     fn lay_out(
         &mut self,
         ctx: &mut dyn MeasureContext,
-        mut self_position: Offset,
-        size: Size,
+        mut offset: Offset,
+        mut size: Size,
     ) -> Result<(), Error> {
         // axes preparation
         let axis = self.axis;
         let cross = axis.cross();
         let cross_takes_native = cross.dim(&self.size).is_content_fixed();
 
-        // dimensions preparation
-        let given_axis_size = axis.size(&size);
-        let wrap_size = axis.dim(&self.size).size_available(given_axis_size);
+        self.style_ref()
+            .padding()
+            .narrow(Some(&mut offset), Some(&mut size));
 
-        let given_cross_size = cross.size(&size);
-        let cross_room = cross.dim(&self.size).size_available(given_cross_size);
+        // dimensions preparation
+        let axis_size = axis.size(&size);
+        let wrap_size = axis.dim(&self.size).size_available(axis_size);
+
+        let cross_size = cross.size(&size);
+        let cross_room = cross.dim(&self.size).size_available(cross_size);
 
         let align_items = self.style_ref().align_items();
         let gap = self.style_ref().gap_size();
@@ -275,14 +281,14 @@ impl Layout for LayoutBox {
             (align_items, size.depth(), self.size_ref().depth()),
             (AlignItems::Baseline, Some(_), Some(_))
         ) {
-            self_position.y_advance(given_ascent.unwrap_or_default());
+            offset.y_advance(given_ascent.unwrap_or_default());
         }
 
         // wrap children using native size
         let lines = lay_out_native(self.axis, &mut self.children, wrap_size, gap);
 
         // prepare loop over lines
-        let mut position = self_position.clone();
+        let mut position = offset.clone();
         let mut content_size = Size::zero();
         let mut ascent_inherit_cache = None;
         let mut ascent;
@@ -317,7 +323,7 @@ impl Layout for LayoutBox {
             };
 
             // prepare loop over children in line
-            axis.set_offset(&mut position, axis.offset(&self_position)); // reset axis offset for new line
+            axis.set_offset(&mut position, axis.offset(&offset)); // reset axis offset for new line
             let mut line_size = Size::zero();
             let mut first_child = Some(());
 
@@ -392,8 +398,8 @@ impl Layout for LayoutBox {
                 };
                 let child_depth = child.size_ref().depth();
                 let child_size = match child_depth {
-                    Some(depth) => Size::new_depth(width, height, depth),
-                    None => Size::new(width, height),
+                    Some(depth) => Size::fixed_depth(width, height, depth),
+                    None => Size::fixed(width, height),
                 };
 
                 // recurse into
@@ -416,13 +422,24 @@ impl Layout for LayoutBox {
             content_size = cross.extend_size(&content_size, &line_size);
         }
 
-        // Sets own axis dimension to native content size, if the dimension is auto_fixed.
-        // Otherwise own axis dimension can be stretchable, therefore size_filled is called to resolve it.
-        axis.resolve_content_size(&mut self.size, &content_size, given_axis_size);
+        // Sets own axis/cross dimensions to native content size, if the dimension is auto_fixed.
+        // Otherwise own axis/cross dimension can be stretchable, therefore size_filled is called to resolve it.
+        axis.resolve_content_size(&mut self.size, &content_size, axis_size);
+        cross.resolve_content_size(&mut self.size, &content_size, cross_size);
 
-        // Sets own cross dimension to native content size, if the dimension is auto_fixed.
-        // Otherwise own cross dimension can be stretchable, therefore size_filled is called to resolve it.
-        cross.resolve_content_size(&mut self.size, &content_size, given_cross_size);
+        self.style_ref()
+            .padding()
+            .widen(None, Some(&mut content_size));
+        self.content_size = Some(content_size);
+
+        // Adopt final offset and size including padding
+        let mut size = self.size.clone();
+        self.style_ref()
+            .padding()
+            .widen(Some(&mut offset), Some(&mut size));
+
+        self.offset = offset;
+        self.size = size;
 
         // Adopt children depth, if I have not it set.
         if self.size.depth().is_none() {
@@ -431,15 +448,48 @@ impl Layout for LayoutBox {
             );
         }
 
-        self.offset = self_position.clone();
-        self.content_size = Some(content_size);
-
         Ok(())
     }
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
         for child in self.iter() {
             child.render(ctx)?;
+        }
+
+        let style = self.style_ref();
+        let top_left = self.offset_ref();
+        let bottom_right = top_left + &self.size;
+
+        if let Some(stroke) = style.border_top() {
+            ctx.line(
+                &self.offset,
+                &Offset::new(bottom_right.x(), top_left.y()),
+                stroke,
+            );
+        }
+
+        if let Some(stroke) = style.border_right() {
+            ctx.line(
+                &Offset::new(bottom_right.x(), top_left.y()),
+                &bottom_right,
+                stroke,
+            );
+        }
+
+        if let Some(stroke) = style.border_bottom() {
+            ctx.line(
+                &bottom_right,
+                &Offset::new(top_left.x(), bottom_right.y()),
+                stroke,
+            );
+        }
+
+        if let Some(stroke) = style.border_left() {
+            ctx.line(
+                &Offset::new(top_left.x(), bottom_right.y()),
+                top_left,
+                stroke,
+            );
         }
 
         ctx.debug_frame(self.offset_ref(), self.size_ref());

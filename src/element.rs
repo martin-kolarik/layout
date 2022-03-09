@@ -1,6 +1,3 @@
-mod decoratedbox;
-pub use decoratedbox::*;
-
 mod filling;
 pub use filling::*;
 

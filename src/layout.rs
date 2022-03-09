@@ -10,7 +10,7 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{Error, Features, Filling, LayoutBox, Stroke, Style, Text, TextPosition, DecoratedBox};
+use crate::{Error, Features, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
 
 use self::position::{Offset, Quad, Size};
 
@@ -96,13 +96,11 @@ pub trait RenderContext: MeasureContext {
 pub trait Factory {
     fn hbox() -> LayoutBox;
     fn hfill() -> Filling;
-    fn hdbox() -> DecoratedBox;
 
     fn vbox() -> LayoutBox;
     fn vfill() -> Filling;
-    fn vdbox() -> DecoratedBox;
 
-    fn text_ref(text: &str) -> Text;
+    fn text_str(text: &str) -> Text;
 }
 
 pub struct DefaultFactory;
@@ -122,10 +120,6 @@ impl Factory for DefaultFactory {
         Filling::new(Axis::Horizontal)
     }
 
-    fn hdbox() -> DecoratedBox {
-        DecoratedBox::new(Axis::Horizontal)
-    }
-
     fn vbox() -> LayoutBox {
         LayoutBox::new(Axis::Vertical)
     }
@@ -134,11 +128,7 @@ impl Factory for DefaultFactory {
         Filling::new(Axis::Vertical)
     }
 
-    fn vdbox() -> DecoratedBox {
-        DecoratedBox::new(Axis::Vertical)
-    }
-
-    fn text_ref(text: &str) -> Text {
+    fn text_str(text: &str) -> Text {
         Text::new(text)
     }
 }
