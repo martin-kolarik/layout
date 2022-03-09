@@ -124,32 +124,40 @@ pub struct Size {
 }
 
 impl Size {
-    pub fn new(width: impl Into<Unit>, height: impl Into<Unit>) -> Self {
-        let height = height.into();
+    pub fn none() -> Self {
         Self {
-            width: Dimension::new(width),
-            height: Dimension::new(height),
+            width: Dimension::none(),
+            height: Dimension::none(),
             depth: None,
         }
     }
 
-    pub fn new_depth(
+    pub fn content() -> Self {
+        Self {
+            width: Dimension::content(),
+            height: Dimension::content(),
+            depth: None,
+        }
+    }
+
+    pub fn fixed(width: impl Into<Unit>, height: impl Into<Unit>) -> Self {
+        let height = height.into();
+        Self {
+            width: Dimension::fixed(width),
+            height: Dimension::fixed(height),
+            depth: None,
+        }
+    }
+
+    pub fn fixed_depth(
         width: impl Into<Unit>,
         height: impl Into<Unit>,
         depth: impl Into<Unit>,
     ) -> Self {
         Self {
-            width: Dimension::new(width),
-            height: Dimension::new(height),
+            width: Dimension::fixed(width),
+            height: Dimension::fixed(height),
             depth: Some(depth.into()),
-        }
-    }
-
-    pub fn new_auto() -> Self {
-        Self {
-            width: Dimension::new_auto(),
-            height: Dimension::new_auto(),
-            depth: None,
         }
     }
 
@@ -430,7 +438,7 @@ mod tests {
         assert_eq!(0, size.width().0);
         assert_eq!(10, size.height().0);
 
-        let mut size = Size::new_auto();
+        let mut size = Size::content();
         assert!(size.width.is_content());
         assert!(size.height.is_content());
 
@@ -455,7 +463,7 @@ mod tests {
 
     #[test]
     fn depth_and_ascent() {
-        let mut size = Size::new_auto();
+        let mut size = Size::content();
         size.set_height(10);
         size.set_depth(Some(2));
 
@@ -465,8 +473,8 @@ mod tests {
 
     #[test]
     fn it_extends() {
-        let size1 = Size::new_depth(10, 12, 2);
-        let size2 = Size::new_depth(20, 12, 3);
+        let size1 = Size::fixed_depth(10, 12, 2);
+        let size2 = Size::fixed_depth(20, 12, 3);
 
         let mut size = size1.clone();
         size.x_extend(&size2);

@@ -28,7 +28,7 @@ impl Filling {
         }
     }
 
-    pub fn with_mark(mut self, mark: &'static str) -> Self {
+    pub fn mark(mut self, mark: &'static str) -> Self {
         self.mark = Some(mark);
         self
     }
@@ -111,7 +111,7 @@ mod tests {
             .lay_out(
                 &mut Ctx,
                 Offset::new(10, 10),
-                Size::new_depth(190, 277, 267),
+                Size::fixed_depth(190, 277, 267),
             )
             .unwrap();
 
@@ -158,7 +158,7 @@ mod tests {
             .lay_out(
                 &mut Ctx,
                 Offset::new(10, 10),
-                Size::new_depth(190, 277, 267),
+                Size::fixed_depth(190, 277, 267),
             )
             .unwrap();
 
@@ -224,7 +224,7 @@ mod tests {
             )
             .child(DefaultFactory::hfill().grow(1));
 
-        let size = Size::new_depth(190, 277, 267);
+        let size = Size::fixed_depth(190, 277, 267);
         outer.measure(&mut Ctx, size.clone()).unwrap();
         outer.lay_out(&mut Ctx, Offset::new(10, 10), size).unwrap();
 
@@ -295,7 +295,7 @@ mod tests {
             .lay_out(
                 &mut Ctx,
                 Offset::new(10, 10),
-                Size::new_depth(190, 277, 267),
+                Size::fixed_depth(190, 277, 267),
             )
             .unwrap();
 

@@ -11,7 +11,7 @@ fn self_not_baseline_on_baseline() {
     box1.lay_out(
         &mut Ctx,
         Offset::new(10, 10),
-        Size::new_depth(190, 277, 247),
+        Size::fixed_depth(190, 277, 247),
     )
     .unwrap();
 
@@ -28,7 +28,7 @@ fn self_not_baseline_on_baseline() {
 fn self_baseline_on_not_baseline() {
     let mut box1 = DefaultFactory::vbox().size(100).depth(85);
 
-    box1.lay_out(&mut Ctx, Offset::new(10, 10), Size::new(190, 277))
+    box1.lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
     assert_eq!(10, box1.offset_ref().x().0);
@@ -47,7 +47,7 @@ fn self_baseline_on_baseline() {
     box1.lay_out(
         &mut Ctx,
         Offset::new(10, 10),
-        Size::new_depth(190, 277, 247),
+        Size::fixed_depth(190, 277, 247),
     )
     .unwrap();
 
@@ -67,7 +67,7 @@ fn self_baseline_inherits() {
     let mut outer = DefaultFactory::vbox().child(box1);
 
     outer
-        .lay_out(&mut Ctx, Offset::new(10, 10), Size::new(190, 277))
+        .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -100,7 +100,7 @@ fn self_baseline_inherits_and_positions() {
         .lay_out(
             &mut Ctx,
             Offset::new(10, 10),
-            Size::new_depth(190, 277, 267),
+            Size::fixed_depth(190, 277, 267),
         )
         .unwrap();
 

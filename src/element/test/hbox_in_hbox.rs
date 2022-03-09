@@ -14,7 +14,7 @@ fn single_fixed_box_c_0_0() {
         .child(box1);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -42,7 +42,7 @@ fn single_fixed_box_c_0_1() {
         .child(box1);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -71,7 +71,7 @@ fn single_fixed_box_c_1_0() {
         .cross_size(12);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -100,7 +100,7 @@ fn single_fixed_box_c_1_1() {
         .cross_size(12);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -122,7 +122,7 @@ fn single_fixed_box_c_1_1() {
 #[test]
 fn single_grow_main_0_1_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15).grow(1);
 
@@ -151,7 +151,7 @@ fn single_grow_main_0_1_box() {
 #[test]
 fn single_grow_main_1_0_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15);
 
@@ -181,7 +181,7 @@ fn single_grow_main_1_0_box() {
 #[test]
 fn single_grow_main_1_1_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15).grow(1);
 
@@ -211,7 +211,7 @@ fn single_grow_main_1_1_box() {
 #[test]
 fn single_grow_main_1_1_parent_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15).grow(1);
 
@@ -243,7 +243,7 @@ fn single_grow_main_1_1_parent_box() {
 #[test]
 fn single_grow_cross_0_1_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox()
         .size(15)
@@ -275,7 +275,7 @@ fn single_grow_cross_0_1_box() {
 #[test]
 fn single_grow_cross_1_0fix_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15).cross_size(7);
 
@@ -305,7 +305,7 @@ fn single_grow_cross_1_0fix_box() {
 #[test]
 fn single_grow_cross_1_0dyn_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox().size(15);
 
@@ -335,7 +335,7 @@ fn single_grow_cross_1_0dyn_box() {
 #[test]
 fn single_grow_cross_1_1_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
 
     let box1 = DefaultFactory::hbox()
         .size(15)
@@ -371,7 +371,7 @@ fn single_grow_cross_1_1_box() {
 #[test]
 fn single_cross_align_end_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 3);
+    let size = Size::fixed_depth(190, 277, 3);
 
     let box1 = DefaultFactory::hbox().size(15).cross_size(7);
 
@@ -401,7 +401,7 @@ fn single_cross_align_end_box() {
 #[test]
 fn single_cross_align_center_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 3);
+    let size = Size::fixed_depth(190, 277, 3);
 
     let box1 = DefaultFactory::hbox().size(15).cross_size(7);
 
@@ -431,7 +431,7 @@ fn single_cross_align_center_box() {
 #[test]
 fn single_cross_align_baseline_box() {
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 267);
+    let size = Size::fixed_depth(190, 277, 267);
 
     let box1 = DefaultFactory::hbox()
         .size(15)
@@ -472,7 +472,7 @@ fn double_fixed_boxes_c_0_0() {
         .child(box2);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -510,7 +510,7 @@ fn triple_fixed_boxes_c() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -554,7 +554,7 @@ fn triple_fixed_boxes_g() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -598,7 +598,7 @@ fn triple_grow_boxes_c() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -642,7 +642,7 @@ fn triple_grow_boxes_g() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -686,7 +686,7 @@ fn triple_fixed_boxes_c_wrap1() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -730,7 +730,7 @@ fn triple_fixed_boxes_c_wrap2() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -774,7 +774,7 @@ fn triple_fixed_boxes_g_wrap() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -824,7 +824,7 @@ fn triple_fixed_boxes_c_wrap_grow1() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -877,7 +877,7 @@ fn triple_fixed_boxes_c_wrap_grow2() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -927,7 +927,7 @@ fn triple_fixed_boxes_g_wrap_grow1() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -980,7 +980,7 @@ fn triple_fixed_boxes_g_wrap_grow2() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new(190, 277);
+    let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -1024,7 +1024,7 @@ fn triple_fixed_boxes_cross_fixed_start() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 3);
+    let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -1068,7 +1068,7 @@ fn triple_fixed_boxes_cross_fixed_center() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 3);
+    let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -1112,7 +1112,7 @@ fn triple_fixed_boxes_cross_fixed_end() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 3);
+    let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
@@ -1165,7 +1165,7 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
         .child(box3);
 
     let position = Offset::new(10, 10);
-    let size = Size::new_depth(190, 277, 247);
+    let size = Size::fixed_depth(190, 277, 247);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);

@@ -27,7 +27,7 @@ impl Text {
         Self {
             mark: None,
             offset: Offset::zero(),
-            size: Size::new_auto(),
+            size: Size::content(),
             style: Style::default(),
             text: InnerText::Input(text.into()),
         }
@@ -74,7 +74,7 @@ impl Layout for Text {
 
             let text = ctx.typeset(&style, text, None)?;
             let font_size = font.size();
-            self.size = Size::new_depth(
+            self.size = Size::fixed_depth(
                 text.width * font_size,
                 text.height * font_size,
                 text.depth * font_size,
@@ -154,9 +154,9 @@ mod tests {
 
         let mut hbox = DefaultFactory::hbox().child(t1).child(t2).child(t3);
 
-        hbox.measure(&mut 0_usize, Size::new(1000000, 2000000))
+        hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::new(1000000, 2000000))
+        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
             .unwrap();
 
         let mut children = hbox.iter();
@@ -188,9 +188,9 @@ mod tests {
                 .child(t3),
         );
 
-        hbox.measure(&mut 0_usize, Size::new(1000000, 2000000))
+        hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::new(1000000, 2000000))
+        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
             .unwrap();
 
         let mut children = hbox.iter();
@@ -217,9 +217,9 @@ mod tests {
 
         let mut vbox = DefaultFactory::vbox().child(t1).child(t2).child(t3);
 
-        vbox.measure(&mut 0_usize, Size::new(1000000, 2000000))
+        vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::new(1000000, 2000000))
+        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
             .unwrap();
 
         let mut children = vbox.iter();
@@ -246,9 +246,9 @@ mod tests {
         let mut vbox =
             DefaultFactory::vbox().child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
 
-        vbox.measure(&mut 0_usize, Size::new(1000000, 2000000))
+        vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::new(1000000, 2000000))
+        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
             .unwrap();
 
         let mut children = vbox.iter();

@@ -104,9 +104,6 @@ pub enum DimAutoOrParent {
 }
 
 impl DimAutoOrParent {
-    pub const fn new() -> Self {
-        Self::Content(None)
-    }
 
     pub fn as_mut(&mut self) -> Option<&mut Unit> {
         match self {
@@ -256,11 +253,17 @@ pub struct Dimension {
 }
 
 impl Dimension {
-    pub fn new(size: impl Into<Unit>) -> Self {
-        size.into().into()
+    pub fn none() -> Self {
+        Self {
+            basis: DimAutoOrParent::None,
+            min: DimOrParent::None,
+            max: DimOrParent::None,
+            grow: None,
+            shrink: None,
+        }
     }
 
-    pub fn new_auto() -> Self {
+    pub fn content() -> Self {
         Self {
             basis: DimAutoOrParent::Content(None),
             min: DimOrParent::None,
@@ -270,7 +273,7 @@ impl Dimension {
         }
     }
 
-    pub fn new_parented(fill: impl Into<FillPerMille>) -> Self {
+    pub fn parented(fill: impl Into<FillPerMille>) -> Self {
         Self {
             basis: DimAutoOrParent::Parent(fill.into(), None),
             min: DimOrParent::None,
@@ -278,6 +281,10 @@ impl Dimension {
             grow: None,
             shrink: None,
         }
+    }
+
+    pub fn fixed(size: impl Into<Unit>) -> Self {
+        size.into().into()
     }
 
     pub fn with_min(mut self, min: impl Into<DimOrParent>) -> Self {
@@ -702,7 +709,7 @@ mod tests {
         assert_eq!(Fill::from(5), dim.grow().unwrap());
         assert!(dim.shrink.is_none());
 
-        let dim = Dimension::new_auto();
+        let dim = Dimension::content();
 
         assert!(matches!(dim.basis, DimAutoOrParent::Content(None)));
         assert!(dim.basis.size().is_none());
@@ -711,7 +718,7 @@ mod tests {
         assert!(dim.grow.is_none());
         assert!(dim.shrink.is_none());
 
-        let dim = Dimension::new_parented(3);
+        let dim = Dimension::parented(3);
 
         assert!(matches!(dim.basis, DimAutoOrParent::Parent(Fill(3), None)));
         assert!(dim.basis.size().is_none());
@@ -723,7 +730,7 @@ mod tests {
 
     #[test]
     fn it_builds() {
-        let mut dim = Dimension::new(100).with_min(25);
+        let mut dim = Dimension::fixed(100).with_min(25);
 
         assert_eq!(Some(Unit::from(100)), dim.basis.size());
         assert_eq!(Some(Unit::from(25)), dim.min.size());
@@ -758,7 +765,7 @@ mod tests {
 
     #[test]
     fn size_is_zero() {
-        let dim = Dimension::new_auto();
+        let dim = Dimension::content();
         assert_eq!(None, dim.basis_size());
         assert!(dim.is_content());
         assert_eq!(Unit::zero(), dim.size());
@@ -766,20 +773,20 @@ mod tests {
 
     #[test]
     fn it_clamps() {
-        let dim = Dimension::new(10).with_min(15);
+        let dim = Dimension::fixed(10).with_min(15);
         assert_eq!(Unit::from(15), dim.size());
         assert_eq!(Unit::from(15), dim.min.size().unwrap());
 
-        let dim = Dimension::new(15).with_max(10);
+        let dim = Dimension::fixed(15).with_max(10);
         assert_eq!(Unit::from(10), dim.size());
         assert_eq!(Unit::from(10), dim.max.size().unwrap());
 
-        let dim = Dimension::new(10).with_min(15).with_max(5);
+        let dim = Dimension::fixed(10).with_min(15).with_max(5);
         assert_eq!(Unit::from(5), dim.size());
         assert_eq!(Unit::from(5), dim.min.size().unwrap());
         assert_eq!(Unit::from(5), dim.max.size().unwrap());
 
-        let dim = Dimension::new(10).with_max(5).with_min(15);
+        let dim = Dimension::fixed(10).with_max(5).with_min(15);
         assert_eq!(Unit::from(15), dim.size());
         assert_eq!(Unit::from(15), dim.min.size().unwrap());
         assert_eq!(Unit::from(15), dim.max.size().unwrap());
@@ -787,21 +794,21 @@ mod tests {
 
     #[test]
     fn min_max() {
-        let dim = Dimension::new(15).min_of(&Dimension::new(10));
+        let dim = Dimension::fixed(15).min_of(&Dimension::fixed(10));
         assert_eq!(Unit::from(10), dim.size());
 
-        let dim = Dimension::new(5).max_of(&Dimension::new(10));
+        let dim = Dimension::fixed(5).max_of(&Dimension::fixed(10));
         assert_eq!(Unit::from(10), dim.size());
     }
 
     #[test]
     fn binary_ops() {
-        let dim1 = Dimension::new(10)
+        let dim1 = Dimension::fixed(10)
             .with_min(5)
             .with_max(15)
             .with_shrink(1)
             .with_grow(2);
-        let dim2 = Dimension::new(11)
+        let dim2 = Dimension::fixed(11)
             .with_min(4)
             .with_max(16)
             .with_shrink(1)
@@ -867,70 +874,70 @@ mod tests {
 
     #[test]
     fn it_fills_size() {
-        let dim = Dimension::new(10);
+        let dim = Dimension::fixed(10);
         let size = dim.size_filled(Unit(20));
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10).with_grow(1);
+        let dim = Dimension::fixed(10).with_grow(1);
         let size = dim.size_filled(Unit(20));
         assert_eq!(Unit::from(20), size);
 
-        let dim = Dimension::new(10).with_grow(1).with_max(15);
+        let dim = Dimension::fixed(10).with_grow(1).with_max(15);
         let size = dim.size_filled(Unit(20));
         assert_eq!(Unit::from(15), size);
 
-        let dim = Dimension::new(10);
+        let dim = Dimension::fixed(10);
         let size = dim.size_filled(Unit(5));
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10).with_shrink(1);
+        let dim = Dimension::fixed(10).with_shrink(1);
         let size = dim.size_filled(Unit(5));
         assert_eq!(Unit::from(5), size);
 
-        let dim = Dimension::new(100).with_shrink(1).with_min(75);
+        let dim = Dimension::fixed(100).with_shrink(1).with_min(75);
         let size = dim.size_filled(Unit(50));
         assert_eq!(Unit::from(75), size);
     }
 
     #[test]
     fn it_distributes_size() {
-        let dim = Dimension::new(10);
+        let dim = Dimension::fixed(10);
         let size = dim.size_distributed(10.into(), None, None);
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10);
+        let dim = Dimension::fixed(10);
         let size = dim.size_distributed(10.into(), Some(10.into()), Some(10.into()));
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10).with_grow(5);
+        let dim = Dimension::fixed(10).with_grow(5);
         let size = dim.size_distributed(10.into(), None, None);
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10).with_grow(5);
+        let dim = Dimension::fixed(10).with_grow(5);
         let size = dim.size_distributed(10.into(), Some(5.into()), None);
         assert_eq!(Unit::from(20), size);
 
-        let dim = Dimension::new(10).with_grow(5);
+        let dim = Dimension::fixed(10).with_grow(5);
         let size = dim.size_distributed(10.into(), Some(10.into()), None);
         assert_eq!(Unit::from(15), size);
 
-        let dim = Dimension::new(10).with_grow(5).with_shrink(5);
+        let dim = Dimension::fixed(10).with_grow(5).with_shrink(5);
         let size = dim.size_distributed(10.into(), Some(10.into()), Some(10.into()));
         assert_eq!(Unit::from(15), size);
 
-        let dim = Dimension::new(10).with_shrink(5);
+        let dim = Dimension::fixed(10).with_shrink(5);
         let size = dim.size_distributed((-10).into(), None, None);
         assert_eq!(Unit::from(10), size);
 
-        let dim = Dimension::new(10).with_shrink(5);
+        let dim = Dimension::fixed(10).with_shrink(5);
         let size = dim.size_distributed((-10).into(), None, Some(5.into()));
         assert_eq!(Unit::from(0), size);
 
-        let dim = Dimension::new(10).with_shrink(5);
+        let dim = Dimension::fixed(10).with_shrink(5);
         let size = dim.size_distributed((-10).into(), None, Some(10.into()));
         assert_eq!(Unit::from(5), size);
 
-        let dim = Dimension::new(10).with_grow(5).with_shrink(5);
+        let dim = Dimension::fixed(10).with_grow(5).with_shrink(5);
         let size = dim.size_distributed((-10).into(), Some(10.into()), Some(10.into()));
         assert_eq!(Unit::from(5), size);
     }
