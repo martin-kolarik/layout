@@ -98,27 +98,19 @@ impl Sub<&DimOrParent> for &DimOrParent {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum DimAutoOrParent {
+    None,
     Content(Option<Unit>),
     Fixed(Unit),
     Parent(FillPerMille, Option<Unit>),
 }
 
 impl DimAutoOrParent {
-
-    pub fn as_mut(&mut self) -> Option<&mut Unit> {
-        match self {
-            Self::Content(unit) => unit.as_mut(),
-            Self::Fixed(unit) => Some(unit),
-            Self::Parent(_, unit) => unit.as_mut(),
-        }
+    pub fn is_content(&self) -> bool {
+        matches!(self, Self::None | Self::Content(_))
     }
 
     pub fn is_parented(&self) -> bool {
         matches!(self, Self::Parent(..))
-    }
-
-    pub fn is_content(&self) -> bool {
-        matches!(self, Self::Content(_))
     }
 
     pub fn is_resolved(&self) -> bool {
@@ -137,20 +129,27 @@ impl DimAutoOrParent {
 
     pub fn size(&self) -> Option<Unit> {
         match self {
+            Self::None => None,
             Self::Content(size) => *size,
             Self::Fixed(size) => Some(*size),
             Self::Parent(_, size) => *size,
         }
     }
 
-    pub fn set_size(&mut self, unit: impl Into<Unit>) {
-        *self = Self::Fixed(unit.into());
+    pub fn set_size(&mut self, size: impl Into<Unit>) {
+        let size = size.into();
+        match self {
+            Self::Parent(fill, _) => *self = Self::Parent(*fill, Some(size)),
+            Self::Content(_) => *self = Self::Content(Some(size)),
+            Self::None | Self::Fixed(_) => *self = Self::Fixed(size),
+        }
     }
 
-    pub fn resolve(&mut self, size: Unit) {
+    pub fn resolve(&mut self, size: impl Into<Unit>) {
+        let size = size.into();
         match self {
             Self::Parent(fill, None) => *self = Self::Parent(*fill, Some(size)),
-            Self::Content(None) => *self = Self::Content(Some(size)),
+            Self::None | Self::Content(None) => *self = Self::Content(Some(size)),
             _ => (),
         }
     }
@@ -222,7 +221,7 @@ impl Add<&DimAutoOrParent> for &DimAutoOrParent {
 
     fn add(self, rhs: &DimAutoOrParent) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimAutoOrParent::Content(None),
+            (None, None) => DimAutoOrParent::None,
             (None, Some(_)) => rhs.clone(),
             (Some(_), None) => self.clone(),
             (Some(l), Some(r)) => DimAutoOrParent::Fixed(l + r),
@@ -235,7 +234,7 @@ impl Sub<&DimAutoOrParent> for &DimAutoOrParent {
 
     fn sub(self, rhs: &DimAutoOrParent) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimAutoOrParent::Content(None),
+            (None, None) => DimAutoOrParent::None,
             (None, Some(r)) => DimAutoOrParent::Fixed(Unit::zero() - r),
             (Some(_), None) => self.clone(),
             (Some(l), Some(r)) => DimAutoOrParent::Fixed(l - r),
@@ -305,6 +304,48 @@ impl Dimension {
     pub fn with_shrink(mut self, fill: impl Into<Fill>) -> Self {
         self.set_shrink(fill);
         self
+    }
+
+    pub fn complete_with_style(
+        &mut self,
+        size: &DimAutoOrParent,
+        min: &DimOrParent,
+        max: &DimOrParent,
+        grow: Option<Fill>,
+        shrink: Option<Fill>,
+    ) {
+        match (&self.min, min) {
+            (DimOrParent::None, DimOrParent::None) => self.min = DimOrParent::None,
+            (DimOrParent::None, min @ DimOrParent::Fixed(_))
+            | (DimOrParent::None, min @ DimOrParent::Parent(_, _)) => self.min = min.clone(),
+            (_, _) => (),
+        }
+
+        match (&self.max, max) {
+            (DimOrParent::None, DimOrParent::None) => self.max = DimOrParent::None,
+            (DimOrParent::None, max @ DimOrParent::Fixed(_))
+            | (DimOrParent::None, max @ DimOrParent::Parent(_, _)) => self.max = max.clone(),
+            (_, _) => (),
+        }
+
+        match (&self.basis, size) {
+            (DimAutoOrParent::None, DimAutoOrParent::None) => {
+                self.basis = DimAutoOrParent::Content(None)
+            }
+            (DimAutoOrParent::None, size @ DimAutoOrParent::Content(_))
+            | (DimAutoOrParent::None, size @ DimAutoOrParent::Fixed(_))
+            | (DimAutoOrParent::None, size @ DimAutoOrParent::Parent(_, _)) => {
+                self.basis = size.clone()
+            }
+            (_, _) => (),
+        }
+
+        self.grow = self.grow.or(grow);
+        self.shrink = self.shrink.or(shrink);
+    }
+
+    pub fn is_parented(&self) -> bool {
+        self.basis.is_parented()
     }
 
     pub fn is_content(&self) -> bool {

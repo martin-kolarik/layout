@@ -218,10 +218,10 @@ impl Style {
             font: None,
             color: None,
             background_color: None,
-            width: DimAutoOrParent::new(),
+            width: DimAutoOrParent::None,
             min_width: DimOrParent::None,
             max_width: DimOrParent::None,
-            height: DimAutoOrParent::new(),
+            height: DimAutoOrParent::None,
             min_height: DimOrParent::None,
             max_height: DimOrParent::None,
             grow: None,
@@ -378,6 +378,30 @@ impl Style {
         self.background_color.as_ref()
     }
 
+    pub fn width(&self) -> &DimAutoOrParent {
+        &self.width
+    }
+
+    pub fn min_width(&self) -> &DimOrParent {
+        &self.min_width
+    }
+
+    pub fn max_width(&self) -> &DimOrParent {
+        &self.max_width
+    }
+
+    pub fn height(&self) -> &DimAutoOrParent {
+        &self.height
+    }
+
+    pub fn min_height(&self) -> &DimOrParent {
+        &self.min_height
+    }
+
+    pub fn max_height(&self) -> &DimOrParent {
+        &self.max_height
+    }
+
     pub fn grow(&self) -> Option<Fill> {
         self.grow
     }
@@ -457,10 +481,10 @@ impl Default for Style {
             font: Some(Font::new("default", Pt(10.0), None)),
             color: Some(Rgba::black().clone()),
             background_color: None,
-            width: DimAutoOrParent::new(),
+            width: DimAutoOrParent::Content(None),
             min_width: DimOrParent::None,
             max_width: DimOrParent::None,
-            height: DimAutoOrParent::new(),
+            height: DimAutoOrParent::Content(None),
             min_height: DimOrParent::None,
             max_height: DimOrParent::None,
             grow: None,

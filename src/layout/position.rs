@@ -1,6 +1,10 @@
 use std::ops::{Add, AddAssign, Sub, SubAssign};
 
-use crate::unit::{sub_unit, Unit};
+use crate::{
+    dimension::DimAutoOrParent,
+    unit::{sub_unit, Unit},
+    Axis, Style,
+};
 
 use super::dimension::Dimension;
 
@@ -169,6 +173,39 @@ impl Size {
         }
     }
 
+    pub fn apply_style(&mut self, axis: Axis, style: &Style) {
+        self.width.complete_with_style(
+            style.width(),
+            style.min_width(),
+            style.max_width(),
+            if matches!(axis, Axis::Horizontal) {
+                style.grow()
+            } else {
+                None
+            },
+            if matches!(axis, Axis::Horizontal) {
+                style.shrink()
+            } else {
+                None
+            },
+        );
+        self.height.complete_with_style(
+            style.height(),
+            style.min_height(),
+            style.max_height(),
+            if matches!(axis, Axis::Vertical) {
+                style.grow()
+            } else {
+                None
+            },
+            if matches!(axis, Axis::Vertical) {
+                style.shrink()
+            } else {
+                None
+            },
+        );
+    }
+
     pub fn x_dim(&self) -> &Dimension {
         &self.width
     }
@@ -185,19 +222,27 @@ impl Size {
         &mut self.height
     }
 
+    pub fn width_ref(&self) -> &DimAutoOrParent {
+        self.width.basis()
+    }
+
     pub fn width(&self) -> Unit {
         self.width.size()
     }
 
-    pub fn set_width(&mut self, width: impl Into<Unit>) {
+    pub fn set_width(&mut self, width: impl Into<DimAutoOrParent>) {
         self.width.set_basis(width);
+    }
+
+    pub fn height_ref(&self) -> &DimAutoOrParent {
+        self.height.basis()
     }
 
     pub fn height(&self) -> Unit {
         self.height.size()
     }
 
-    pub fn set_height(&mut self, height: impl Into<Unit>) {
+    pub fn set_height(&mut self, height: impl Into<DimAutoOrParent>) {
         self.height.set_basis(height);
     }
 
@@ -372,10 +417,14 @@ impl Quad {
         }
         if let Some(size) = size {
             if size.x_dim().is_resolved() {
-                size.set_width(size.width() - self.width());
+                let mut width = size.width_ref().clone();
+                width.set_size(size.width() - self.width());
+                size.set_width(width);
             }
             if size.y_dim().is_resolved() {
-                size.set_height(size.height() - self.height());
+                let mut height = size.height_ref().clone();
+                height.set_size(size.height() - self.height());
+                size.set_height(height);
             }
         }
     }
@@ -387,10 +436,14 @@ impl Quad {
         }
         if let Some(size) = size {
             if size.x_dim().is_resolved() {
-                size.set_width(size.width() + self.width());
+                let mut width = size.width_ref().clone();
+                width.set_size(size.width() + self.width());
+                size.set_width(width);
             }
             if size.y_dim().is_resolved() {
-                size.set_height(size.height() + self.height());
+                let mut height = size.height_ref().clone();
+                height.set_size(size.height() + self.height());
+                size.set_height(height);
             }
         }
     }
