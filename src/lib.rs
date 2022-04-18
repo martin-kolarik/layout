@@ -1,5 +1,4 @@
 #![feature(bool_to_option)]
-#![feature(total_cmp)]
 
 #[cfg(feature = "color")]
 mod color;
