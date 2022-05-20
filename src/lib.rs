@@ -1,5 +1,3 @@
-#![feature(bool_to_option)]
-
 #[cfg(feature = "color")]
 mod color;
 #[cfg(feature = "color")]
