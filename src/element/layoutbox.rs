@@ -27,11 +27,7 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
-            style: Style::new().with_align_items(if matches!(axis, Axis::Horizontal) {
-                AlignItems::Baseline
-            } else {
-                AlignItems::Start
-            }),
+            style: Style::new().with_align_items(AlignItems::Start),
             children: vec![],
             native_size: None,
             content_size: None,
@@ -65,6 +61,11 @@ impl LayoutBox {
 
     pub fn shrink(mut self, weight: impl Into<Fill>) -> Self {
         self.axis.dim_mut(&mut self.size).set_shrink(weight);
+        self
+    }
+
+    pub fn with_baseline(mut self) -> Self {
+        self.style = self.style.with_align_items(AlignItems::Baseline);
         self
     }
 
@@ -226,6 +227,8 @@ impl Layout for LayoutBox {
         let cross_room = cross.size(&room);
         cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
+        let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
+
         let mut native_size = if self.children.is_empty() {
             self.size.clone()
         } else {
@@ -235,7 +238,13 @@ impl Layout for LayoutBox {
 
             let axis_room = axis.dim(&self.size).size_available(axis_room);
             let gap = self.style_ref().gap_size();
-            let lines = lay_out_native(self.axis, &mut self.children, axis_room, gap);
+            let lines = lay_out_native(
+                self.axis,
+                &mut self.children,
+                axis_room,
+                gap,
+                respect_baseline,
+            );
             let last = lines.last().unwrap();
 
             let mut size = axis.extend_dim(last.size(), last.offset());
@@ -293,7 +302,13 @@ impl Layout for LayoutBox {
         }
 
         // wrap children using native size
-        let lines = lay_out_native(self.axis, &mut self.children, wrap_size, gap);
+        let lines = lay_out_native(
+            self.axis,
+            &mut self.children,
+            wrap_size,
+            gap,
+            matches!(align_items, AlignItems::Baseline),
+        );
 
         // prepare loop over lines
         let mut position = offset.clone();
@@ -421,13 +436,21 @@ impl Layout for LayoutBox {
 
                 // move forward in main axis, gap is added at the loop begin
                 position = axis.advance_dim(&position, child_axis_size);
-                line_size = axis.extend_size(&line_size, &line_child_size);
+                line_size = axis.extend_size(
+                    &line_size,
+                    &line_child_size,
+                    matches!(align_items, AlignItems::Baseline),
+                );
             }
 
             // Move forward in cross axis (over lines), gap is added at the loop begin.
             // Multiple lines never stretch (the same behavior as FlexBox has).
             position = cross.advance_dim(&position, cross.size(&native_line_size));
-            content_size = cross.extend_size(&content_size, &line_size);
+            content_size = cross.extend_size(
+                &content_size,
+                &line_size,
+                matches!(align_items, AlignItems::Baseline),
+            );
         }
 
         // Sets own axis/cross dimensions to native content size, if the dimension is auto_fixed.

@@ -50,6 +50,7 @@ pub fn lay_out_native(
     children: &mut [Box<dyn Layout>],
     wrap_size: impl Into<Unit>,
     gap: impl Into<Unit>,
+    respect_baseline: bool,
 ) -> Vec<Line> {
     if children.is_empty() {
         return vec![];
@@ -89,7 +90,7 @@ pub fn lay_out_native(
             offset = axis.advance_dim(&offset, line_gap);
             line_size = axis.extend_dim(&line_size, line_gap);
         }
-        line_size = axis.extend_size(&line_size, child_size);
+        line_size = axis.extend_size(&line_size, child_size, respect_baseline);
 
         *child.offset_mut() = offset.clone();
         offset = axis.advance_dim(&offset, child_axis_size);
@@ -116,7 +117,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 0, true);
 
             assert_eq!(1, output.len());
             assert_eq!(1, output[0].len());
@@ -139,7 +140,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 0, true);
 
             assert_eq!(1, output.len());
             assert_eq!(2, output[0].len());
@@ -168,7 +169,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 3);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 100, 3, true);
 
             assert_eq!(1, output.len());
             assert_eq!(2, output[0].len());
@@ -197,7 +198,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 15, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 15, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(1, output[0].len());
@@ -230,7 +231,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 15, 4);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 15, 4, true);
 
             assert_eq!(2, output.len());
             assert_eq!(1, output[0].len());
@@ -265,7 +266,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 24, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 24, 0, true);
 
             assert_eq!(3, output.len());
             assert_eq!(1, output[0].len());
@@ -310,7 +311,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 25, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 25, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -351,7 +352,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 26, 0);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 26, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -392,7 +393,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 27, 3);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 27, 3, true);
 
             assert_eq!(3, output.len());
             assert_eq!(1, output[0].len());
@@ -437,7 +438,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 28, 3);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 28, 3, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -478,7 +479,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Horizontal, &mut children, 29, 3);
+            let output = lay_out_native(Axis::Horizontal, &mut children, 29, 3, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -520,7 +521,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 100, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 100, 0, true);
 
             assert_eq!(1, output.len());
             assert_eq!(1, output[0].len());
@@ -543,7 +544,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 100, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 100, 0, true);
 
             assert_eq!(1, output.len());
             assert_eq!(2, output[0].len());
@@ -572,7 +573,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 100, 3);
+            let output = lay_out_native(Axis::Vertical, &mut children, 100, 3, true);
 
             assert_eq!(1, output.len());
             assert_eq!(2, output[0].len());
@@ -601,7 +602,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 15, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 15, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(1, output[0].len());
@@ -634,7 +635,7 @@ mod tests {
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 15, 4);
+            let output = lay_out_native(Axis::Vertical, &mut children, 15, 4, true);
 
             assert_eq!(2, output.len());
             assert_eq!(1, output[0].len());
@@ -669,7 +670,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 24, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 24, 0, true);
 
             assert_eq!(3, output.len());
             assert_eq!(1, output[0].len());
@@ -714,7 +715,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 25, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 25, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -755,7 +756,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 26, 0);
+            let output = lay_out_native(Axis::Vertical, &mut children, 26, 0, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -796,7 +797,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 27, 3);
+            let output = lay_out_native(Axis::Vertical, &mut children, 27, 3, true);
 
             assert_eq!(3, output.len());
             assert_eq!(1, output[0].len());
@@ -841,7 +842,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 28, 3);
+            let output = lay_out_native(Axis::Vertical, &mut children, 28, 3, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());
@@ -882,7 +883,7 @@ mod tests {
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
 
-            let output = lay_out_native(Axis::Vertical, &mut children, 29, 3);
+            let output = lay_out_native(Axis::Vertical, &mut children, 29, 3, true);
 
             assert_eq!(2, output.len());
             assert_eq!(2, output[0].len());

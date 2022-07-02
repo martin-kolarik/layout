@@ -263,17 +263,21 @@ impl Size {
         sub_unit(self.height.basis_size(), self.depth).unwrap_or_default()
     }
 
-    pub fn x_extend(&mut self, rhs: &Size) {
+    pub fn x_extend(&mut self, rhs: &Size, respect_baseline: bool) {
         self.width += &rhs.width;
-        let ascent = self.ascent_size().max(rhs.ascent_size());
-        self.depth = self.depth.max(rhs.depth);
-        self.height = (self.depth().unwrap_or_default() + ascent).into();
+        if respect_baseline {
+            let ascent = self.ascent_size().max(rhs.ascent_size());
+            self.depth = self.depth.max(rhs.depth);
+            self.height = (self.depth().unwrap_or_default() + ascent).into();
+        } else {
+            self.height = self.height.max_of(&rhs.height);
+        }
     }
 
-    pub fn y_extend(&mut self, rhs: &Size) {
+    pub fn y_extend(&mut self, rhs: &Size, respect_baseline: bool) {
         self.width = self.width.max_of(&rhs.width);
         self.height += &rhs.height;
-        if self.depth.is_none() {
+        if respect_baseline && self.depth.is_none() {
             self.depth = rhs.depth;
         }
     }
@@ -530,25 +534,25 @@ mod tests {
         let size2 = Size::fixed_depth(20, 12, 3);
 
         let mut size = size1.clone();
-        size.x_extend(&size2);
+        size.x_extend(&size2, true);
         assert_eq!(30, size.width().0);
         assert_eq!(13, size.height().0);
         assert_eq!(10, size.ascent_size().0);
 
         let mut size = size2.clone();
-        size.x_extend(&size1);
+        size.x_extend(&size1, true);
         assert_eq!(30, size.width().0);
         assert_eq!(13, size.height().0);
         assert_eq!(10, size.ascent_size().0);
 
         let mut size = size1.clone();
-        size.y_extend(&size2);
+        size.y_extend(&size2, true);
         assert_eq!(20, size.width().0);
         assert_eq!(24, size.height().0);
         assert_eq!(22, size.ascent_size().0);
 
         let mut size = size2;
-        size.y_extend(&size1);
+        size.y_extend(&size1, true);
         assert_eq!(20, size.width().0);
         assert_eq!(24, size.height().0);
         assert_eq!(21, size.ascent_size().0);

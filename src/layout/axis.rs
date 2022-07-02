@@ -71,11 +71,11 @@ impl Axis {
         size
     }
 
-    pub fn extend_size(&self, size: &Size, amount: &Size) -> Size {
+    pub fn extend_size(&self, size: &Size, amount: &Size, respect_baseline: bool) -> Size {
         let mut size = size.clone();
         match self {
-            Axis::Horizontal => size.x_extend(amount),
-            Axis::Vertical => size.y_extend(amount),
+            Axis::Horizontal => size.x_extend(amount, respect_baseline),
+            Axis::Vertical => size.y_extend(amount, respect_baseline),
         }
         size
     }
