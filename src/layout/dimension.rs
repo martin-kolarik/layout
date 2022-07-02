@@ -5,7 +5,7 @@ use std::{
 
 use crate::unit::{add_fill, sub_fill, Fill, FillPerMille, Unit};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DimOrParent {
     None,
     Fixed(Unit),
@@ -96,7 +96,7 @@ impl Sub<&DimOrParent> for &DimOrParent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DimAutoOrParent {
     None,
     Content(Option<Unit>),
@@ -105,6 +105,10 @@ pub enum DimAutoOrParent {
 }
 
 impl DimAutoOrParent {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+
     pub fn is_content(&self) -> bool {
         matches!(self, Self::None | Self::Content(_))
     }
@@ -242,7 +246,7 @@ impl Sub<&DimAutoOrParent> for &DimAutoOrParent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Dimension {
     basis: DimAutoOrParent,
     min: DimOrParent,
@@ -342,6 +346,10 @@ impl Dimension {
 
         self.grow = self.grow.or(grow);
         self.shrink = self.shrink.or(shrink);
+    }
+
+    pub fn is_fixed(&self) -> bool {
+        self.basis.is_fixed()
     }
 
     pub fn is_parented(&self) -> bool {

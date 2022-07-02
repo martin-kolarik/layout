@@ -67,15 +67,15 @@ pub struct Stroke {
 }
 
 impl Stroke {
-    pub fn new(color: Rgba, thickness: impl Into<Pt>) -> Self {
+    pub fn new(color: impl Into<Rgba>, thickness: impl Into<Pt>) -> Self {
         Self {
-            color,
+            color: color.into(),
             thickness: thickness.into(),
         }
     }
 
-    pub fn with_color(mut self, color: Rgba) -> Self {
-        self.color = color;
+    pub fn with_color(mut self, color: impl Into<Rgba>) -> Self {
+        self.color = color.into();
         self
     }
 

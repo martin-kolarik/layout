@@ -15,7 +15,7 @@ impl Unit {
 }
 
 #[repr(transparent)]
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Fill(pub(crate) usize);
 pub type FillPerMille = Fill;
 

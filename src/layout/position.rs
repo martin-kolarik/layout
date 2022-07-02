@@ -8,7 +8,7 @@ use crate::{
 
 use super::dimension::Dimension;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Offset {
     x: Unit,
     y: Unit,
@@ -120,7 +120,7 @@ impl SubAssign for Offset {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Size {
     width: Dimension,
     height: Dimension,

@@ -238,7 +238,15 @@ impl Layout for LayoutBox {
             let lines = lay_out_native(self.axis, &mut self.children, axis_room, gap);
             let last = lines.last().unwrap();
 
-            axis.extend_dim(last.size(), last.offset())
+            let mut size = axis.extend_dim(last.size(), last.offset());
+            if axis.dim(&self.size).is_fixed() {
+                *axis.dim_mut(&mut size) = axis.dim(&self.size).clone();
+            }
+            if cross.dim(&self.size).is_fixed() {
+                *cross.dim_mut(&mut size) = cross.dim(&self.size).clone();
+            }
+
+            size
         };
 
         self.style_ref()
