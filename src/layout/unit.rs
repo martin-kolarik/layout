@@ -94,6 +94,15 @@ impl MulAssign<usize> for Unit {
     }
 }
 
+impl Mul<Unit> for usize {
+    type Output = Unit;
+
+    fn mul(self, mut rhs: Unit) -> Self::Output {
+        rhs.mul_assign(self);
+        rhs
+    }
+}
+
 impl Mul<f64> for Unit {
     type Output = Self;
 
@@ -106,6 +115,15 @@ impl Mul<f64> for Unit {
 impl MulAssign<f64> for Unit {
     fn mul_assign(&mut self, rhs: f64) {
         self.0 = (self.0 as f64 * rhs) as i64;
+    }
+}
+
+impl Mul<Unit> for f64 {
+    type Output = Unit;
+
+    fn mul(self, mut rhs: Unit) -> Self::Output {
+        rhs.mul_assign(self);
+        rhs
     }
 }
 
@@ -381,11 +399,59 @@ impl Add for Mm {
     }
 }
 
+impl Sub for Mm {
+    type Output = Mm;
+
+    fn sub(self, rhs: Mm) -> Self::Output {
+        Mm(self.0 - rhs.0)
+    }
+}
+
+impl Mul<f64> for Mm {
+    type Output = Mm;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Mm(self.0 * rhs)
+    }
+}
+
+impl Mul<Mm> for f64 {
+    type Output = Mm;
+
+    fn mul(self, rhs: Mm) -> Self::Output {
+        Mm(rhs.0 * self)
+    }
+}
+
 impl Add<Pt> for Mm {
     type Output = Mm;
 
     fn add(self, rhs: Pt) -> Self::Output {
         Mm(self.0) + Mm::from(rhs)
+    }
+}
+
+impl Sub<Pt> for Mm {
+    type Output = Mm;
+
+    fn sub(self, rhs: Pt) -> Self::Output {
+        Mm(self.0) - Mm::from(rhs)
+    }
+}
+
+impl Mul<f64> for Pt {
+    type Output = Pt;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Pt(self.0 * rhs)
+    }
+}
+
+impl Mul<Pt> for f64 {
+    type Output = Pt;
+
+    fn mul(self, rhs: Pt) -> Self::Output {
+        Pt(rhs.0 * self)
     }
 }
 
