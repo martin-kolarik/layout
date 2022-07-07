@@ -365,10 +365,12 @@ impl Layout for LayoutBox {
                     line_size = axis.extend_dim(&line_size, gap);
                 }
 
+                let child_size = child.native_size().unwrap_or_else(|| child.size_ref());
+
                 // Resolve axis streches.
-                let child_axis_size = axis
-                    .dim(child.native_size().unwrap_or_else(|| child.size_ref()))
-                    .size_distributed(room_to_distribute, sum_grow, sum_shrink);
+                let child_axis_size =
+                    axis.dim(child_size)
+                        .size_distributed(room_to_distribute, sum_grow, sum_shrink);
 
                 // Resolve cross stretches. only if both me and child has auto dimension, they stretch.
                 // The behavior is the same as in FlexBox.
@@ -378,7 +380,7 @@ impl Layout for LayoutBox {
                     cross.dim(child.size_ref()).size_available(line_cross_room)
                 } else {
                     cross
-                        .dim(child.size_ref())
+                        .dim(child_size)
                         .size_filled(cross.size(&native_line_size))
                 };
 
