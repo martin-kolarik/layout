@@ -133,6 +133,12 @@ impl From<u32> for Rgba {
     }
 }
 
+impl From<&Rgba> for Rgba {
+    fn from(rgba: &Rgba) -> Self {
+        rgba.clone()
+    }
+}
+
 impl ToString for Rgba {
     fn to_string(&self) -> String {
         macro_rules! format {

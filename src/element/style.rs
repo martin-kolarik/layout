@@ -93,6 +93,12 @@ impl Stroke {
     }
 }
 
+impl From<&Stroke> for Stroke {
+    fn from(stroke: &Stroke) -> Self {
+        stroke.clone()
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Border {
     top: Option<Stroke>,
@@ -120,7 +126,8 @@ impl Border {
         }
     }
 
-    pub fn square(stroke: Stroke) -> Self {
+    pub fn square(stroke: impl Into<Stroke>) -> Self {
+        let stroke = stroke.into();
         Self {
             top: Some(stroke.clone()),
             left: Some(stroke.clone()),
@@ -129,7 +136,9 @@ impl Border {
         }
     }
 
-    pub fn h_v(horizontal: Stroke, vertical: Stroke) -> Self {
+    pub fn h_v(horizontal: impl Into<Stroke>, vertical: impl Into<Stroke>) -> Self {
+        let horizontal = horizontal.into();
+        let vertical = vertical.into();
         Self {
             top: Some(horizontal.clone()),
             left: Some(vertical.clone()),
@@ -138,7 +147,8 @@ impl Border {
         }
     }
 
-    pub fn h(horizontal: Stroke) -> Self {
+    pub fn h(horizontal: impl Into<Stroke>) -> Self {
+        let horizontal = horizontal.into();
         Self {
             top: Some(horizontal.clone()),
             left: None,
@@ -147,7 +157,8 @@ impl Border {
         }
     }
 
-    pub fn v(vertical: Stroke) -> Self {
+    pub fn v(vertical: impl Into<Stroke>) -> Self {
+        let vertical = vertical.into();
         Self {
             top: None,
             left: Some(vertical.clone()),
@@ -156,23 +167,23 @@ impl Border {
         }
     }
 
-    pub fn with_top(mut self, top: Stroke) -> Self {
-        self.top = Some(top);
+    pub fn with_top(mut self, top: impl Into<Stroke>) -> Self {
+        self.top = Some(top.into());
         self
     }
 
-    pub fn with_left(mut self, left: Stroke) -> Self {
-        self.left = Some(left);
+    pub fn with_left(mut self, left: impl Into<Stroke>) -> Self {
+        self.left = Some(left.into());
         self
     }
 
-    pub fn with_bottom(mut self, bottom: Stroke) -> Self {
-        self.bottom = Some(bottom);
+    pub fn with_bottom(mut self, bottom: impl Into<Stroke>) -> Self {
+        self.bottom = Some(bottom.into());
         self
     }
 
-    pub fn with_right(mut self, right: Stroke) -> Self {
-        self.right = Some(right);
+    pub fn with_right(mut self, right: impl Into<Stroke>) -> Self {
+        self.right = Some(right.into());
         self
     }
 
