@@ -56,8 +56,6 @@ pub fn lay_out_native(
         return vec![];
     }
 
-    let zero = Size::zero();
-
     let wrap_size = wrap_size.into();
     let gap = gap.into();
     let mut lines = vec![];
@@ -70,7 +68,7 @@ pub fn lay_out_native(
     for child in children {
         let line_gap = if line.is_empty() { Unit::zero() } else { gap };
 
-        let child_size = child.native_size().unwrap_or(&zero);
+        let child_size = child.native_size().unwrap_or_else(|| child.size_ref());
         let child_axis_size = axis.size(child_size);
 
         if axis.size(&line_size) + line_gap + child_axis_size > wrap_size {

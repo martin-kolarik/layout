@@ -245,17 +245,19 @@ impl Layout for LayoutBox {
                 gap,
                 respect_baseline,
             );
-            let last = lines.last().unwrap();
 
-            let mut size = axis.extend_dim(last.size(), last.offset());
+            let mut native_size = lines.iter().fold(Size::none(), |mut sum, line| {
+                *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
+                cross.extend_size(&sum, line.size(), respect_baseline)
+            });
             if axis.dim(&self.size).is_fixed() {
-                *axis.dim_mut(&mut size) = axis.dim(&self.size).clone();
+                *axis.dim_mut(&mut native_size) = axis.dim(&self.size).clone();
             }
             if cross.dim(&self.size).is_fixed() {
-                *cross.dim_mut(&mut size) = cross.dim(&self.size).clone();
+                *cross.dim_mut(&mut native_size) = cross.dim(&self.size).clone();
             }
 
-            size
+            native_size
         };
 
         self.style_ref()
@@ -377,7 +379,7 @@ impl Layout for LayoutBox {
                 let line_cross_grows = cross.dim(&self.size).is_dyn();
                 let child_cross_grows = cross.dim(child.size_ref()).is_content_or_dyn();
                 let child_cross_size = if child_cross_grows && line_cross_grows {
-                    cross.dim(child.size_ref()).size_available(line_cross_room)
+                    cross.dim(child_size).size_available(line_cross_room)
                 } else {
                     cross
                         .dim(child_size)

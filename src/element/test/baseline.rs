@@ -64,7 +64,9 @@ fn self_baseline_on_baseline() {
 fn self_baseline_inherits() {
     let box1 = DefaultFactory::vbox().size(100).depth(85);
 
-    let mut outer = DefaultFactory::vbox().child(box1);
+    let mut outer = DefaultFactory::vbox()
+        .child(box1)
+        .style(Style::new().with_align_items(AlignItems::Baseline));
 
     outer
         .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))

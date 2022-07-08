@@ -250,10 +250,10 @@ impl Style {
             max_height: self.max_height.clone(),
             grow: self.grow,
             shrink: self.shrink,
-            border: self.border.merge(&parent.border),
-            padding: self.padding.merge(&parent.padding),
-            align_items: self.align_items.or(parent.align_items),
-            gap: self.gap.or(parent.gap),
+            border: self.border.clone(),
+            padding: self.padding.clone(),
+            align_items: self.align_items,
+            gap: self.gap,
         }
     }
 
