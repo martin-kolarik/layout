@@ -383,13 +383,13 @@ fn single_cross_align_center_box() {
     assert_eq!(10, outer.offset_ref().y().0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(7, outer.size_ref().height().0);
-    assert_eq!(102, outer.content_size().unwrap().width().0);
+    assert_eq!(103, outer.content_size().unwrap().width().0);
     assert_eq!(7, outer.content_size().unwrap().height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(97, box1.offset_ref().x().0);
+    assert_eq!(98, box1.offset_ref().x().0);
     assert_eq!(10, box1.offset_ref().y().0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);

@@ -383,13 +383,13 @@ fn single_cross_align_center_box() {
     assert_eq!(10, outer.offset_ref().y().0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(98, outer.content_size().unwrap().width().0);
+    assert_eq!(99, outer.content_size().unwrap().width().0);
     assert_eq!(15, outer.content_size().unwrap().height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(101, box1.offset_ref().x().0);
+    assert_eq!(102, box1.offset_ref().x().0);
     assert_eq!(10, box1.offset_ref().y().0);
     assert_eq!(7, box1.size_ref().width().0);
     assert_eq!(15, box1.size_ref().height().0);
@@ -1060,7 +1060,7 @@ fn triple_fixed_boxes_cross_fixed_center() {
     assert_eq!(40, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(17, box3.offset_ref().x().0);
+    assert_eq!(18, box3.offset_ref().x().0);
     assert_eq!(90, box3.offset_ref().y().0);
     assert_eq!(15, box3.size_ref().width().0);
     assert_eq!(40, box3.size_ref().height().0);

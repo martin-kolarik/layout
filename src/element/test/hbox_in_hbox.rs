@@ -1094,7 +1094,7 @@ fn triple_fixed_boxes_cross_fixed_center() {
 
     let box3 = iter.next().unwrap();
     assert_eq!(90, box3.offset_ref().x().0);
-    assert_eq!(17, box3.offset_ref().y().0);
+    assert_eq!(18, box3.offset_ref().y().0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }

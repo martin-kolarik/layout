@@ -22,6 +22,7 @@ impl<'a> Line<'a> {
         }
     }
 
+    #[cfg(test)]
     pub fn offset(&self) -> Unit {
         self.offset
     }

@@ -114,7 +114,7 @@ impl Mul<f64> for Unit {
 
 impl MulAssign<f64> for Unit {
     fn mul_assign(&mut self, rhs: f64) {
-        self.0 = (self.0 as f64 * rhs) as i64;
+        self.0 = (self.0 as f64 * rhs).round() as i64;
     }
 }
 
@@ -222,7 +222,7 @@ impl Mul<f64> for Fill {
 
 impl MulAssign<f64> for Fill {
     fn mul_assign(&mut self, rhs: f64) {
-        self.0 = (self.0 as f64 * rhs.max(0.0)) as usize;
+        self.0 = (self.0 as f64 * rhs.max(0.0)).round() as usize;
     }
 }
 
