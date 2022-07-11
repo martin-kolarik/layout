@@ -16,7 +16,8 @@ rgb = { version = "^0.8", default-features = false, features = [
     "argb",
 ], optional = true }
 
-allsorts = { version = "^0.7", optional = true }
+## allsorts = { version = "^0.7", optional = true }
+allsorts = { path = "../allsorts", optional = true }
 log = { version = "^0.4", default-features = false, optional = true }
 printpdf = { version = "^0.5", optional = true }
 thiserror = { version = "^1.0", optional = true }
