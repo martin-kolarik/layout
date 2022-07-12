@@ -453,6 +453,12 @@ impl Quad {
     }
 }
 
+impl From<&Quad> for Quad {
+    fn from(quad: &Quad) -> Self {
+        quad.clone()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Offset, Size};

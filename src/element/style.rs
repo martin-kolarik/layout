@@ -60,6 +60,12 @@ impl Font {
     }
 }
 
+impl From<&Font> for Font {
+    fn from(font: &Font) -> Self {
+        font.clone()
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Stroke {
     color: Rgba,
@@ -201,6 +207,12 @@ impl Border {
 
     pub fn right(&self) -> Option<&Stroke> {
         self.right.as_ref()
+    }
+}
+
+impl From<&Border> for Border {
+    fn from(border: &Border) -> Self {
+        border.clone()
     }
 }
 
@@ -353,13 +365,13 @@ impl Style {
         self
     }
 
-    pub fn with_border(mut self, border: Border) -> Self {
-        self.border = border;
+    pub fn with_border(mut self, border: impl Into<Border>) -> Self {
+        self.border = border.into();
         self
     }
 
-    pub fn with_padding(mut self, padding: Quad) -> Self {
-        self.padding = padding;
+    pub fn with_padding(mut self, padding: impl Into<Quad>) -> Self {
+        self.padding = padding.into();
         self
     }
 

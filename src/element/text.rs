@@ -156,8 +156,12 @@ mod tests {
 
         hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
-            .unwrap();
+        hbox.lay_out(
+            &mut 0_usize,
+            Offset::new(0, 0),
+            Size::fixed(1000000, 2000000),
+        )
+        .unwrap();
 
         let mut children = hbox.iter();
 
@@ -190,8 +194,12 @@ mod tests {
 
         hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        hbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
-            .unwrap();
+        hbox.lay_out(
+            &mut 0_usize,
+            Offset::new(0, 0),
+            Size::fixed(1000000, 2000000),
+        )
+        .unwrap();
 
         let mut children = hbox.iter();
         let mut children = children.next().unwrap().iter();
@@ -219,8 +227,12 @@ mod tests {
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
-            .unwrap();
+        vbox.lay_out(
+            &mut 0_usize,
+            Offset::new(0, 0),
+            Size::fixed(1000000, 2000000),
+        )
+        .unwrap();
 
         let mut children = vbox.iter();
 
@@ -248,8 +260,12 @@ mod tests {
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
-        vbox.lay_out(&mut 0_usize, Offset::new(0, 0), Size::fixed(1000000, 2000000))
-            .unwrap();
+        vbox.lay_out(
+            &mut 0_usize,
+            Offset::new(0, 0),
+            Size::fixed(1000000, 2000000),
+        )
+        .unwrap();
 
         let mut children = vbox.iter();
         let mut children = children.next().unwrap().iter();
