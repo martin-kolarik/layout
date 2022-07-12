@@ -28,7 +28,7 @@ impl Text {
             mark: None,
             offset: Offset::zero(),
             size: Size::content(),
-            style: Style::default(),
+            style: Style::new(),
             text: InnerText::Input(text.into()),
         }
     }
@@ -66,7 +66,7 @@ styled!(Text);
 impl Layout for Text {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, _: Size) -> Result<(), Error> {
         if let InnerText::Input(text) = &mut self.text {
-            let style = self.style.merge(ctx.style());
+            let style = self.style.inherit(ctx.style());
             let font = match style.font() {
                 Some(font) => font,
                 None => return Ok(()),

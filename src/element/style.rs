@@ -256,7 +256,7 @@ impl Style {
         }
     }
 
-    pub fn merge(&self, parent: &Style) -> Self {
+    pub fn inherit(&self, parent: &Style) -> Self {
         Self {
             font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
@@ -277,6 +277,30 @@ impl Style {
             padding: self.padding.clone(),
             align_items: self.align_items,
             gap: self.gap,
+        }
+    }
+
+    pub fn merge(&self, parent: &Style) -> Self {
+        Self {
+            font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
+            color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
+            background_color: self
+                .background_color
+                .as_ref()
+                .or(parent.background_color.as_ref())
+                .cloned(),
+            width: self.width.clone(),
+            min_width: self.min_width.clone(),
+            max_width: self.max_width.clone(),
+            height: self.height.clone(),
+            min_height: self.min_height.clone(),
+            max_height: self.max_height.clone(),
+            grow: self.grow,
+            shrink: self.shrink,
+            border: self.border.merge(&parent.border),
+            padding: self.padding.merge(&parent.padding),
+            align_items: self.align_items.or(parent.align_items),
+            gap: self.gap.or(parent.gap),
         }
     }
 

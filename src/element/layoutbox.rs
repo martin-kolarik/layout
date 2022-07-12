@@ -131,7 +131,7 @@ impl LayoutBox {
     }
 
     pub fn child_box(mut self, mut child: Box<dyn Layout>) -> Self {
-        let style = child.style_ref().merge(self.style_ref());
+        let style = child.style_ref().inherit(self.style_ref());
         child.size_mut().apply_style(self.axis, &style);
         child.set_style(style);
         self.children.push(child);
@@ -145,7 +145,7 @@ impl LayoutBox {
         let children = children
             .into_iter()
             .map(|mut child| {
-                let style = child.style_ref().merge(self.style_ref());
+                let style = child.style_ref().inherit(self.style_ref());
                 child.size_mut().apply_style(self.axis, &style);
                 child.set_style(style);
                 child
