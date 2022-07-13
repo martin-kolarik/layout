@@ -2,9 +2,8 @@ use rtext::Apply;
 
 use crate::{
     position::{Offset, Size},
-    styled,
     unit::Fill,
-    Axis, Error, Layout, MeasureContext, Position, Style,
+    Axis, Error, Layout, MeasureContext, Position, Style, Styled,
 };
 
 pub struct Filling {
@@ -46,8 +45,6 @@ impl Filling {
 
 impl Apply for Filling {}
 
-styled!(Filling);
-
 impl Position for Filling {
     fn mark(&self) -> &str {
         self.mark.unwrap_or_default()
@@ -75,6 +72,16 @@ impl Position for Filling {
 
     fn native_size(&self) -> Option<&Size> {
         Some(self.size_ref())
+    }
+}
+
+impl Styled for Filling {
+    fn style_ref(&self) -> &Style {
+        &self.style
+    }
+
+    fn set_style(&mut self, style: Style) {
+        self.style = style;
     }
 }
 

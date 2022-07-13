@@ -552,12 +552,4 @@ impl Styled for Style {
     fn set_style(&mut self, style: Style) {
         *self = style;
     }
-
-    fn adopt_parent_style(&mut self, parent: &Style) {
-        *self = self.merge(parent);
-    }
-
-    fn override_style(&mut self, with: &Style) {
-        *self = with.merge(self);
-    }
 }

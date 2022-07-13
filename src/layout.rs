@@ -37,8 +37,14 @@ pub trait Position {
 pub trait Styled {
     fn style_ref(&self) -> &Style;
     fn set_style(&mut self, style: Style);
-    fn adopt_parent_style(&mut self, parent: &Style);
-    fn override_style(&mut self, with: &Style);
+
+    fn adopt_parent_style(&mut self, parent: &Style) {
+        self.set_style(self.style_ref().merge(parent));
+    }
+
+    fn override_style(&mut self, with: &Style) {
+        self.set_style(with.merge(self.style_ref()));
+    }
 }
 
 #[allow(unused_variables)]
@@ -131,27 +137,4 @@ impl Factory for DefaultFactory {
     fn text_str(text: &str) -> Text {
         Text::new(text)
     }
-}
-
-#[macro_export]
-macro_rules! styled {
-    ($layout:path) => {
-        impl $crate::Styled for $layout {
-            fn style_ref(&self) -> &$crate::Style {
-                &self.style
-            }
-
-            fn set_style(&mut self, style: $crate::Style) {
-                self.style = style;
-            }
-
-            fn adopt_parent_style(&mut self, parent: &$crate::Style) {
-                self.style = self.style.merge(parent);
-            }
-
-            fn override_style(&mut self, with: &$crate::Style) {
-                self.style = with.merge(&self.style);
-            }
-        }
-    };
 }

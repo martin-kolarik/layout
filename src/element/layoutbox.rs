@@ -4,7 +4,6 @@ use crate::{
     children::lay_out_native,
     dimension::{DimAutoOrParent, DimOrParent},
     position::{Offset, Size},
-    styled,
     unit::{sub_unit, Fill, Unit},
     AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
 };
@@ -213,7 +212,20 @@ impl Position for LayoutBox {
     }
 }
 
-styled!(LayoutBox);
+impl Styled for LayoutBox {
+    fn style_ref(&self) -> &Style {
+        &self.style
+    }
+
+    fn set_style(&mut self, style: Style) {
+        self.children.iter_mut().for_each(|child| {
+            let style = child.style_ref().inherit(&style);
+            child.size_mut().apply_style(self.axis, &style);
+            child.set_style(style);
+        });
+        self.style = style;
+    }
+}
 
 impl Layout for LayoutBox {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, mut room: Size) -> Result<(), Error> {

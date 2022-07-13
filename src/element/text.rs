@@ -1,7 +1,7 @@
 use crate::{
     font::TextPosition,
     position::{Offset, Size},
-    styled, Error, Layout, MeasureContext, Position, RenderContext, Style,
+    Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
 };
 
 enum InnerText {
@@ -61,7 +61,15 @@ impl Position for Text {
     }
 }
 
-styled!(Text);
+impl Styled for Text {
+    fn style_ref(&self) -> &Style {
+        &self.style
+    }
+
+    fn set_style(&mut self, style: Style) {
+        self.style = style;
+    }
+}
 
 impl Layout for Text {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, _: Size) -> Result<(), Error> {
@@ -152,7 +160,11 @@ mod tests {
         let t2 = DefaultFactory::text("b");
         let t3 = DefaultFactory::text("c");
 
-        let mut hbox = DefaultFactory::hbox().child(t1).child(t2).child(t3);
+        let mut hbox = DefaultFactory::hbox()
+            .style(Style::default())
+            .child(t1)
+            .child(t2)
+            .child(t3);
 
         hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
@@ -184,13 +196,16 @@ mod tests {
         let t2 = DefaultFactory::text("b").mark("t2");
         let t3 = DefaultFactory::text("c").mark("t3");
 
-        let mut hbox = DefaultFactory::hbox().mark("h1").child(
-            DefaultFactory::hbox()
-                .mark("h2")
-                .child(t1)
-                .child(t2)
-                .child(t3),
-        );
+        let mut hbox = DefaultFactory::hbox()
+            .style(Style::default())
+            .mark("h1")
+            .child(
+                DefaultFactory::hbox()
+                    .mark("h2")
+                    .child(t1)
+                    .child(t2)
+                    .child(t3),
+            );
 
         hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
@@ -223,7 +238,11 @@ mod tests {
         let t2 = DefaultFactory::text("b");
         let t3 = DefaultFactory::text("c");
 
-        let mut vbox = DefaultFactory::vbox().child(t1).child(t2).child(t3);
+        let mut vbox = DefaultFactory::vbox()
+            .style(Style::default())
+            .child(t1)
+            .child(t2)
+            .child(t3);
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
@@ -255,8 +274,9 @@ mod tests {
         let t2 = DefaultFactory::text("b");
         let t3 = DefaultFactory::text("c");
 
-        let mut vbox =
-            DefaultFactory::vbox().child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
+        let mut vbox = DefaultFactory::vbox()
+            .style(Style::default())
+            .child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
