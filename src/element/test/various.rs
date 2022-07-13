@@ -70,7 +70,7 @@ fn decorated_cell_in_rows_line() {
     assert_eq!(10, line.offset_ref().y().0);
     assert_eq!(190, line.size_ref().x_dim().basis_size().unwrap().0);
     assert_eq!(
-        36,
+        28,
         line.native_size().unwrap().x_dim().basis_size().unwrap().0
     );
     assert_eq!(8, line.size_ref().y_dim().basis_size().unwrap().0);
@@ -80,7 +80,7 @@ fn decorated_cell_in_rows_line() {
 
     assert_eq!(10, cell.offset_ref().x().0);
     assert_eq!(10, cell.offset_ref().y().0);
-    assert_eq!(36, cell.size_ref().x_dim().basis_size().unwrap().0);
+    assert_eq!(28, cell.size_ref().x_dim().basis_size().unwrap().0);
     assert_eq!(8, cell.size_ref().y_dim().basis_size().unwrap().0);
 }
 

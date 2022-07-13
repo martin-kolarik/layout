@@ -217,8 +217,7 @@ styled!(LayoutBox);
 
 impl Layout for LayoutBox {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, mut room: Size) -> Result<(), Error> {
-        self.style_ref().padding().narrow(None, Some(&mut room));
-
+        // expand self outer size, it must fill parent if specified
         let axis = self.axis;
         let axis_room = axis.size(&room);
         axis.dim_mut(self.size_mut()).resolve_parented(axis_room);
@@ -227,17 +226,26 @@ impl Layout for LayoutBox {
         let cross_room = cross.size(&room);
         cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
-        let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
+        let mut content_size = self.size.clone();
+        self.style_ref()
+            .padding()
+            .narrow(None, Some(&mut content_size));
 
         let mut native_size = if self.children.is_empty() {
-            self.size.clone()
+            content_size
         } else {
             for child in self.children.iter_mut() {
                 child.measure(ctx, room.clone())?;
             }
 
-            let axis_room = axis.dim(&self.size).size_available(axis_room);
+            let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
+
+            self.style_ref().padding().narrow(None, Some(&mut room));
+            let axis_room = axis.size(&room);
+            let axis_room = axis.dim(&content_size).size_available(axis_room);
+
             let gap = self.style_ref().gap_size();
+
             let lines = lay_out_native(
                 self.axis,
                 &mut self.children,
@@ -251,10 +259,10 @@ impl Layout for LayoutBox {
                 cross.extend_size(&sum, line.size(), respect_baseline)
             });
             if axis.dim(&self.size).is_fixed() {
-                *axis.dim_mut(&mut native_size) = axis.dim(&self.size).clone();
+                *axis.dim_mut(&mut native_size) = axis.dim(&content_size).clone();
             }
             if cross.dim(&self.size).is_fixed() {
-                *cross.dim_mut(&mut native_size) = cross.dim(&self.size).clone();
+                *cross.dim_mut(&mut native_size) = cross.dim(&content_size).clone();
             }
 
             native_size
@@ -273,31 +281,35 @@ impl Layout for LayoutBox {
         &mut self,
         ctx: &mut dyn MeasureContext,
         mut offset: Offset,
-        mut size: Size,
+        mut room: Size,
     ) -> Result<(), Error> {
+        // resolve padding
+        self.style_ref()
+            .padding()
+            .narrow(Some(&mut offset), Some(&mut room));
+
+        let mut size = self.size.clone();
+        self.style_ref().padding().narrow(None, Some(&mut size));
+
         // axes preparation
         let axis = self.axis;
         let cross = axis.cross();
-        let cross_takes_native = cross.dim(&self.size).is_content_fixed();
-
-        self.style_ref()
-            .padding()
-            .narrow(Some(&mut offset), Some(&mut size));
+        let cross_takes_native = cross.dim(&size).is_content_fixed();
 
         // dimensions preparation
-        let axis_size = axis.size(&size);
-        let wrap_size = axis.dim(&self.size).size_available(axis_size);
+        let axis_room = axis.size(&room);
+        let axis_size = axis.dim(&size).size_available(axis_room);
 
-        let cross_size = cross.size(&size);
-        let cross_room = cross.dim(&self.size).size_available(cross_size);
+        let cross_room = cross.size(&room);
+        let cross_size = cross.dim(&size).size_available(cross_room);
 
         let align_items = self.style_ref().align_items();
         let gap = self.style_ref().gap_size();
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
-        let given_ascent = sub_unit(size.ascent(), self.size_ref().ascent());
+        let given_ascent = sub_unit(room.ascent(), self.size_ref().ascent());
         if matches!(
-            (align_items, size.depth(), self.size_ref().depth()),
+            (align_items, room.depth(), self.size_ref().depth()),
             (AlignItems::Baseline, Some(_), Some(_))
         ) {
             offset.y_advance(given_ascent.unwrap_or_default());
@@ -307,7 +319,7 @@ impl Layout for LayoutBox {
         let lines = lay_out_native(
             self.axis,
             &mut self.children,
-            wrap_size,
+            axis_size,
             gap,
             matches!(align_items, AlignItems::Baseline),
         );
@@ -335,7 +347,7 @@ impl Layout for LayoutBox {
                 content_size = cross.extend_dim(&content_size, gap);
             }
 
-            let room_to_distribute = wrap_size - axis.size(&native_line_size);
+            let room_to_distribute = axis_size - axis.size(&native_line_size);
             let sum_grow = axis.dim(&native_line_size).grow();
             let sum_shrink = axis.dim(&native_line_size).shrink();
 
@@ -344,7 +356,7 @@ impl Layout for LayoutBox {
             let line_cross_room = if multi_line || cross_takes_native {
                 cross.size(&native_line_size)
             } else {
-                cross_room
+                cross_size
             };
 
             // prepare loop over children in line
@@ -376,7 +388,7 @@ impl Layout for LayoutBox {
 
                 // Resolve cross stretches. only if both me and child has auto dimension, they stretch.
                 // The behavior is the same as in FlexBox.
-                let line_cross_grows = cross.dim(&self.size).is_dyn();
+                let line_cross_grows = cross.dim(&size).is_dyn();
                 let child_cross_grows = cross.dim(child.size_ref()).is_content_or_dyn();
                 let child_cross_size = if child_cross_grows && line_cross_grows {
                     cross.dim(child_size).size_available(line_cross_room)
@@ -459,16 +471,12 @@ impl Layout for LayoutBox {
 
         // Sets own axis/cross dimensions to native content size, if the dimension is auto_fixed.
         // Otherwise own axis/cross dimension can be stretchable, therefore size_filled is called to resolve it.
-        axis.resolve_content_size(&mut self.size, &content_size, axis_size);
-        cross.resolve_content_size(&mut self.size, &content_size, cross_size);
+        axis.resolve_content_size(&mut size, &content_size, axis_room);
+        cross.resolve_content_size(&mut size, &content_size, cross_room);
 
-        self.style_ref()
-            .padding()
-            .widen(None, Some(&mut content_size));
         self.content_size = Some(content_size);
 
         // Adopt final offset and size including padding
-        let mut size = self.size.clone();
         self.style_ref()
             .padding()
             .widen(Some(&mut offset), Some(&mut size));

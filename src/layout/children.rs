@@ -49,7 +49,7 @@ impl<'a> Line<'a> {
 pub fn lay_out_native(
     axis: Axis,
     children: &mut [Box<dyn Layout>],
-    wrap_size: impl Into<Unit>,
+    axis_room: impl Into<Unit>,
     gap: impl Into<Unit>,
     respect_baseline: bool,
 ) -> Vec<Line> {
@@ -57,7 +57,7 @@ pub fn lay_out_native(
         return vec![];
     }
 
-    let wrap_size = wrap_size.into();
+    let wrap_size = axis_room.into();
     let gap = gap.into();
     let mut lines = vec![];
     let mut remaining = children.len();
