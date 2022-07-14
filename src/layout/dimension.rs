@@ -53,6 +53,14 @@ impl DimOrParent {
             *self = Self::Parent(*fill, Some(size));
         }
     }
+    pub fn merge(&self, parent: &Self) -> Self {
+        if matches!(self, Self::None) {
+            parent
+        } else {
+            self
+        }
+        .clone()
+    }
 }
 
 impl<IU> From<IU> for DimOrParent
@@ -192,6 +200,15 @@ impl DimAutoOrParent {
             (Some(_), None) => self.clone(),
             (Some(l), Some(r)) => Self::Fixed(l - r),
         }
+    }
+
+    pub fn merge(&self, parent: &Self) -> Self {
+        if matches!(self, Self::None) {
+            parent
+        } else {
+            self
+        }
+        .clone()
     }
 }
 
