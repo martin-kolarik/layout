@@ -69,9 +69,7 @@ pub fn lay_out_native(
     for child in children {
         let line_gap = if line.is_empty() { Unit::zero() } else { gap };
 
-        let child_size = child.native_size().unwrap_or_else(|| child.size_ref());
-        let child_axis_size = axis.size(child_size);
-
+        let child_axis_size = axis.size(child.size_ref());
         if axis.size(&line_size) + line_gap + child_axis_size > wrap_size {
             let next_line_offset = axis
                 .cross()
@@ -89,7 +87,7 @@ pub fn lay_out_native(
             offset = axis.advance_dim(&offset, line_gap);
             line_size = axis.extend_dim(&line_size, line_gap);
         }
-        line_size = axis.extend_size(&line_size, child_size, respect_baseline);
+        line_size = axis.extend_size(&line_size, child.size_ref(), respect_baseline);
 
         *child.offset_mut() = offset.clone();
         offset = axis.advance_dim(&offset, child_axis_size);

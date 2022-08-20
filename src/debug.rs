@@ -13,7 +13,6 @@ impl Debug for dyn Layout {
         f.debug_struct(&name)
             .field("offset", self.offset_ref())
             .field("size", self.size_ref())
-            .field("native_size", &self.native_size())
             .field("content_size", &self.content_size())
             .finish()?;
 

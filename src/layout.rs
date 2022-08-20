@@ -29,10 +29,6 @@ pub trait Position {
     fn size_ref(&self) -> &Size;
     fn size_mut(&mut self) -> &mut Size;
 
-    fn native_size(&self) -> Option<&Size> {
-        Some(self.size_ref())
-    }
-
     fn content_size(&self) -> Option<&Size> {
         None
     }
