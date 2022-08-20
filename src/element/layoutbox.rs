@@ -103,7 +103,7 @@ impl LayoutBox {
 
     pub fn style(mut self, style: impl Into<Arc<Style>>) -> Self {
         let style = style.into();
-        self.size.apply_style(self.axis, &style);
+        // self.size.apply_style(self.axis, &style);
         self.style = style;
         self
     }
@@ -231,7 +231,7 @@ impl Styled for LayoutBox {
             child.size_mut().apply_style(self.axis, &style);
             child.set_style(style);
         });
-        self.size.apply_style(self.axis, &style);
+        //self.size.apply_style(self.axis, &style);
         self.style = style;
     }
 }
@@ -248,9 +248,14 @@ impl Layout for LayoutBox {
         cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
         let mut content_size = self.size.clone();
+
+        println!("CS1: {:?}", content_size);
+
         self.style_ref()
             .padding()
             .narrow(None, Some(&mut content_size));
+
+        println!("CS2: {:?}", content_size);
 
         let mut native_size = if self.children.is_empty() {
             content_size
@@ -279,6 +284,7 @@ impl Layout for LayoutBox {
                 *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
                 cross.extend_size(&sum, line.size(), respect_baseline)
             });
+
             if axis.dim(&self.size).is_fixed() {
                 *axis.dim_mut(&mut native_size) = axis.dim(&content_size).clone();
             }
@@ -289,9 +295,20 @@ impl Layout for LayoutBox {
             native_size
         };
 
+        println!("NS3: {:?}", native_size);
+
         self.style_ref()
             .padding()
             .widen(None, Some(&mut native_size));
+
+        println!("NS4: {:?}", native_size);
+
+        if axis.dim(&self.size).is_content() {
+            *axis.dim_mut(self.size_mut()) = axis.dim(&native_size).clone();
+        }
+        if cross.dim(&self.size).is_content() {
+            *cross.dim_mut(self.size_mut()) = cross.dim(&native_size).clone();
+        }
 
         self.native_size = Some(native_size);
 
@@ -401,6 +418,7 @@ impl Layout for LayoutBox {
                 }
 
                 let child_size = child.native_size().unwrap_or_else(|| child.size_ref());
+                //let child_size = child.size_ref();
 
                 // Resolve axis streches.
                 let child_axis_size =

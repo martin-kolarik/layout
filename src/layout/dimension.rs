@@ -54,6 +54,7 @@ impl DimOrParent {
             *self = Self::Parent(*fill, Some(size));
         }
     }
+
     pub fn merge(&self, parent: &Self) -> Self {
         if matches!(self, Self::None) {
             parent
@@ -462,6 +463,12 @@ impl Dimension {
             }
         }
         self.max = max;
+    }
+
+    pub fn resolve_content(&mut self, content_size: impl Into<Unit>) {
+        if self.basis.is_content() {
+            self.basis.resolve(content_size.into());
+        }
     }
 
     pub fn resolve_parented(&mut self, parent_size: impl Into<Unit>) {
