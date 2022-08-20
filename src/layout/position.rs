@@ -1,4 +1,7 @@
-use std::ops::{Add, AddAssign, Sub, SubAssign};
+use std::{
+    fmt::Debug,
+    ops::{Add, AddAssign, Sub, SubAssign},
+};
 
 use crate::{
     dimension::DimAutoOrParent,
@@ -120,11 +123,21 @@ impl SubAssign for Offset {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct Size {
     width: Dimension,
     height: Dimension,
     depth: Option<Unit>,
+}
+
+impl Debug for Size {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Size")
+            .field("w", &self.width)
+            .field("h", &self.height)
+            .field("d", &format!("{:?}", self.depth))
+            .finish()
+    }
 }
 
 impl Size {

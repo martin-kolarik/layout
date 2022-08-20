@@ -1,5 +1,6 @@
 use std::{
     cmp::Ordering,
+    fmt::Debug,
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
@@ -263,13 +264,22 @@ impl Sub<&DimAutoOrParent> for &DimAutoOrParent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct Dimension {
     basis: DimAutoOrParent,
     min: DimOrParent,
     max: DimOrParent,
     grow: Option<Fill>,
     shrink: Option<Fill>,
+}
+
+impl Debug for Dimension {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_fmt(format_args!(
+            "{:?}+{:?}-{:?}[{:?}->{:?}]",
+            self.basis, self.grow, self.shrink, self.min, self.max,
+        ))
+    }
 }
 
 impl Dimension {

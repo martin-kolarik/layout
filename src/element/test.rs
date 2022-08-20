@@ -3,9 +3,9 @@ use crate::{Features, MeasureContext, Style, TextPosition};
 pub(crate) mod baseline;
 pub(crate) mod hbox_in_hbox;
 pub(crate) mod hbox_in_vbox;
+pub(crate) mod various;
 pub(crate) mod vbox_in_hbox;
 pub(crate) mod vbox_in_vbox;
-pub(crate) mod various;
 
 pub(crate) struct Ctx;
 

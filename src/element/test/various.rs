@@ -1,7 +1,7 @@
 use crate::{
     position::{Offset, Quad, Size},
     unit::FillPerMille,
-    DefaultFactory, Factory, Layout, Style,
+    DefaultFactory, Factory, Layout, StyleBuilder,
 };
 
 #[test]
@@ -51,7 +51,7 @@ fn decorated_cell_in_rows_line() {
 
     let cell = DefaultFactory::hbox()
         .size(28)
-        .style(Style::new().with_padding(Quad::square(4)));
+        .style(StyleBuilder::new().with_padding(Quad::square(4)));
     let line = DefaultFactory::hbox()
         .child(cell)
         .size(FillPerMille::full());
@@ -92,7 +92,7 @@ fn cell_in_rows_decorated_line() {
     let line = DefaultFactory::hbox()
         .child(cell)
         .size(FillPerMille::full())
-        .style(Style::new().with_padding(Quad::square(4)));
+        .style(StyleBuilder::new().with_padding(Quad::square(4)));
 
     let mut outer = DefaultFactory::vbox().child(line);
 
@@ -134,7 +134,7 @@ fn cells_in_rows_decorated_line() {
         .child(cell2)
         .child(cell3)
         .size(FillPerMille::full())
-        .style(Style::new().with_padding(Quad::square(4)));
+        .style(StyleBuilder::new().with_padding(Quad::square(4)));
 
     let mut outer = DefaultFactory::vbox().child(line);
 

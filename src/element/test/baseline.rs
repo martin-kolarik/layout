@@ -1,7 +1,7 @@
 use crate::{
     position::{Offset, Size},
     test::Ctx,
-    AlignItems, DefaultFactory, Factory, Layout, Position, Style,
+    AlignItems, DefaultFactory, Factory, Layout, Position, StyleBuilder,
 };
 
 #[test]
@@ -42,7 +42,10 @@ fn self_baseline_on_not_baseline() {
 
 #[test]
 fn self_baseline_on_baseline() {
-    let mut box1 = DefaultFactory::vbox().size(100).depth(85);
+    let mut box1 = DefaultFactory::vbox()
+        .size(100)
+        .depth(85)
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
 
     box1.lay_out(
         &mut Ctx,
@@ -66,7 +69,7 @@ fn self_baseline_inherits() {
 
     let mut outer = DefaultFactory::vbox()
         .child(box1)
-        .style(Style::new().with_align_items(AlignItems::Baseline));
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
 
     outer
         .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
@@ -96,7 +99,7 @@ fn self_baseline_inherits_and_positions() {
 
     let mut outer = DefaultFactory::vbox()
         .child(box1)
-        .style(Style::new().with_align_items(AlignItems::Baseline));
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
 
     outer
         .lay_out(

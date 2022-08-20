@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use rtext::Apply;
 
 use crate::{
@@ -11,7 +13,7 @@ pub struct Filling {
     axis: Axis,
     offset: Offset,
     size: Size,
-    style: Style,
+    style: Arc<Style>,
     content_size: Option<Size>,
 }
 
@@ -46,6 +48,10 @@ impl Filling {
 impl Apply for Filling {}
 
 impl Position for Filling {
+    fn element(&self) -> &str {
+        "Fill"
+    }
+
     fn mark(&self) -> &str {
         self.mark.unwrap_or_default()
     }

@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::{
     dimension::{DimAutoOrParent, DimOrParent},
     position::Quad,
@@ -216,7 +218,7 @@ impl From<&Border> for Border {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Style {
     font: Option<Font>,
     color: Option<Rgba>,
@@ -235,8 +237,18 @@ pub struct Style {
     gap: Option<Unit>,
 }
 
+impl Styled for Arc<Style> {
+    fn style_ref(&self) -> &Style {
+        self.as_ref()
+    }
+
+    fn set_style(&mut self, style: Arc<Style>) {
+        *self = style;
+    }
+}
+
 impl Style {
-    pub const fn new() -> Self {
+    const fn __internal_new() -> Self {
         Self {
             font: None,
             color: None,
@@ -256,8 +268,26 @@ impl Style {
         }
     }
 
-    pub fn inherit(&self, parent: &Style) -> Self {
-        Self {
+    fn __internal_default() -> Style {
+        Style {
+            font: Some(Font::new("default", Pt(10.0), None)),
+            color: Some(Rgba::black().clone()),
+            width: DimAutoOrParent::Content(None),
+            height: DimAutoOrParent::Content(None),
+            ..Self::__internal_new()
+        }
+    }
+
+    pub fn new() -> Arc<Self> {
+        Arc::new(Self::__internal_new())
+    }
+
+    pub fn default() -> Arc<Style> {
+        Arc::new(Self::__internal_default())
+    }
+
+    pub fn inherit(&self, parent: &Style) -> Arc<Self> {
+        Arc::new(Self {
             font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
             background_color: self
@@ -277,11 +307,11 @@ impl Style {
             padding: self.padding.clone(),
             align_items: self.align_items,
             gap: self.gap,
-        }
+        })
     }
 
-    pub fn merge(&self, parent: &Style) -> Self {
-        Self {
+    pub fn merge(&self, parent: &Style) -> Arc<Self> {
+        Arc::new(Self {
             font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
             background_color: self
@@ -294,127 +324,18 @@ impl Style {
             max_width: self.max_width.merge(&parent.max_width),
             height: self.height.merge(&parent.height),
             min_height: self.min_height.merge(&parent.min_height),
-            max_height: self.max_height.merge(&&parent.max_height),
+            max_height: self.max_height.merge(&parent.max_height),
             grow: self.grow.as_ref().or(parent.grow.as_ref()).cloned(),
             shrink: self.shrink.as_ref().or(parent.shrink.as_ref()).cloned(),
             border: self.border.merge(&parent.border),
             padding: self.padding.merge(&parent.padding),
             align_items: self.align_items.or(parent.align_items),
             gap: self.gap.or(parent.gap),
-        }
-    }
-
-    pub fn with_font(mut self, font: impl Into<Font>) -> Self {
-        self.font = Some(font.into());
-        self
-    }
-
-    pub fn with_color(mut self, color: impl Into<Rgba>) -> Self {
-        self.color = Some(color.into());
-        self
-    }
-
-    pub fn with_background_color(mut self, background_color: impl Into<Rgba>) -> Self {
-        self.background_color = Some(background_color.into());
-        self
-    }
-
-    pub fn with_width(mut self, width: impl Into<Unit>) -> Self {
-        self.width = width.into().into();
-        self
-    }
-
-    pub fn with_width_parent(mut self, fill: impl Into<FillPerMille>) -> Self {
-        self.width = fill.into().into();
-        self
-    }
-
-    pub fn with_max_width(mut self, max: impl Into<Unit>) -> Self {
-        self.max_width = max.into().into();
-        self
-    }
-
-    pub fn with_max_width_parent(mut self, max: impl Into<FillPerMille>) -> Self {
-        self.max_width = max.into().into();
-        self
-    }
-
-    pub fn with_min_width(mut self, min: impl Into<Unit>) -> Self {
-        self.min_width = min.into().into();
-        self
-    }
-
-    pub fn with_min_width_parent(mut self, min: impl Into<FillPerMille>) -> Self {
-        self.min_width = min.into().into();
-        self
-    }
-
-    pub fn with_height(mut self, height: impl Into<Unit>) -> Self {
-        self.height = height.into().into();
-        self
-    }
-
-    pub fn with_height_parent(mut self, fill: impl Into<FillPerMille>) -> Self {
-        self.height = fill.into().into();
-        self
-    }
-
-    pub fn with_max_height(mut self, max: impl Into<Unit>) -> Self {
-        self.max_height = max.into().into();
-        self
-    }
-
-    pub fn with_max_height_parent(mut self, max: impl Into<FillPerMille>) -> Self {
-        self.max_height = max.into().into();
-        self
-    }
-
-    pub fn with_min_height(mut self, min: impl Into<Unit>) -> Self {
-        self.min_height = min.into().into();
-        self
-    }
-
-    pub fn with_min_height_parent(mut self, min: impl Into<FillPerMille>) -> Self {
-        self.min_height = min.into().into();
-        self
-    }
-
-    pub fn with_grow(mut self, grow: impl Into<Fill>) -> Self {
-        self.grow = Some(grow.into());
-        self
-    }
-
-    pub fn with_shrink(mut self, shrink: impl Into<Fill>) -> Self {
-        self.shrink = Some(shrink.into());
-        self
-    }
-
-    pub fn with_border(mut self, border: impl Into<Border>) -> Self {
-        self.border = border.into();
-        self
-    }
-
-    pub fn with_padding(mut self, padding: impl Into<Quad>) -> Self {
-        self.padding = padding.into();
-        self
-    }
-
-    pub fn with_align_items(mut self, align_items: AlignItems) -> Self {
-        self.align_items = Some(align_items);
-        self
-    }
-
-    pub fn with_gap(mut self, gap: impl Into<Unit>) -> Self {
-        self.gap = Some(gap.into());
-        self
+        })
     }
 
     pub fn font(&self) -> Option<&Font> {
         self.font.as_ref()
-    }
-
-    pub fn font_mut(&mut self) -> Option<&mut Font> {
-        self.font.as_mut()
     }
 
     pub fn color(&self) -> Option<&Rgba> {
@@ -522,34 +443,145 @@ impl Style {
     }
 }
 
-impl Default for Style {
+pub struct StyleBuilder {
+    style: Style,
+}
+
+impl Default for StyleBuilder {
     fn default() -> Self {
         Self {
-            font: Some(Font::new("default", Pt(10.0), None)),
-            color: Some(Rgba::black().clone()),
-            background_color: None,
-            width: DimAutoOrParent::Content(None),
-            min_width: DimOrParent::None,
-            max_width: DimOrParent::None,
-            height: DimAutoOrParent::Content(None),
-            min_height: DimOrParent::None,
-            max_height: DimOrParent::None,
-            grow: None,
-            shrink: None,
-            border: Border::none(),
-            padding: Quad::empty(),
-            align_items: None,
-            gap: None,
+            style: Style::__internal_default(),
         }
     }
 }
 
-impl Styled for Style {
-    fn style_ref(&self) -> &Style {
+impl From<StyleBuilder> for Arc<Style> {
+    fn from(builder: StyleBuilder) -> Self {
+        builder.build()
+    }
+}
+
+impl StyleBuilder {
+    pub fn new() -> Self {
+        Self {
+            style: Style::__internal_new(),
+        }
+    }
+
+    pub fn build(self) -> Arc<Style> {
+        Arc::new(self.style)
+    }
+
+    pub fn style(&self) -> &Style {
+        &self.style
+    }
+
+    pub fn with_font(mut self, font: impl Into<Font>) -> Self {
+        self.style.font = Some(font.into());
         self
     }
 
-    fn set_style(&mut self, style: Style) {
-        *self = style;
+    pub fn font_mut(&mut self) -> Option<&mut Font> {
+        self.style.font.as_mut()
+    }
+
+    pub fn with_color(mut self, color: impl Into<Rgba>) -> Self {
+        self.style.color = Some(color.into());
+        self
+    }
+
+    pub fn with_background_color(mut self, background_color: impl Into<Rgba>) -> Self {
+        self.style.background_color = Some(background_color.into());
+        self
+    }
+
+    pub fn with_width(mut self, width: impl Into<Unit>) -> Self {
+        self.style.width = width.into().into();
+        self
+    }
+
+    pub fn with_width_parent(mut self, fill: impl Into<FillPerMille>) -> Self {
+        self.style.width = fill.into().into();
+        self
+    }
+
+    pub fn with_max_width(mut self, max: impl Into<Unit>) -> Self {
+        self.style.max_width = max.into().into();
+        self
+    }
+
+    pub fn with_max_width_parent(mut self, max: impl Into<FillPerMille>) -> Self {
+        self.style.max_width = max.into().into();
+        self
+    }
+
+    pub fn with_min_width(mut self, min: impl Into<Unit>) -> Self {
+        self.style.min_width = min.into().into();
+        self
+    }
+
+    pub fn with_min_width_parent(mut self, min: impl Into<FillPerMille>) -> Self {
+        self.style.min_width = min.into().into();
+        self
+    }
+
+    pub fn with_height(mut self, height: impl Into<Unit>) -> Self {
+        self.style.height = height.into().into();
+        self
+    }
+
+    pub fn with_height_parent(mut self, fill: impl Into<FillPerMille>) -> Self {
+        self.style.height = fill.into().into();
+        self
+    }
+
+    pub fn with_max_height(mut self, max: impl Into<Unit>) -> Self {
+        self.style.max_height = max.into().into();
+        self
+    }
+
+    pub fn with_max_height_parent(mut self, max: impl Into<FillPerMille>) -> Self {
+        self.style.max_height = max.into().into();
+        self
+    }
+
+    pub fn with_min_height(mut self, min: impl Into<Unit>) -> Self {
+        self.style.min_height = min.into().into();
+        self
+    }
+
+    pub fn with_min_height_parent(mut self, min: impl Into<FillPerMille>) -> Self {
+        self.style.min_height = min.into().into();
+        self
+    }
+
+    pub fn with_grow(mut self, grow: impl Into<Fill>) -> Self {
+        self.style.grow = Some(grow.into());
+        self
+    }
+
+    pub fn with_shrink(mut self, shrink: impl Into<Fill>) -> Self {
+        self.style.shrink = Some(shrink.into());
+        self
+    }
+
+    pub fn with_border(mut self, border: impl Into<Border>) -> Self {
+        self.style.border = border.into();
+        self
+    }
+
+    pub fn with_padding(mut self, padding: impl Into<Quad>) -> Self {
+        self.style.padding = padding.into();
+        self
+    }
+
+    pub fn with_align_items(mut self, align_items: AlignItems) -> Self {
+        self.style.align_items = Some(align_items);
+        self
+    }
+
+    pub fn with_gap(mut self, gap: impl Into<Unit>) -> Self {
+        self.style.gap = Some(gap.into());
+        self
     }
 }

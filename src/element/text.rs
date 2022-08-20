@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use crate::{
     font::TextPosition,
     position::{Offset, Size},
@@ -13,7 +14,7 @@ pub struct Text {
     mark: Option<&'static str>,
     offset: Offset,
     size: Size,
-    style: Style,
+    style: Arc<Style>,
     text: InnerText,
 }
 
@@ -33,13 +34,17 @@ impl Text {
         }
     }
 
-    pub fn style(mut self, style: Style) -> Self {
-        self.style = style;
+    pub fn style(mut self, style: impl Into<Arc<Style>>) -> Self {
+        self.style = style.into();
         self
     }
 }
 
 impl Position for Text {
+    fn element(&self) -> &str {
+        "Text"
+    }
+
     fn mark(&self) -> &str {
         self.mark.unwrap_or_default()
     }
@@ -63,10 +68,11 @@ impl Position for Text {
 
 impl Styled for Text {
     fn style_ref(&self) -> &Style {
-        &self.style
+        self.style.as_ref()
     }
 
-    fn set_style(&mut self, style: Style) {
+    fn set_style(&mut self, style: Arc<Style>) {
+        self.size.apply_style(Axis::Horizontal, &style);
         self.style = style;
     }
 }
@@ -103,6 +109,8 @@ impl Layout for Text {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::{Arc, OnceLock};
+
     use crate::{
         position::{Offset, Quad, Size},
         unit::Em,
@@ -110,11 +118,11 @@ mod tests {
         RenderContext, Stroke, Style, TextPosition,
     };
 
-    static STYLE: Style = Style::new();
+    static STYLE: OnceLock<Arc<Style>> = OnceLock::new();
 
     impl MeasureContext for usize {
         fn style(&self) -> &Style {
-            &STYLE
+            STYLE.get_or_init(Style::new)
         }
 
         fn typeset(

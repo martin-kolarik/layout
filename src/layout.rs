@@ -1,5 +1,7 @@
 mod axis;
 
+use std::sync::Arc;
+
 pub use axis::*;
 
 pub(crate) mod dimension;
@@ -15,6 +17,8 @@ use crate::{Error, Features, Filling, LayoutBox, Stroke, Style, Text, TextPositi
 use self::position::{Offset, Quad, Size};
 
 pub trait Position {
+    fn element(&self) -> &str;
+
     fn mark(&self) -> &str {
         ""
     }
@@ -36,7 +40,7 @@ pub trait Position {
 
 pub trait Styled {
     fn style_ref(&self) -> &Style;
-    fn set_style(&mut self, style: Style);
+    fn set_style(&mut self, style: Arc<Style>);
 
     fn adopt_parent_style(&mut self, parent: &Style) {
         self.set_style(self.style_ref().merge(parent));
@@ -68,7 +72,7 @@ pub trait Layout: Send + Position + Styled {
     }
 
     fn iter(&self) -> Box<dyn Iterator<Item = &Box<dyn Layout>> + '_> {
-        unreachable!()
+        Box::new([].iter())
     }
 }
 
