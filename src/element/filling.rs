@@ -72,21 +72,22 @@ impl Position for Filling {
         &mut self.size
     }
 
-    fn content_size(&self) -> Option<&Size> {
-        self.content_size.as_ref()
-    }
-
     fn native_size(&self) -> Option<&Size> {
         Some(self.size_ref())
+    }
+
+    fn content_size(&self) -> Option<&Size> {
+        self.content_size.as_ref()
     }
 }
 
 impl Styled for Filling {
     fn style_ref(&self) -> &Style {
-        &self.style
+        self.style.as_ref()
     }
 
-    fn set_style(&mut self, style: Style) {
+    fn set_style(&mut self, style: Arc<Style>) {
+        self.size.apply_style(self.axis, &style);
         self.style = style;
     }
 }

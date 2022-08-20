@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use rtext::Apply;
 
 use crate::{
@@ -5,7 +7,8 @@ use crate::{
     dimension::{DimAutoOrParent, DimOrParent},
     position::{Offset, Size},
     unit::{sub_unit, Fill, Unit},
-    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
+    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, StyleBuilder,
+    Styled,
 };
 
 pub struct LayoutBox {
@@ -13,7 +16,7 @@ pub struct LayoutBox {
     axis: Axis,
     offset: Offset,
     size: Size,
-    style: Style,
+    style: Arc<Style>,
     children: Vec<Box<dyn Layout>>,
     native_size: Option<Size>,
     content_size: Option<Size>,
@@ -26,7 +29,9 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
-            style: Style::new().with_align_items(AlignItems::Start),
+            style: StyleBuilder::new()
+                .with_align_items(AlignItems::Start)
+                .build(),
             children: vec![],
             native_size: None,
             content_size: None,
@@ -63,13 +68,10 @@ impl LayoutBox {
         self
     }
 
-    pub fn with_baseline(mut self) -> Self {
-        self.style = self.style.with_align_items(AlignItems::Baseline);
-        self
-    }
-
     pub fn depth(mut self, depth: impl Into<Unit>) -> Self {
-        self.style = self.style.with_align_items(AlignItems::Baseline);
+        if !matches!(self.style.align_items(), AlignItems::Baseline) {
+            log::warn!("Depth set for a box having items not aligned on a baseline");
+        }
         self.size.set_depth(Some(depth));
         self
     }
@@ -99,7 +101,9 @@ impl LayoutBox {
         self
     }
 
-    pub fn style(mut self, style: Style) -> Self {
+    pub fn style(mut self, style: impl Into<Arc<Style>>) -> Self {
+        let style = style.into();
+        self.size.apply_style(self.axis, &style);
         self.style = style;
         self
     }
@@ -183,6 +187,10 @@ impl<'a> Iterator for ChildrenIterator<'a> {
 impl Apply for LayoutBox {}
 
 impl Position for LayoutBox {
+    fn element(&self) -> &str {
+        "Box"
+    }
+
     fn mark(&self) -> &'static str {
         self.mark.unwrap_or_default()
     }
@@ -217,12 +225,13 @@ impl Styled for LayoutBox {
         &self.style
     }
 
-    fn set_style(&mut self, style: Style) {
+    fn set_style(&mut self, style: Arc<Style>) {
         self.children.iter_mut().for_each(|child| {
             let style = child.style_ref().inherit(&style);
             child.size_mut().apply_style(self.axis, &style);
             child.set_style(style);
         });
+        self.size.apply_style(self.axis, &style);
         self.style = style;
     }
 }
@@ -401,7 +410,7 @@ impl Layout for LayoutBox {
                 // Resolve cross stretches. only if both me and child has auto dimension, they stretch.
                 // The behavior is the same as in FlexBox.
                 let line_cross_grows = cross.dim(&size).is_dyn();
-                let child_cross_grows = cross.dim(child.size_ref()).is_content_or_dyn();
+                let child_cross_grows = cross.dim(child_size).is_content_or_dyn();
                 let child_cross_size = if child_cross_grows && line_cross_grows {
                     cross.dim(child_size).size_available(line_cross_room)
                 } else {

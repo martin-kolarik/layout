@@ -1,8 +1,9 @@
 use std::sync::Arc;
+
 use crate::{
     font::TextPosition,
     position::{Offset, Size},
-    Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
+    Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
 };
 
 enum InnerText {
