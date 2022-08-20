@@ -7,8 +7,8 @@ use crate::{
     dimension::{DimAutoOrParent, DimOrParent},
     position::{Offset, Size},
     unit::{sub_unit, Fill, Unit},
-    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, StyleBuilder,
-    Styled,
+    AlignItems, Axis, DefaultFactory, Error, Layout, MeasureContext, Position, RenderContext,
+    Style, StyleBuilder, Styled,
 };
 
 pub struct LayoutBox {
@@ -116,7 +116,7 @@ impl LayoutBox {
     }
 
     pub fn child(self, child: impl Layout + 'static) -> Self {
-        self.child_box(Box::new(child))
+        self.child_dyn(Box::new(child))
     }
 
     pub fn children<L, IL, IIL>(self, children: IIL) -> Self
@@ -125,13 +125,13 @@ impl LayoutBox {
         IL: Into<L>,
         L: Layout + 'static,
     {
-        self.children_box(children.into_iter().map(|child| {
+        self.children_dyn(children.into_iter().map(|child| {
             let child: Box<dyn Layout> = Box::new(child.into());
             child
         }))
     }
 
-    pub fn child_box(mut self, mut child: Box<dyn Layout>) -> Self {
+    pub fn child_dyn(mut self, mut child: Box<dyn Layout>) -> Self {
         let style = child.style_ref().inherit(self.style_ref());
         child.size_mut().apply_style(self.axis, &style);
         child.set_style(style);
@@ -139,7 +139,7 @@ impl LayoutBox {
         self
     }
 
-    pub fn children_box<IL>(mut self, children: IL) -> Self
+    pub fn children_dyn<IL>(mut self, children: IL) -> Self
     where
         IL: IntoIterator<Item = Box<dyn Layout>>,
     {
@@ -154,6 +154,10 @@ impl LayoutBox {
             .collect::<Vec<_>>();
         self.children.extend(children);
         self
+    }
+
+    pub fn text(self, text: impl Into<String>) -> Self {
+        self.child_dyn(Box::new(DefaultFactory::text(text)))
     }
 }
 
