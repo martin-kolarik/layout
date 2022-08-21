@@ -14,7 +14,11 @@ pub(crate) mod children;
 
 use crate::{Error, Features, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
 
-use self::position::{Offset, Quad, Size};
+use self::{
+    dimension::DimAutoOrParent,
+    position::{Offset, Quad, Size},
+    unit::Fill,
+};
 
 pub trait Position {
     fn element(&self) -> &str;
@@ -101,10 +105,26 @@ pub trait RenderContext: MeasureContext {
 
 pub trait Factory {
     fn hbox() -> LayoutBox;
-    fn hfill() -> Filling;
+    fn hfilling() -> Filling;
+
+    fn hfill(weight: impl Into<Fill>) -> Filling {
+        Self::hfilling().grow(weight)
+    }
+
+    fn hspace(size: impl Into<DimAutoOrParent>) -> Filling {
+        Self::hfilling().size(size)
+    }
 
     fn vbox() -> LayoutBox;
-    fn vfill() -> Filling;
+    fn vfilling() -> Filling;
+
+    fn vfill(weight: impl Into<Fill>) -> Filling {
+        Self::vfilling().grow(weight)
+    }
+
+    fn vspace(size: impl Into<DimAutoOrParent>) -> Filling {
+        Self::vfilling().size(size)
+    }
 
     fn text_str(text: &str) -> Text;
 }
@@ -122,7 +142,7 @@ impl Factory for DefaultFactory {
         LayoutBox::new(Axis::Horizontal)
     }
 
-    fn hfill() -> Filling {
+    fn hfilling() -> Filling {
         Filling::new(Axis::Horizontal)
     }
 
@@ -130,7 +150,7 @@ impl Factory for DefaultFactory {
         LayoutBox::new(Axis::Vertical)
     }
 
-    fn vfill() -> Filling {
+    fn vfilling() -> Filling {
         Filling::new(Axis::Vertical)
     }
 
