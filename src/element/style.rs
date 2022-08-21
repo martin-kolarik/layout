@@ -7,18 +7,13 @@ use crate::{
     Features, Rgba, Styled,
 };
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy)]
 pub enum AlignItems {
+    #[default]
     Start,
     Baseline,
     Center,
     End,
-}
-
-impl Default for AlignItems {
-    fn default() -> Self {
-        Self::Start
-    }
 }
 
 #[derive(Debug, Clone)]
@@ -287,6 +282,14 @@ impl Style {
     }
 
     pub fn inherit(&self, parent: &Style) -> Arc<Self> {
+        let align_items = if matches!(self.align_items, None)
+            && matches!(parent.align_items, Some(AlignItems::Baseline))
+        {
+            Some(AlignItems::Baseline)
+        } else {
+            self.align_items
+        };
+
         Arc::new(Self {
             font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
@@ -305,7 +308,7 @@ impl Style {
             shrink: self.shrink,
             border: self.border.clone(),
             padding: self.padding.clone(),
-            align_items: self.align_items,
+            align_items,
             gap: self.gap,
         })
     }

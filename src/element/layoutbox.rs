@@ -28,9 +28,7 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
-            style: StyleBuilder::new()
-                .with_align_items(AlignItems::Start)
-                .build(),
+            style: StyleBuilder::new().build(),
             children: vec![],
             content_size: None,
         }
@@ -100,9 +98,7 @@ impl LayoutBox {
     }
 
     pub fn style(mut self, style: impl Into<Arc<Style>>) -> Self {
-        let style = style.into();
-        // self.size.apply_style(self.axis, &style);
-        self.style = style;
+        self.set_style(style.into());
         self
     }
 
@@ -229,7 +225,7 @@ impl Styled for LayoutBox {
             child.size_mut().apply_style(self.axis, &style);
             child.set_style(style);
         });
-        //self.size.apply_style(self.axis, &style);
+        self.size.apply_style(self.axis, &style);
         self.style = style;
     }
 }
@@ -244,6 +240,7 @@ impl Layout for LayoutBox {
         let cross_room = cross.size(&room);
         cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
+        let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
         let mut self_size = self.size.clone();
 
         self.style_ref()
@@ -256,8 +253,6 @@ impl Layout for LayoutBox {
             for child in self.children.iter_mut() {
                 child.measure(ctx, room.clone())?;
             }
-
-            let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
 
             self.style_ref().padding().narrow(None, Some(&mut room));
             let axis_room = axis.size(&room);
@@ -295,6 +290,9 @@ impl Layout for LayoutBox {
         cross
             .dim_mut(self.size_mut())
             .resolve_content(cross.size(&self_size));
+        if respect_baseline && self.size_ref().depth().is_none() {
+            self.size_mut().set_depth(self_size.depth());
+        }
 
         Ok(())
     }
@@ -329,12 +327,13 @@ impl Layout for LayoutBox {
         let gap = self.style_ref().gap_size();
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
-        let given_ascent = sub_unit(room.ascent(), self.size_ref().ascent());
+        let self_ascent = self.size_ref().ascent();
         if matches!(
-            (align_items, room.depth(), self.size_ref().depth()),
+            (align_items, room.depth(), self_ascent),
             (AlignItems::Baseline, Some(_), Some(_))
         ) {
-            offset.y_advance(given_ascent.unwrap_or_default());
+            let self_to_parent_ascent = sub_unit(room.ascent(), self_ascent);
+            offset.y_advance(self_to_parent_ascent.unwrap_or_default());
         }
 
         // wrap children using native size
@@ -349,21 +348,27 @@ impl Layout for LayoutBox {
         // prepare loop over lines
         let mut position = offset.clone();
         let mut content_size = Size::zero();
-        let mut ascent_inherit_cache = None;
-        let mut ascent;
+        let mut first_ascent = None;
         let mut first_line = Some(());
         let multi_line = lines.len() > 1;
 
         for mut line in lines {
             let native_line_size = line.size().clone();
-            ascent = native_line_size.ascent();
 
             if first_line.take().is_some() {
-                if matches!((axis, given_ascent), (Axis::Horizontal, Some(_))) {
+                if matches!(axis, Axis::Horizontal) {
                     // if lines are horizontal, only the first line respects baseline
-                    ascent = given_ascent;
+                    if matches!(
+                        (align_items, self_ascent, native_line_size.ascent()),
+                        (AlignItems::Baseline, Some(_), Some(_))
+                    ) {
+                        let first_line_to_self_ascent =
+                            sub_unit(self_ascent, native_line_size.ascent());
+                        offset.y_advance(first_line_to_self_ascent.unwrap_or_default());
+                    }
+
+                    first_ascent = self_ascent.or_else(|| native_line_size.ascent());
                 }
-                ascent_inherit_cache = ascent;
             } else {
                 position = cross.advance_dim(&position, gap);
                 content_size = cross.extend_dim(&content_size, gap);
@@ -389,12 +394,8 @@ impl Layout for LayoutBox {
             for child in line.content_mut() {
                 let first = first_child.take();
                 if first.is_some() {
-                    if matches!((axis, given_ascent), (Axis::Vertical, Some(_))) {
-                        // if lines are vertical, each first child of each line respects baseline
-                        ascent = given_ascent;
-                    }
-                    if ascent_inherit_cache.is_none() {
-                        ascent_inherit_cache = ascent;
+                    if matches!(axis, Axis::Vertical) {
+                        first_ascent = first_ascent.max(child.size_ref().ascent());
                     }
                 } else {
                     position = axis.advance_dim(&position, gap);
@@ -420,28 +421,31 @@ impl Layout for LayoutBox {
                         .size_filled(cross.size(&native_line_size))
                 };
 
-                // Baseline alignment for vertical axis (baseline offsets main axis).
-                let child_axis_offset =
-                    match (align_items, first, axis, ascent, child.size_ref().ascent()) {
-                        (
-                            AlignItems::Baseline,
-                            Some(_),
-                            Axis::Vertical,
-                            Some(ascent),
-                            Some(child_ascent),
-                        ) => ascent - child_ascent,
-                        _ => Unit::zero(),
-                    };
+                // Baseline alignment
+                let child_ascent = child_size.ascent();
+
+                // Baseline axis is main axis (therefore vertical).
+                let child_axis_offset = match (align_items, first, axis, self_ascent, child_ascent)
+                {
+                    (
+                        AlignItems::Baseline,
+                        Some(_),
+                        Axis::Vertical,
+                        Some(self_ascent),
+                        Some(child_ascent),
+                    ) => self_ascent - child_ascent,
+                    _ => Unit::zero(),
+                };
                 position = axis.advance_dim(&position, child_axis_offset);
 
-                // Cross axis alignment. Baseline alignment for horizontal axis (baseline offsets cross axis).
+                // Baseline axis is cross axis (therefore horizontal).
                 let child_cross_offset = match (&self.style.align_items(), axis) {
                     (AlignItems::Start, _) => Unit::zero(),
                     (AlignItems::Center, _) => (line_cross_room - child_cross_size) * 0.5,
                     (AlignItems::End, _) => line_cross_room - child_cross_size,
                     (AlignItems::Baseline, Axis::Horizontal) => {
-                        match (ascent, child.size_ref().ascent()) {
-                            (Some(ascent), Some(child_ascent)) => ascent - child_ascent,
+                        match (native_line_size.ascent(), child_ascent) {
+                            (Some(line_ascent), Some(child_ascent)) => line_ascent - child_ascent,
                             // the following creates artificial baseline of child box in its lower edge, if the child box has no baseline
                             // (Some(ascent), None) => ascent - child_cross_size,
                             _ => Unit::zero(),
@@ -508,9 +512,8 @@ impl Layout for LayoutBox {
 
         // Adopt children depth, if I have not it set.
         if self.size.depth().is_none() {
-            self.size.set_depth(
-                ascent_inherit_cache.map(|first_ascent| self.size.height() - first_ascent),
-            );
+            self.size
+                .set_depth(first_ascent.map(|first_ascent| self.size.height() - first_ascent));
         }
 
         Ok(())

@@ -399,16 +399,19 @@ fn single_cross_align_baseline_box() {
     let mut outer = DefaultFactory::vbox()
         .child(box1)
         .cross_grow(1)
-        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
+        // size and depth below is forced size assignment due to ommited measure call
+        .size(15)
+        .depth(1);
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(6, outer.offset_ref().y().0);
     assert_eq!(190, outer.size_ref().width().0);
-    assert_eq!(11, outer.size_ref().height().0);
+    assert_eq!(15, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
-    assert_eq!(11, outer.content_size().unwrap().height().0);
+    assert_eq!(15, outer.content_size().unwrap().height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
@@ -1110,27 +1113,27 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
     assert_eq!(10, outer.offset_ref().x().0);
     assert_eq!(10, outer.offset_ref().y().0);
     assert_eq!(40, outer.size_ref().width().0);
-    assert_eq!(80, outer.size_ref().height().0);
+    assert_eq!(65, outer.size_ref().height().0);
     assert_eq!(40, outer.content_size().unwrap().width().0);
-    assert_eq!(80, outer.content_size().unwrap().height().0);
+    assert_eq!(65, outer.content_size().unwrap().height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
     assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(25, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().y().0);
     assert_eq!(40, box1.size_ref().width().0);
     assert_eq!(20, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
     assert_eq!(10, box2.offset_ref().x().0);
-    assert_eq!(45, box2.offset_ref().y().0);
+    assert_eq!(30, box2.offset_ref().y().0);
     assert_eq!(40, box2.size_ref().width().0);
     assert_eq!(30, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
     assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(75, box3.offset_ref().y().0);
+    assert_eq!(60, box3.offset_ref().y().0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }

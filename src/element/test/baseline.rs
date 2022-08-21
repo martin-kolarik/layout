@@ -69,7 +69,9 @@ fn self_baseline_inherits() {
 
     let mut outer = DefaultFactory::vbox()
         .child(box1)
-        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
+        // depth here is artificial as there measure pass is missing
+        .depth(85);
 
     outer
         .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
@@ -99,7 +101,10 @@ fn self_baseline_inherits_and_positions() {
 
     let mut outer = DefaultFactory::vbox()
         .child(box1)
-        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
+        .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
+        // size and depth are set due to emulate missing measure phase
+        .size(100)
+        .depth(85);
 
     outer
         .lay_out(
@@ -110,12 +115,12 @@ fn self_baseline_inherits_and_positions() {
         .unwrap();
 
     assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(5, outer.offset_ref().y().0);
     assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(95, outer.size_ref().height().0);
-    assert_eq!(80, outer.size_ref().depth().unwrap().0);
+    assert_eq!(100, outer.size_ref().height().0);
+    assert_eq!(85, outer.size_ref().depth().unwrap().0);
     assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(95, outer.content_size().unwrap().height().0);
+    assert_eq!(100, outer.content_size().unwrap().height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();

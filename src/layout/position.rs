@@ -442,6 +442,10 @@ impl Quad {
                 let mut height = size.height_ref().clone();
                 height.set_size(size.height() - self.height());
                 size.set_height(height);
+
+                if let Some(depth) = &mut size.depth {
+                    *depth -= self.bottom_size();
+                }
             }
         }
     }
@@ -461,6 +465,10 @@ impl Quad {
                 let mut height = size.height_ref().clone();
                 height.set_size(size.height() + self.height());
                 size.set_height(height);
+
+                if let Some(depth) = &mut size.depth {
+                    *depth += self.bottom_size();
+                }
             }
         }
     }
