@@ -81,6 +81,10 @@ impl Styled for Text {
 impl Layout for Text {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, _: Size) -> Result<(), Error> {
         if let InnerText::Input(text) = &mut self.text {
+            if text.is_empty() {
+                return Ok(());
+            }
+
             let style = self.style.inherit(ctx.style());
             let font = match style.font() {
                 Some(font) => font,
@@ -101,8 +105,10 @@ impl Layout for Text {
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
         if let InnerText::Layout(text) = &self.text {
-            ctx.text(self.offset_ref(), &self.style, text, false);
-            ctx.debug_frame(self.offset_ref(), self.size_ref());
+            if !text.positions.is_empty() {
+                ctx.text(self.offset_ref(), &self.style, text, false);
+                ctx.debug_frame(self.offset_ref(), self.size_ref());
+            }
         }
         Ok(())
     }
