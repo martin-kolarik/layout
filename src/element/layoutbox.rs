@@ -152,7 +152,7 @@ impl LayoutBox {
         self
     }
 
-    pub fn text(self, text: impl Into<String>) -> Self {
+    pub fn text(self, text: impl ToString) -> Self {
         self.child_dyn(Box::new(DefaultFactory::text(text)))
     }
 }

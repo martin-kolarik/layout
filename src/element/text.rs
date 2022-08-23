@@ -25,13 +25,13 @@ impl Text {
         self
     }
 
-    pub fn new(text: impl Into<String>) -> Self {
+    pub fn new(text: impl ToString) -> Self {
         Self {
             mark: None,
             offset: Offset::zero(),
             size: Size::content(),
             style: Style::new(),
-            text: InnerText::Input(text.into()),
+            text: InnerText::Input(text.to_string()),
         }
     }
 

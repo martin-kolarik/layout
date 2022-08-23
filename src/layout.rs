@@ -132,7 +132,7 @@ pub trait Factory {
 pub struct DefaultFactory;
 
 impl DefaultFactory {
-    pub fn text(text: impl Into<String>) -> Text {
+    pub fn text(text: impl ToString) -> Text {
         Text::new(text)
     }
 }

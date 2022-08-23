@@ -13,6 +13,10 @@ impl Rgba {
         &GRAY_50
     }
 
+    pub fn gray_63() -> &'static Rgba {
+        &GRAY_63
+    }
+
     pub fn gray_75() -> &'static Rgba {
         &GRAY_75
     }
@@ -98,6 +102,13 @@ static GRAY_50: Rgba = Rgba(RGBA {
     r: 128,
     g: 128,
     b: 128,
+    a: 1.0,
+});
+
+static GRAY_63: Rgba = Rgba(RGBA {
+    r: 160,
+    g: 160,
+    b: 160,
     a: 1.0,
 });
 
