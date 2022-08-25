@@ -91,7 +91,7 @@ impl Layout for Text {
                 None => return Ok(()),
             };
 
-            let text = ctx.typeset(&style, text, None)?;
+            let text = ctx.typeset(&style, text, Some(font.features()))?;
             let font_size = font.size();
             self.size = Size::fixed_depth(
                 text.width * font_size,

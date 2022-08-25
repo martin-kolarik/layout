@@ -446,6 +446,7 @@ impl Style {
     }
 }
 
+#[derive(Debug)]
 pub struct StyleBuilder {
     style: Style,
 }
