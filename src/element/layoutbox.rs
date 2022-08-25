@@ -102,6 +102,11 @@ impl LayoutBox {
         self
     }
 
+    pub fn add_style(mut self, style: impl Into<Arc<Style>>) -> Self {
+        self.set_style(style.into().merge(&self.style));
+        self
+    }
+
     pub fn take_over_position(&mut self, offset: Offset, size: Size) {
         self.offset = offset;
         self.size = size;

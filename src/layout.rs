@@ -12,7 +12,7 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{Error, Features, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
+use crate::{Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
 
 use self::{
     dimension::DimAutoOrParent,
@@ -79,12 +79,7 @@ pub trait Layout: Send + Position + Styled {
 pub trait MeasureContext {
     fn style(&self) -> &Style;
 
-    fn typeset(
-        &mut self,
-        style: &Style,
-        text: &str,
-        features: Option<&Features>,
-    ) -> Result<TextPosition, Error>;
+    fn typeset(&mut self, style: &Style, text: &str) -> Result<TextPosition, Error>;
 }
 
 pub trait RenderContext: MeasureContext {

@@ -36,7 +36,12 @@ impl Text {
     }
 
     pub fn style(mut self, style: impl Into<Arc<Style>>) -> Self {
-        self.style = style.into();
+        self.set_style(style.into());
+        self
+    }
+
+    pub fn add_style(mut self, style: impl Into<Arc<Style>>) -> Self {
+        self.set_style(style.into().merge(&self.style));
         self
     }
 }
@@ -86,13 +91,13 @@ impl Layout for Text {
             }
 
             let style = self.style.inherit(ctx.style());
-            let font = match style.font() {
-                Some(font) => font,
-                None => return Ok(()),
-            };
+            let font = style.font();
+            if font.name().is_none() || font.size().is_none() {
+                return Ok(());
+            }
 
-            let text = ctx.typeset(&style, text, Some(font.features()))?;
-            let font_size = font.size();
+            let text = ctx.typeset(&style, text)?;
+            let font_size = font.size().unwrap();
             self.size = Size::fixed_depth(
                 text.width * font_size,
                 text.height * font_size,

@@ -18,41 +18,57 @@ pub enum AlignItems {
 
 #[derive(Debug, Clone)]
 pub struct Font {
-    name: &'static str,
-    size: Pt,
-    features: Features,
+    name: Option<&'static str>,
+    size: Option<Pt>,
+    features: Option<Features>,
 }
 
 impl Font {
     pub fn new(name: &'static str, size: impl Into<Pt>, features: Option<Features>) -> Self {
         Self {
-            name,
-            size: size.into(),
-            features: features.unwrap_or_default(),
+            name: Some(name),
+            size: Some(size.into()),
+            features: features,
+        }
+    }
+
+    const fn __internal_new() -> Self {
+        Self {
+            name: None,
+            size: None,
+            features: None,
+        }
+    }
+
+    pub fn merge(&self, parent: &Self) -> Self {
+        Self {
+            name: self.name.as_ref().or(parent.name.as_ref()).cloned(),
+            size: self.size.or(parent.size),
+            features: self.features.as_ref().or(parent.features.as_ref()).cloned(),
         }
     }
 
     pub fn set_name(&mut self, name: &'static str) {
-        self.name = name;
+        self.name = Some(name);
     }
 
     pub fn set_size(&mut self, size: Pt) {
-        self.size = size;
+        self.size = Some(size);
     }
 
     pub fn set_features(&mut self, features: Features) {
-        self.features = features;
+        self.features = Some(features);
     }
 
-    pub fn name(&self) -> &str {
-        self.name
+    pub fn name(&self) -> Option<&str> {
+        self.name.as_deref()
     }
 
-    pub fn features(&self) -> &Features {
-        &self.features
+    pub fn features(&self) -> Option<&Features> {
+        self.features.as_ref()
     }
 
-    pub fn size(&self) -> Pt {
+    pub fn size(&self) -> Option<Pt> {
         self.size
     }
 }
@@ -215,7 +231,7 @@ impl From<&Border> for Border {
 
 #[derive(Debug)]
 pub struct Style {
-    font: Option<Font>,
+    font: Font,
     color: Option<Rgba>,
     background_color: Option<Rgba>,
     width: DimAutoOrParent,
@@ -245,7 +261,7 @@ impl Styled for Arc<Style> {
 impl Style {
     const fn __internal_new() -> Self {
         Self {
-            font: None,
+            font: Font::__internal_new(),
             color: None,
             background_color: None,
             width: DimAutoOrParent::None,
@@ -265,7 +281,7 @@ impl Style {
 
     fn __internal_default() -> Style {
         Style {
-            font: Some(Font::new("default", Pt(10.0), None)),
+            font: Font::new("default", Pt(10.0), None),
             color: Some(Rgba::black().clone()),
             width: DimAutoOrParent::Content(None),
             height: DimAutoOrParent::Content(None),
@@ -291,7 +307,7 @@ impl Style {
         };
 
         Arc::new(Self {
-            font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
+            font: self.font.merge(&parent.font),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
             background_color: self
                 .background_color
@@ -315,7 +331,7 @@ impl Style {
 
     pub fn merge(&self, parent: &Style) -> Arc<Self> {
         Arc::new(Self {
-            font: self.font.as_ref().or(parent.font.as_ref()).cloned(),
+            font: self.font.merge(&parent.font),
             color: self.color.as_ref().or(parent.color.as_ref()).cloned(),
             background_color: self
                 .background_color
@@ -337,8 +353,8 @@ impl Style {
         })
     }
 
-    pub fn font(&self) -> Option<&Font> {
-        self.font.as_ref()
+    pub fn font(&self) -> &Font {
+        &self.font
     }
 
     pub fn color(&self) -> Option<&Rgba> {
@@ -481,12 +497,23 @@ impl StyleBuilder {
     }
 
     pub fn with_font(mut self, font: impl Into<Font>) -> Self {
-        self.style.font = Some(font.into());
+        self.style.font = font.into();
         self
     }
 
-    pub fn font_mut(&mut self) -> Option<&mut Font> {
-        self.style.font.as_mut()
+    pub fn with_font_name(mut self, name: &'static str) -> Self {
+        self.style.font.set_name(name);
+        self
+    }
+
+    pub fn with_font_size(mut self, size: Pt) -> Self {
+        self.style.font.set_size(size);
+        self
+    }
+
+    pub fn with_font_features(mut self, features: Features) -> Self {
+        self.style.font.set_features(features);
+        self
     }
 
     pub fn with_color(mut self, color: impl Into<Rgba>) -> Self {
