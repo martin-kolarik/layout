@@ -7,8 +7,8 @@ use crate::{
     dimension::{DimAutoOrParent, DimOrParent},
     position::{Offset, Size},
     unit::{sub_unit, Fill, Unit},
-    AlignItems, Axis, DefaultFactory, Error, Layout, MeasureContext, Position, RenderContext,
-    Style, StyleBuilder, Styled,
+    AlignItems, Axis, DefaultFactory, Error, Layout, MeasureContext, NewPageOptions, Position,
+    RenderContext, Style, StyleBuilder, Styled,
 };
 
 pub struct LayoutBox {
@@ -16,6 +16,7 @@ pub struct LayoutBox {
     axis: Axis,
     offset: Offset,
     size: Size,
+    break_inside: bool,
     style: Arc<Style>,
     children: Vec<Box<dyn Layout>>,
     content_size: Option<Size>,
@@ -28,6 +29,7 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
+            break_inside: true,
             style: StyleBuilder::new().build(),
             children: vec![],
             content_size: None,
@@ -41,6 +43,11 @@ impl LayoutBox {
 
     pub fn size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
         self.axis.dim_mut(&mut self.size).set_basis(size);
+        self
+    }
+
+    pub fn avoid_break(mut self) -> Self {
+        self.break_inside = false;
         self
     }
 
@@ -262,6 +269,10 @@ impl Layout for LayoutBox {
             self.style_ref().padding().narrow(None, Some(&mut room));
             let axis_room = axis.size(&room);
             let axis_room = axis.dim(&self_size).size_available(axis_room);
+            let wrap = self
+                .style_ref()
+                .wrap()
+                .unwrap_or(matches!(axis, Axis::Horizontal));
 
             let gap = self.style_ref().gap_size();
 
@@ -270,6 +281,7 @@ impl Layout for LayoutBox {
                 &mut self.children,
                 axis_room,
                 gap,
+                wrap,
                 respect_baseline,
             );
 
@@ -328,6 +340,10 @@ impl Layout for LayoutBox {
         let cross_room = cross.size(&room);
         let cross_size = cross.dim(&size).size_available(cross_room);
 
+        let wrap = self
+            .style_ref()
+            .wrap()
+            .unwrap_or(matches!(axis, Axis::Horizontal));
         let align_items = self.style_ref().align_items();
         let gap = self.style_ref().gap_size();
 
@@ -347,6 +363,7 @@ impl Layout for LayoutBox {
             &mut self.children,
             axis_size,
             gap,
+            wrap,
             matches!(align_items, AlignItems::Baseline),
         );
 
@@ -525,6 +542,12 @@ impl Layout for LayoutBox {
     }
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
+        if !self.break_inside {
+            ctx.new_page(Some(
+                NewPageOptions::new().with_break_if_not_room(self.offset_ref(), self.size_ref()),
+            ));
+        }
+
         for child in self.iter() {
             child.render(ctx)?;
         }

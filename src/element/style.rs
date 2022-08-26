@@ -242,10 +242,11 @@ pub struct Style {
     max_height: DimOrParent,
     grow: Option<Fill>,
     shrink: Option<Fill>,
-    border: Border,
-    padding: Quad,
+    wrap: Option<bool>,
     align_items: Option<AlignItems>,
     gap: Option<Unit>,
+    border: Border,
+    padding: Quad,
 }
 
 impl Styled for Arc<Style> {
@@ -272,10 +273,11 @@ impl Style {
             max_height: DimOrParent::None,
             grow: None,
             shrink: None,
-            border: Border::none(),
-            padding: Quad::empty(),
+            wrap: None,
             align_items: None,
             gap: None,
+            border: Border::none(),
+            padding: Quad::empty(),
         }
     }
 
@@ -322,10 +324,11 @@ impl Style {
             max_height: self.max_height.clone(),
             grow: self.grow,
             shrink: self.shrink,
-            border: self.border.clone(),
-            padding: self.padding.clone(),
+            wrap: self.wrap,
             align_items,
             gap: self.gap,
+            border: self.border.clone(),
+            padding: self.padding.clone(),
         })
     }
 
@@ -346,10 +349,11 @@ impl Style {
             max_height: self.max_height.merge(&parent.max_height),
             grow: self.grow.as_ref().or(parent.grow.as_ref()).cloned(),
             shrink: self.shrink.as_ref().or(parent.shrink.as_ref()).cloned(),
-            border: self.border.merge(&parent.border),
-            padding: self.padding.merge(&parent.padding),
+            wrap: self.wrap.as_ref().or(parent.wrap.as_ref()).cloned(),
             align_items: self.align_items.or(parent.align_items),
             gap: self.gap.or(parent.gap),
+            border: self.border.merge(&parent.border),
+            padding: self.padding.merge(&parent.padding),
         })
     }
 
@@ -395,6 +399,10 @@ impl Style {
 
     pub fn shrink(&self) -> Option<Fill> {
         self.shrink
+    }
+
+    pub fn wrap(&self) -> Option<bool> {
+        self.wrap
     }
 
     pub fn border_top(&self) -> Option<&Stroke> {
@@ -593,6 +601,11 @@ impl StyleBuilder {
 
     pub fn with_shrink(mut self, shrink: impl Into<Fill>) -> Self {
         self.style.shrink = Some(shrink.into());
+        self
+    }
+
+    pub fn with_wrap(mut self, wrap: bool) -> Self {
+        self.style.wrap = Some(wrap);
         self
     }
 

@@ -17,7 +17,7 @@ use crate::{Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
 use self::{
     dimension::DimAutoOrParent,
     position::{Offset, Quad, Size},
-    unit::Fill,
+    unit::{Fill, Unit},
 };
 
 pub trait Position {
@@ -82,9 +82,48 @@ pub trait MeasureContext {
     fn typeset(&mut self, style: &Style, text: &str) -> Result<TextPosition, Error>;
 }
 
+#[derive(Default)]
+pub struct NewPageOptions {
+    must_be_in_page: Option<(Unit, Unit)>,
+    margin: Option<Quad>,
+    size: Option<Size>,
+}
+
+impl NewPageOptions {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn with_break_if_not_room(mut self, offset: &Offset, size: &Size) -> Self {
+        self.must_be_in_page = Some((offset.y(), size.height()));
+        self
+    }
+
+    pub fn with_margin(mut self, margin: Quad) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    pub fn with_size(mut self, size: Size) -> Self {
+        self.size = Some(size);
+        self
+    }
+
+    pub fn must_be_in_page(&self) -> Option<(Unit, Unit)> {
+        self.must_be_in_page
+    }
+
+    pub fn margin(&self) -> Option<&Quad> {
+        self.margin.as_ref()
+    }
+
+    pub fn size(&self) -> Option<&Size> {
+        self.size.as_ref()
+    }
+}
+
 pub trait RenderContext: MeasureContext {
-    fn new_page(&mut self);
-    fn new_page_size(&mut self, margin: Quad, size: Size);
+    fn new_page(&mut self, options: Option<NewPageOptions>) -> bool;
 
     fn debug_frame(&self, content_position: &Offset, size: &Size);
 
