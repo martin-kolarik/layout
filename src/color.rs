@@ -9,16 +9,20 @@ impl Rgba {
         &BLACK
     }
 
+    pub fn gray_25() -> &'static Rgba {
+        &GRAY_25
+    }
+
+    pub fn gray_33() -> &'static Rgba {
+        &GRAY_33
+    }
+
     pub fn gray_50() -> &'static Rgba {
         &GRAY_50
     }
 
     pub fn gray_63() -> &'static Rgba {
         &GRAY_63
-    }
-
-    pub fn gray_75() -> &'static Rgba {
-        &GRAY_75
     }
 
     pub fn white() -> &'static Rgba {
@@ -98,6 +102,20 @@ static BLACK: Rgba = Rgba(RGBA {
     a: 1.0,
 });
 
+static GRAY_25: Rgba = Rgba(RGBA {
+    r: 192,
+    g: 192,
+    b: 192,
+    a: 1.0,
+});
+
+static GRAY_33: Rgba = Rgba(RGBA {
+    r: 172,
+    g: 172,
+    b: 172,
+    a: 1.0,
+});
+
 static GRAY_50: Rgba = Rgba(RGBA {
     r: 128,
     g: 128,
@@ -106,16 +124,9 @@ static GRAY_50: Rgba = Rgba(RGBA {
 });
 
 static GRAY_63: Rgba = Rgba(RGBA {
-    r: 160,
-    g: 160,
-    b: 160,
-    a: 1.0,
-});
-
-static GRAY_75: Rgba = Rgba(RGBA {
-    r: 192,
-    g: 192,
-    b: 192,
+    r: 96,
+    g: 96,
+    b: 96,
     a: 1.0,
 });
 
