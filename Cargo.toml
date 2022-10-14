@@ -6,10 +6,10 @@ edition = "2021"
 [features]
 default = ["color", "layout"]
 color = ["oklab", "rgb", "ufmt"]
-layout = ["allsorts", "log", "printpdf", "rtext", "thiserror"]
+layout = ["allsorts", "log", "rtext", "thiserror"]
 
 [dependencies]
-rtext = { path = "../rtext", optional = true }
+rtext = { git = "https://martinkolariknp@bitbucket.org/martinkolariknp/rtext.git", optional = true }
 
 oklab = { version = "^1.0", optional = true }
 rgb = { version = "^0.8", default-features = false, features = [
@@ -18,7 +18,6 @@ rgb = { version = "^0.8", default-features = false, features = [
 
 allsorts = { version = "^0.11", optional = true }
 log = { version = "^0.4", default-features = false, optional = true }
-printpdf = { version = "^0.5", optional = true }
 thiserror = { version = "^1.0", optional = true }
 ufmt = { version = "^0.1", features = [
     "std",
