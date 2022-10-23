@@ -14,7 +14,7 @@ pub enum Error {
     #[error("Font '{0}' cannot be read, it seems to be empty")]
     MalformedFont(String),
     #[error("Error creating pdf document: {0}")]
-    PdfWrite(#[from] printpdf::Error),
+    PdfWrite(String),
     #[error("Font '{0}' is unknown")]
     UnknownFont(String),
 }
