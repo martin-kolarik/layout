@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["color", "layout"]
+default = ["color"]
 color = ["oklab", "rgb", "ufmt"]
 layout = ["allsorts", "log", "rtext", "thiserror"]
 
