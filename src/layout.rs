@@ -141,6 +141,13 @@ pub trait Factory {
     fn hbox() -> LayoutBox;
     fn hfilling() -> Filling;
 
+    fn hcbox(layout: impl Layout + 'static) -> LayoutBox {
+        Self::hbox()
+            .child(Self::hfill(1))
+            .child(layout)
+            .child(Self::hfill(1))
+    }
+
     fn hfill(weight: impl Into<Fill>) -> Filling {
         Self::hfilling().grow(weight)
     }
@@ -151,6 +158,13 @@ pub trait Factory {
 
     fn vbox() -> LayoutBox;
     fn vfilling() -> Filling;
+
+    fn vcbox(layout: impl Layout + 'static) -> LayoutBox {
+        Self::vbox()
+            .child(Self::vfill(1))
+            .child(layout)
+            .child(Self::vfill(1))
+    }
 
     fn vfill(weight: impl Into<Fill>) -> Filling {
         Self::vfilling().grow(weight)
