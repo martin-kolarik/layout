@@ -21,6 +21,10 @@ impl Unit {
     pub const fn is_zero(&self) -> bool {
         self.0 == 0
     }
+
+    pub const fn infinity() -> Self {
+        Self(i64::MAX)
+    }
 }
 
 #[repr(transparent)]

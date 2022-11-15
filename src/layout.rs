@@ -12,7 +12,7 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition};
+use crate::{Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition, Wrap};
 
 use self::{
     dimension::DimAutoOrParent,
@@ -32,6 +32,10 @@ pub trait Position {
 
     fn size_ref(&self) -> &Size;
     fn size_mut(&mut self) -> &mut Size;
+
+    fn size_after_wrap_ref(&self) -> &Size {
+        self.size_ref()
+    }
 
     fn content_size(&self) -> Option<&Size> {
         None
@@ -156,6 +160,8 @@ pub trait Factory {
         Self::hfilling().size(size)
     }
 
+    fn hwrap() -> Wrap;
+
     fn vbox() -> LayoutBox;
     fn vfilling() -> Filling;
 
@@ -173,6 +179,8 @@ pub trait Factory {
     fn vspace(size: impl Into<DimAutoOrParent>) -> Filling {
         Self::vfilling().size(size)
     }
+
+    fn vwrap() -> Wrap;
 
     fn text_str(text: &str) -> Text;
 }
@@ -194,12 +202,20 @@ impl Factory for DefaultFactory {
         Filling::new(Axis::Horizontal)
     }
 
+    fn hwrap() -> Wrap {
+        Wrap::new(Axis::Horizontal)
+    }
+
     fn vbox() -> LayoutBox {
         LayoutBox::new(Axis::Vertical)
     }
 
     fn vfilling() -> Filling {
         Filling::new(Axis::Vertical)
+    }
+
+    fn vwrap() -> Wrap {
+        Wrap::new(Axis::Vertical)
     }
 
     fn text_str(text: &str) -> Text {
