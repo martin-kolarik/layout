@@ -87,7 +87,7 @@ pub fn lay_out_native(
             offset = axis.advance_dim(&offset, line_gap);
             line_size = axis.extend_dim(&line_size, line_gap);
         }
-        line_size = axis.extend_size(&line_size, child.size_ref(), respect_baseline);
+        line_size = axis.extend_size(&line_size, child.size_after_wrap_ref(), respect_baseline);
 
         *child.offset_mut() = offset.clone();
         offset = axis.advance_dim(&offset, axis.size(child.size_after_wrap_ref()));
