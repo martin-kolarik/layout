@@ -348,7 +348,7 @@ impl Layout for LayoutBox {
         let gap = self.style_ref().gap_size();
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
-        let self_ascent = self.size_ref().ascent();
+        let self_ascent = self.size_after_wrap_ref().ascent();
         if matches!(
             (align_items, room.depth(), self_ascent),
             (AlignItems::Baseline, Some(_), Some(_))
@@ -417,14 +417,14 @@ impl Layout for LayoutBox {
                 let first = first_child.take();
                 if first.is_some() {
                     if matches!(axis, Axis::Vertical) {
-                        first_ascent = first_ascent.max(child.size_ref().ascent());
+                        first_ascent = first_ascent.max(child.size_after_wrap_ref().ascent());
                     }
                 } else {
                     position = axis.advance_dim(&position, gap);
                     line_size = axis.extend_dim(&line_size, gap);
                 }
 
-                let child_size = child.size_ref();
+                let child_size = child.size_after_wrap_ref();
 
                 // Resolve axis streches.
                 let child_axis_size =
@@ -483,7 +483,7 @@ impl Layout for LayoutBox {
                     Axis::Horizontal => (child_axis_size, child_cross_size),
                     Axis::Vertical => (child_cross_size, child_axis_size),
                 };
-                let child_depth = child.size_ref().depth();
+                let child_depth = child.size_after_wrap_ref().depth();
                 let child_size = match child_depth {
                     Some(depth) => Size::fixed_depth(width, height, depth),
                     None => Size::fixed(width, height),
@@ -494,7 +494,7 @@ impl Layout for LayoutBox {
 
                 // line_child_size incorporates bounding box of child offsetted in both axes.
                 // line_child_size can be bigger than child_size.
-                let line_child_size = child.size_ref();
+                let line_child_size = child.size_after_wrap_ref();
                 let line_child_size = axis.extend_dim(line_child_size, child_axis_offset);
                 let line_child_size = cross.extend_dim(&line_child_size, child_cross_offset);
 

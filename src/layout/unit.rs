@@ -79,7 +79,7 @@ impl Add for Unit {
 
 impl AddAssign for Unit {
     fn add_assign(&mut self, rhs: Self) {
-        self.0 += rhs.0
+        self.0 = self.0.saturating_add(rhs.0);
     }
 }
 
@@ -94,7 +94,9 @@ impl Sub for Unit {
 
 impl SubAssign for Unit {
     fn sub_assign(&mut self, rhs: Self) {
-        self.0 -= rhs.0
+        if self.0 < i64::MAX {
+            self.0 = self.0.saturating_sub(rhs.0);
+        }
     }
 }
 
@@ -109,7 +111,7 @@ impl Mul<usize> for Unit {
 
 impl MulAssign<usize> for Unit {
     fn mul_assign(&mut self, rhs: usize) {
-        self.0 *= rhs as i64;
+        self.0 = self.0.saturating_mul(rhs as i64);
     }
 }
 
@@ -133,7 +135,9 @@ impl Mul<f64> for Unit {
 
 impl MulAssign<f64> for Unit {
     fn mul_assign(&mut self, rhs: f64) {
-        self.0 = (self.0 as f64 * rhs).round() as i64;
+        if self.0 < i64::MAX {
+            self.0 = (self.0 as f64 * rhs).round() as i64;
+        }
     }
 }
 
@@ -157,7 +161,9 @@ impl Div<f64> for Unit {
 
 impl DivAssign<f64> for Unit {
     fn div_assign(&mut self, rhs: f64) {
-        self.0 = (self.0 as f64 / rhs.max(1.0e-6)) as i64;
+        if self.0 < i64::MAX {
+            self.0 = (self.0 as f64 / rhs.max(1.0e-6)) as i64;
+        }
     }
 }
 
