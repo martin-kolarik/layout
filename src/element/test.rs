@@ -1,4 +1,4 @@
-use crate::{Features, MeasureContext, Style, TextPosition};
+use crate::{MeasureContext, Style, TextPosition};
 
 pub(crate) mod baseline;
 pub(crate) mod hbox_in_hbox;
@@ -14,12 +14,7 @@ impl MeasureContext for Ctx {
         todo!()
     }
 
-    fn typeset(
-        &mut self,
-        _: &Style,
-        _: &str,
-        _: Option<&Features>,
-    ) -> Result<TextPosition, crate::Error> {
+    fn typeset(&mut self, _: &Style, _: &str) -> Result<TextPosition, crate::Error> {
         todo!()
     }
 }

@@ -30,3 +30,9 @@ pub use font::*;
 mod layout;
 #[cfg(feature = "layout")]
 pub use self::layout::*;
+
+#[cfg(feature = "layout")]
+#[macro_use]
+mod script;
+#[cfg(feature = "layout")]
+pub use self::script::*;

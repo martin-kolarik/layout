@@ -28,7 +28,7 @@ impl Font {
         Self {
             name: Some(name),
             size: Some(size.into()),
-            features: features,
+            features,
         }
     }
 
@@ -61,7 +61,7 @@ impl Font {
     }
 
     pub fn name(&self) -> Option<&str> {
-        self.name.as_deref()
+        self.name
     }
 
     pub fn features(&self) -> Option<&Features> {
@@ -295,7 +295,7 @@ impl Style {
         Arc::new(Self::__internal_new())
     }
 
-    pub fn default() -> Arc<Style> {
+    pub fn new_default() -> Arc<Style> {
         Arc::new(Self::__internal_default())
     }
 

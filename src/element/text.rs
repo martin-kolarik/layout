@@ -124,9 +124,9 @@ mod tests {
     use std::sync::{Arc, OnceLock};
 
     use crate::{
-        position::{Offset, Quad, Size},
+        position::{Offset, Size},
         unit::Em,
-        DefaultFactory, Error, Factory, Features, GlyphPosition, Layout, MeasureContext,
+        DefaultFactory, Error, Factory, GlyphPosition, Layout, MeasureContext, NewPageOptions,
         RenderContext, Stroke, Style, TextPosition,
     };
 
@@ -137,12 +137,7 @@ mod tests {
             STYLE.get_or_init(Style::new)
         }
 
-        fn typeset(
-            &mut self,
-            _: &Style,
-            _: &str,
-            _: Option<&Features>,
-        ) -> Result<TextPosition, Error> {
+        fn typeset(&mut self, _: &Style, _: &str) -> Result<TextPosition, Error> {
             Ok(TextPosition {
                 width: Em(30.0),
                 height: Em(10.0),
@@ -153,11 +148,7 @@ mod tests {
     }
 
     impl RenderContext for usize {
-        fn new_page(&mut self) {
-            todo!()
-        }
-
-        fn new_page_size(&mut self, _: Quad, _: Size) {
+        fn new_page(&mut self, _: Option<NewPageOptions>) -> bool {
             todo!()
         }
 
@@ -181,7 +172,7 @@ mod tests {
         let t3 = DefaultFactory::text("c");
 
         let mut hbox = DefaultFactory::hbox()
-            .style(Style::default())
+            .style(Style::new_default())
             .child(t1)
             .child(t2)
             .child(t3);
@@ -217,7 +208,7 @@ mod tests {
         let t3 = DefaultFactory::text("c").mark("t3");
 
         let mut hbox = DefaultFactory::hbox()
-            .style(Style::default())
+            .style(Style::new_default())
             .mark("h1")
             .child(
                 DefaultFactory::hbox()
@@ -259,7 +250,7 @@ mod tests {
         let t3 = DefaultFactory::text("c");
 
         let mut vbox = DefaultFactory::vbox()
-            .style(Style::default())
+            .style(Style::new_default())
             .child(t1)
             .child(t2)
             .child(t3);
@@ -295,7 +286,7 @@ mod tests {
         let t3 = DefaultFactory::text("c");
 
         let mut vbox = DefaultFactory::vbox()
-            .style(Style::default())
+            .style(Style::new_default())
             .child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
