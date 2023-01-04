@@ -73,7 +73,7 @@ impl LayoutBox {
 
     pub fn depth(mut self, depth: impl Into<Unit>) -> Self {
         if !matches!(self.style.align_items(), AlignItems::Baseline) {
-            log::warn!("Depth set for a box having items not aligned on a baseline");
+            tracing::warn!("Depth set for a box having items not aligned on a baseline");
         }
         self.size.set_depth(Some(depth));
         self
