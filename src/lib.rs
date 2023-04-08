@@ -1,5 +1,3 @@
-#![feature(once_cell)]
-
 #[cfg(feature = "color")]
 mod color;
 #[cfg(feature = "color")]
