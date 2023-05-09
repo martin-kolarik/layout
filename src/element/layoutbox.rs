@@ -509,7 +509,7 @@ impl Layout for LayoutBox {
 
             // Move forward in cross axis (over lines), gap is added at the loop begin.
             // Multiple lines never stretch (the same behavior as FlexBox has).
-            position = cross.advance_dim(&position, cross.size(&native_line_size));
+            position = cross.advance_dim(&position, cross.size(&line_size));
             content_size = cross.extend_size(
                 &content_size,
                 &line_size,
