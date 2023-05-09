@@ -274,13 +274,21 @@ impl Layout for LayoutBox {
                 .wrap()
                 .unwrap_or(matches!(axis, Axis::Horizontal));
 
-            let gap = self.style_ref().gap_size();
+            let axis_gap = axis.select(
+                self.style_ref().horizontal_gap_size(),
+                self.style_ref().vertical_gap_size(),
+            );
+            let cross_gap = cross.select(
+                self.style_ref().horizontal_gap_size(),
+                self.style_ref().vertical_gap_size(),
+            );
 
             let lines = lay_out_native(
                 self.axis,
                 &mut self.children,
                 axis_room,
-                gap,
+                axis_gap,
+                cross_gap,
                 wrap,
                 respect_baseline,
             );
@@ -294,7 +302,7 @@ impl Layout for LayoutBox {
                         let with_gap = if index == 0 {
                             Size::none()
                         } else {
-                            cross.extend_dim(&sum, gap)
+                            cross.extend_dim(&sum, cross_gap)
                         };
                         cross.extend_size(
                             &with_gap,
@@ -358,7 +366,15 @@ impl Layout for LayoutBox {
             .wrap()
             .unwrap_or(matches!(axis, Axis::Horizontal));
         let align_items = self.style_ref().align_items();
-        let gap = self.style_ref().gap_size();
+
+        let axis_gap = axis.select(
+            self.style_ref().horizontal_gap_size(),
+            self.style_ref().vertical_gap_size(),
+        );
+        let cross_gap = cross.select(
+            self.style_ref().horizontal_gap_size(),
+            self.style_ref().vertical_gap_size(),
+        );
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
         let self_ascent = self.size_after_wrap_ref().ascent();
@@ -375,7 +391,8 @@ impl Layout for LayoutBox {
             self.axis,
             &mut self.children,
             axis_size,
-            gap,
+            axis_gap,
+            cross_gap,
             wrap,
             matches!(align_items, AlignItems::Baseline),
         );
@@ -405,8 +422,8 @@ impl Layout for LayoutBox {
                     first_ascent = self_ascent.or_else(|| native_line_size.ascent());
                 }
             } else {
-                position = cross.advance_dim(&position, gap);
-                content_size = cross.extend_dim(&content_size, gap);
+                position = cross.advance_dim(&position, cross_gap);
+                content_size = cross.extend_dim(&content_size, cross_gap);
             }
 
             let room_to_distribute = axis_size - axis.size(&native_line_size);
@@ -433,8 +450,8 @@ impl Layout for LayoutBox {
                         first_ascent = first_ascent.max(child.size_after_wrap_ref().ascent());
                     }
                 } else {
-                    position = axis.advance_dim(&position, gap);
-                    line_size = axis.extend_dim(&line_size, gap);
+                    position = axis.advance_dim(&position, axis_gap);
+                    line_size = axis.extend_dim(&line_size, axis_gap);
                 }
 
                 let child_size = child.size_after_wrap_ref();

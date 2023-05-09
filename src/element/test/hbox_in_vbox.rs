@@ -512,7 +512,8 @@ fn triple_fixed_boxes_g() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -604,7 +605,8 @@ fn triple_grow_boxes_g() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -740,7 +742,8 @@ fn triple_fixed_boxes_g_wrap() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -876,7 +879,8 @@ fn triple_fixed_boxes_g_wrap_grow1() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(5),
+                .with_horizontal_gap(5)
+                .with_vertical_gap(5),
         )
         .child(box1)
         .child(box2)
@@ -924,7 +928,8 @@ fn triple_fixed_boxes_g_wrap_grow2() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(5),
+                .with_horizontal_gap(5)
+                .with_vertical_gap(5),
         )
         .child(box1)
         .child(box2)

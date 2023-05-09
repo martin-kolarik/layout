@@ -21,6 +21,13 @@ impl Axis {
         }
     }
 
+    pub fn select(&self, horizontal: Unit, vertical: Unit) -> Unit {
+        match self {
+            Axis::Horizontal => horizontal,
+            Axis::Vertical => vertical,
+        }
+    }
+
     pub fn offset(&self, offset: &Offset) -> Unit {
         match self {
             Axis::Horizontal => offset.x(),

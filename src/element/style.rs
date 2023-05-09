@@ -244,7 +244,8 @@ pub struct Style {
     shrink: Option<Fill>,
     wrap: Option<bool>,
     align_items: Option<AlignItems>,
-    gap: Option<Unit>,
+    horizontal_gap: Option<Unit>,
+    vertical_gap: Option<Unit>,
     border: Border,
     padding: Quad,
 }
@@ -275,7 +276,8 @@ impl Style {
             shrink: None,
             wrap: None,
             align_items: None,
-            gap: None,
+            horizontal_gap: None,
+            vertical_gap: None,
             border: Border::none(),
             padding: Quad::empty(),
         }
@@ -326,7 +328,8 @@ impl Style {
             shrink: self.shrink,
             wrap: self.wrap,
             align_items,
-            gap: self.gap,
+            horizontal_gap: self.horizontal_gap,
+            vertical_gap: self.vertical_gap,
             border: self.border.clone(),
             padding: self.padding.clone(),
         })
@@ -351,7 +354,8 @@ impl Style {
             shrink: self.shrink.as_ref().or(parent.shrink.as_ref()).cloned(),
             wrap: self.wrap.as_ref().or(parent.wrap.as_ref()).cloned(),
             align_items: self.align_items.or(parent.align_items),
-            gap: self.gap.or(parent.gap),
+            horizontal_gap: self.horizontal_gap.or(parent.horizontal_gap),
+            vertical_gap: self.vertical_gap.or(parent.vertical_gap),
             border: self.border.merge(&parent.border),
             padding: self.padding.merge(&parent.padding),
         })
@@ -461,12 +465,20 @@ impl Style {
         self.align_items.unwrap_or_default()
     }
 
-    pub fn gap(&self) -> Option<Unit> {
-        self.gap
+    pub fn horizontal_gap(&self) -> Option<Unit> {
+        self.horizontal_gap
     }
 
-    pub fn gap_size(&self) -> Unit {
-        self.gap.unwrap_or_default()
+    pub fn horizontal_gap_size(&self) -> Unit {
+        self.horizontal_gap.unwrap_or_default()
+    }
+
+    pub fn vertical_gap(&self) -> Option<Unit> {
+        self.vertical_gap
+    }
+
+    pub fn vertical_gap_size(&self) -> Unit {
+        self.vertical_gap.unwrap_or_default()
     }
 }
 
@@ -624,8 +636,13 @@ impl StyleBuilder {
         self
     }
 
-    pub fn with_gap(mut self, gap: impl Into<Unit>) -> Self {
-        self.style.gap = Some(gap.into());
+    pub fn with_horizontal_gap(mut self, gap: impl Into<Unit>) -> Self {
+        self.style.horizontal_gap = Some(gap.into());
+        self
+    }
+
+    pub fn with_vertical_gap(mut self, gap: impl Into<Unit>) -> Self {
+        self.style.vertical_gap = Some(gap.into());
         self
     }
 }

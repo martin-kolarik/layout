@@ -511,7 +511,8 @@ fn triple_fixed_boxes_g() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -603,7 +604,8 @@ fn triple_grow_boxes_g() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -648,7 +650,11 @@ fn triple_fixed_boxes_c_wrap1() {
     let box3 = DefaultFactory::vbox().size(80);
 
     let mut outer = DefaultFactory::vbox()
-        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .style(
+            StyleBuilder::new()
+                .with_align_items(AlignItems::Start)
+                .with_wrap(true),
+        )
         .child(box1)
         .child(box2)
         .child(box3);
@@ -692,7 +698,11 @@ fn triple_fixed_boxes_c_wrap2() {
     let box3 = DefaultFactory::vbox().size(80).cross_size(20);
 
     let mut outer = DefaultFactory::vbox()
-        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .style(
+            StyleBuilder::new()
+                .with_align_items(AlignItems::Start)
+                .with_wrap(true),
+        )
         .child(box1)
         .child(box2)
         .child(box3);
@@ -739,7 +749,9 @@ fn triple_fixed_boxes_g_wrap() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(2),
+                .with_wrap(true)
+                .with_horizontal_gap(2)
+                .with_vertical_gap(2),
         )
         .child(box1)
         .child(box2)
@@ -784,7 +796,11 @@ fn triple_fixed_boxes_c_wrap_grow1() {
     let box3 = DefaultFactory::vbox().size(80).cross_size(20);
 
     let mut outer = DefaultFactory::vbox()
-        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .style(
+            StyleBuilder::new()
+                .with_align_items(AlignItems::Start)
+                .with_wrap(true),
+        )
         .child(box1)
         .child(box2)
         .child(box3);
@@ -828,7 +844,11 @@ fn triple_fixed_boxes_c_wrap_grow2() {
     let box3 = DefaultFactory::vbox().size(80).cross_size(20).grow(1);
 
     let mut outer = DefaultFactory::vbox()
-        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .style(
+            StyleBuilder::new()
+                .with_align_items(AlignItems::Start)
+                .with_wrap(true),
+        )
         .child(box1)
         .child(box2)
         .child(box3);
@@ -875,7 +895,9 @@ fn triple_fixed_boxes_g_wrap_grow1() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(5),
+                .with_wrap(true)
+                .with_horizontal_gap(5)
+                .with_vertical_gap(5),
         )
         .child(box1)
         .child(box2)
@@ -923,7 +945,9 @@ fn triple_fixed_boxes_g_wrap_grow2() {
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
-                .with_gap(5),
+                .with_wrap(true)
+                .with_horizontal_gap(5)
+                .with_vertical_gap(5),
         )
         .child(box1)
         .child(box2)
