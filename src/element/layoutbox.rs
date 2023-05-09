@@ -285,11 +285,23 @@ impl Layout for LayoutBox {
                 respect_baseline,
             );
 
-            let mut children_size = lines.iter().fold(Size::none(), |mut sum, line| {
-                *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
-                let with_gap = cross.extend_dim(&sum, gap);
-                cross.extend_size(&with_gap, line.size(), respect_baseline)
-            });
+            let mut children_size =
+                lines
+                    .iter()
+                    .enumerate()
+                    .fold(Size::none(), |mut sum, (index, line)| {
+                        *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
+                        let with_gap = if index == 0 {
+                            Size::none()
+                        } else {
+                            cross.extend_dim(&sum, gap)
+                        };
+                        cross.extend_size(
+                            &with_gap,
+                            line.size(),
+                            respect_baseline && (index == 0 || matches!(axis, Axis::Horizontal)),
+                        )
+                    });
 
             if axis.dim(&self_size).is_fixed() {
                 *axis.dim_mut(&mut children_size) = axis.dim(&self_size).clone();
