@@ -287,7 +287,8 @@ impl Layout for LayoutBox {
 
             let mut children_size = lines.iter().fold(Size::none(), |mut sum, line| {
                 *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
-                cross.extend_size(&sum, line.size(), respect_baseline)
+                let with_gap = cross.extend_dim(&sum, gap);
+                cross.extend_size(&with_gap, line.size(), respect_baseline)
             });
 
             if axis.dim(&self_size).is_fixed() {
