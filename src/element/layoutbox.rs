@@ -1,7 +1,5 @@
 use std::sync::Arc;
 
-use rtext::Apply;
-
 use crate::{
     children::lay_out_native,
     dimension::{DimAutoOrParent, DimOrParent},
@@ -193,8 +191,6 @@ impl<'a> Iterator for ChildrenIterator<'a> {
         }
     }
 }
-
-impl Apply for LayoutBox {}
 
 impl Position for LayoutBox {
     fn element(&self) -> &str {

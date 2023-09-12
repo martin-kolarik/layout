@@ -1,7 +1,5 @@
 use std::sync::Arc;
 
-use rtext::Apply;
-
 use crate::{
     dimension::DimAutoOrParent,
     position::{Offset, Size},
@@ -50,8 +48,6 @@ impl Filling {
         self
     }
 }
-
-impl Apply for Filling {}
 
 impl Position for Filling {
     fn element(&self) -> &str {
