@@ -34,12 +34,12 @@ impl Rgba {
         Self(self.0.alpha(fraction))
     }
 
-    pub fn into_rgba(self) -> (f64, f64, f64, f64) {
+    pub fn into_rgba(self) -> (f32, f32, f32, f32) {
         (
-            self.0.r as f64 / 255.0,
-            self.0.g as f64 / 255.0,
-            self.0.b as f64 / 255.0,
-            self.0.a as f64,
+            self.0.r as f32 / 255.0,
+            self.0.g as f32 / 255.0,
+            self.0.b as f32 / 255.0,
+            self.0.a as f32,
         )
     }
 
