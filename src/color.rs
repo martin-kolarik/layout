@@ -39,7 +39,7 @@ impl Rgba {
             self.0.r as f32 / 255.0,
             self.0.g as f32 / 255.0,
             self.0.b as f32 / 255.0,
-            self.0.a as f32,
+            self.0.a,
         )
     }
 
