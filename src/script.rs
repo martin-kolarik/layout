@@ -7,17 +7,17 @@ use crate::{
 };
 
 pub enum Element {
-    Bbox(Option<Vec<Format>>, Vec<Element>),
+    Bbox(Vec<Format>, Vec<Element>),
 
-    Hbox(Option<Vec<Format>>, Vec<Element>),
+    Hbox(Vec<Format>, Vec<Element>),
     Hspace(Unit),
     Hfill(Fill),
 
-    Vbox(Option<Vec<Format>>, Vec<Element>),
+    Vbox(Vec<Format>, Vec<Element>),
     Vspace(Unit),
     Vfill(Fill),
 
-    Text(Option<Vec<Format>>, String),
+    Text(Vec<Format>, String),
 }
 
 pub enum Format {
@@ -33,9 +33,9 @@ pub enum Format {
     Shrink(Fill),
 }
 
-impl From<Format> for Option<Vec<Format>> {
+impl From<Format> for Vec<Format> {
     fn from(format: Format) -> Self {
-        Some(vec![format])
+        vec![format]
     }
 }
 
@@ -43,7 +43,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
     match element {
         Element::Bbox(format, children) => {
             let mut bbox = DefaultFactory::bbox();
-            apply_format(&mut bbox, format.as_deref());
+            apply_format(&mut bbox, &format);
             Box::new(
                 children
                     .iter()
@@ -53,7 +53,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
 
         Element::Hbox(format, children) => {
             let mut hbox = DefaultFactory::hbox();
-            apply_format(&mut hbox, format.as_deref());
+            apply_format(&mut hbox, &format);
             Box::new(
                 children
                     .iter()
@@ -65,7 +65,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
 
         Element::Vbox(format, children) => {
             let mut vbox = DefaultFactory::vbox();
-            apply_format(&mut vbox, format.as_deref());
+            apply_format(&mut vbox, &format);
             Box::new(
                 children
                     .iter()
@@ -77,15 +77,15 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
 
         Element::Text(format, text) => {
             let mut text = DefaultFactory::text(text);
-            apply_format(&mut text, format.as_deref());
+            apply_format(&mut text, &format);
             Box::new(text)
         }
     }
 }
 
-fn apply_format(layout: &mut dyn Layout, format: Option<&[Format]>) {
-    if let Some(formats) = format {
-        let style = formats
+fn apply_format(layout: &mut dyn Layout, format: &[Format]) {
+    if !format.is_empty() {
+        let style = format
             .iter()
             .fold(StyleBuilder::new(), |style, format| match format {
                 Format::Width(width) => style.with_width(width.clone()),
