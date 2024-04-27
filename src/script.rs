@@ -22,13 +22,21 @@ pub enum Element {
 
 pub enum Format {
     Width(Unit),
+    WidthParent(Fill),
     Height(Unit),
+    HeightParent(Fill),
     Font(SmolStr),
     Points(Pt),
     Padding(Quad),
     Border(Border),
     Grow(Fill),
     Shrink(Fill),
+}
+
+impl From<Format> for Option<Vec<Format>> {
+    fn from(format: Format) -> Self {
+        Some(vec![format])
+    }
 }
 
 pub fn lay_out(element: &Element) -> Box<dyn Layout> {
@@ -81,7 +89,9 @@ fn apply_format(layout: &mut dyn Layout, format: Option<&[Format]>) {
             .iter()
             .fold(StyleBuilder::new(), |style, format| match format {
                 Format::Width(width) => style.with_width(width.clone()),
+                Format::WidthParent(fill) => style.with_width_parent(fill.clone()),
                 Format::Height(height) => style.with_height(height.clone()),
+                Format::HeightParent(fill) => style.with_height_parent(fill.clone()),
                 Format::Font(font) => style.with_font_name(font.clone()),
                 Format::Points(points) => style.with_font_size(points.clone()),
                 Format::Padding(padding) => style.with_padding(padding.clone()),
