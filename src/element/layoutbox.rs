@@ -167,34 +167,9 @@ impl LayoutBox {
     }
 }
 
-pub struct ChildrenIterator<'a> {
-    index: usize,
-    of: &'a LayoutBox,
-}
-
-impl<'a> ChildrenIterator<'a> {
-    pub fn new(of: &'a LayoutBox) -> Self {
-        Self { index: 0, of }
-    }
-}
-
-impl<'a> Iterator for ChildrenIterator<'a> {
-    type Item = &'a Box<dyn Layout>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.index >= self.of.children.len() {
-            None
-        } else {
-            let item = &self.of.children[self.index];
-            self.index += 1;
-            Some(item)
-        }
-    }
-}
-
 impl Position for LayoutBox {
     fn element(&self) -> &str {
-        "Box"
+        "LayoutBox"
     }
 
     fn mark(&self) -> &'static str {
@@ -258,6 +233,8 @@ impl Layout for LayoutBox {
         let mut self_size = if self.children.is_empty() {
             self_size
         } else {
+            // TODO: should not be limiting room fo children here??
+            // self.style_ref().padding().narrow(None, Some(&mut room));
             for child in self.children.iter_mut() {
                 child.measure(ctx, room.clone())?;
             }
@@ -620,6 +597,6 @@ impl Layout for LayoutBox {
     }
 
     fn iter(&self) -> Box<dyn Iterator<Item = &Box<dyn Layout>> + '_> {
-        Box::new(ChildrenIterator::new(self))
+        Box::new(self.children.iter())
     }
 }

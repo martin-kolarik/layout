@@ -12,7 +12,7 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition, Wrap};
+use crate::{BlockBox, Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition, Wrap};
 
 use self::{
     dimension::DimAutoOrParent,
@@ -142,6 +142,8 @@ pub trait RenderContext: MeasureContext {
 }
 
 pub trait Factory {
+    fn bbox() -> BlockBox;
+
     fn hbox() -> LayoutBox;
     fn hfilling() -> Filling;
 
@@ -194,6 +196,10 @@ impl DefaultFactory {
 }
 
 impl Factory for DefaultFactory {
+    fn bbox() -> BlockBox {
+        BlockBox::new()
+    }
+
     fn hbox() -> LayoutBox {
         LayoutBox::new(Axis::Horizontal)
     }

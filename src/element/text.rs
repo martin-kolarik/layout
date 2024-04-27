@@ -121,49 +121,10 @@ impl Layout for Text {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{Arc, OnceLock};
-
     use crate::{
         position::{Offset, Size},
-        unit::Em,
-        DefaultFactory, Error, Factory, GlyphPosition, Layout, MeasureContext, NewPageOptions,
-        RenderContext, Stroke, Style, TextPosition,
+        DefaultFactory, Factory, Layout, Style,
     };
-
-    static STYLE: OnceLock<Arc<Style>> = OnceLock::new();
-
-    impl MeasureContext for usize {
-        fn style(&self) -> &Style {
-            STYLE.get_or_init(Style::new)
-        }
-
-        fn typeset(&mut self, _: &Style, _: &str) -> Result<TextPosition, Error> {
-            Ok(TextPosition {
-                width: Em(30.0),
-                height: Em(10.0),
-                depth: Em(2.0),
-                positions: vec![GlyphPosition::new(1, Em(30.0), Em(0.0), Em(0.0), Em(0.0))],
-            })
-        }
-    }
-
-    impl RenderContext for usize {
-        fn new_page(&mut self, _: Option<NewPageOptions>) -> bool {
-            todo!()
-        }
-
-        fn debug_frame(&self, _: &Offset, _: &Size) {
-            todo!()
-        }
-
-        fn line(&mut self, _: &Offset, _: &Offset, _: &Stroke) {
-            todo!()
-        }
-
-        fn text(&mut self, _: &Offset, _: &Style, _: &TextPosition, _: bool) {
-            todo!()
-        }
-    }
 
     #[test]
     fn text_in_hbox() {
