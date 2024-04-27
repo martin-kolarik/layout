@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use smol_str::{SmolStr, ToSmolStr};
+
 use crate::{
     dimension::{DimAutoOrParent, DimOrParent},
     position::Quad,
@@ -18,15 +20,15 @@ pub enum AlignItems {
 
 #[derive(Debug, Clone)]
 pub struct Font {
-    name: Option<&'static str>,
+    name: Option<SmolStr>,
     size: Option<Pt>,
     features: Option<Features>,
 }
 
 impl Font {
-    pub fn new(name: &'static str, size: impl Into<Pt>, features: Option<Features>) -> Self {
+    pub fn new(name: impl ToSmolStr, size: impl Into<Pt>, features: Option<Features>) -> Self {
         Self {
-            name: Some(name),
+            name: Some(name.to_smolstr()),
             size: Some(size.into()),
             features,
         }
@@ -48,8 +50,8 @@ impl Font {
         }
     }
 
-    pub fn set_name(&mut self, name: &'static str) {
-        self.name = Some(name);
+    pub fn set_name(&mut self, name: impl ToSmolStr) {
+        self.name = Some(name.to_smolstr());
     }
 
     pub fn set_size(&mut self, size: Pt) {
@@ -61,7 +63,7 @@ impl Font {
     }
 
     pub fn name(&self) -> Option<&str> {
-        self.name
+        self.name.as_deref()
     }
 
     pub fn features(&self) -> Option<&Features> {
@@ -521,7 +523,7 @@ impl StyleBuilder {
         self
     }
 
-    pub fn with_font_name(mut self, name: &'static str) -> Self {
+    pub fn with_font_name(mut self, name: impl ToSmolStr) -> Self {
         self.style.font.set_name(name);
         self
     }
