@@ -3,7 +3,7 @@ use smol_str::SmolStr;
 use crate::{
     position::Quad,
     unit::{Fill, Pt, Unit},
-    Border, DefaultFactory, Factory, Layout, StyleBuilder,
+    AlignItems, Border, DefaultFactory, Factory, Layout, StyleBuilder,
 };
 
 pub enum Element {
@@ -20,6 +20,7 @@ pub enum Element {
     Text(Vec<Format>, String),
 }
 
+#[derive(Clone)]
 pub enum Format {
     Width(Unit),
     WidthParent(Fill),
@@ -31,6 +32,7 @@ pub enum Format {
     Border(Border),
     Grow(Fill),
     Shrink(Fill),
+    Align(AlignItems),
 }
 
 impl From<Format> for Vec<Format> {
@@ -98,6 +100,7 @@ fn apply_format(layout: &mut dyn Layout, format: &[Format]) {
                 Format::Border(border) => style.with_border(border.clone()),
                 Format::Grow(grow) => style.with_grow(grow.clone()),
                 Format::Shrink(shrink) => style.with_shrink(shrink.clone()),
+                Format::Align(align) => style.with_align_items(align.clone()),
             });
         layout.set_style(style.build());
     }
