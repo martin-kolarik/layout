@@ -32,6 +32,16 @@ impl Unit {
 pub struct Fill(pub(crate) usize);
 pub type FillPerMille = Fill;
 
+impl Fill {
+    pub fn scaling(&self) -> f64 {
+        self.0 as f64 / 1000.0
+    }
+
+    pub fn permille(&self) -> usize {
+        self.0
+    }
+}
+
 impl Debug for Fill {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("Fill({})", self.0))

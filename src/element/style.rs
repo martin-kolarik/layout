@@ -23,6 +23,7 @@ pub struct Font {
     name: Option<SmolStr>,
     size: Option<Pt>,
     features: Option<Features>,
+    scaling: Option<FillPerMille>,
 }
 
 impl Font {
@@ -31,6 +32,7 @@ impl Font {
             name: Some(name.to_smolstr()),
             size: Some(size.into()),
             features,
+            scaling: None,
         }
     }
 
@@ -39,6 +41,7 @@ impl Font {
             name: None,
             size: None,
             features: None,
+            scaling: None,
         }
     }
 
@@ -47,6 +50,7 @@ impl Font {
             name: self.name.as_ref().or(parent.name.as_ref()).cloned(),
             size: self.size.or(parent.size),
             features: self.features.as_ref().or(parent.features.as_ref()).cloned(),
+            scaling: self.scaling.or(parent.scaling),
         }
     }
 
@@ -62,6 +66,10 @@ impl Font {
         self.features = Some(features);
     }
 
+    pub fn set_scaling(&mut self, scaling: FillPerMille) {
+        self.scaling = Some(scaling);
+    }
+
     pub fn name(&self) -> Option<&str> {
         self.name.as_deref()
     }
@@ -72,6 +80,10 @@ impl Font {
 
     pub fn size(&self) -> Option<Pt> {
         self.size
+    }
+
+    pub fn scaling(&self) -> Option<FillPerMille> {
+        self.scaling
     }
 }
 
@@ -535,6 +547,11 @@ impl StyleBuilder {
 
     pub fn with_font_features(mut self, features: Features) -> Self {
         self.style.font.set_features(features);
+        self
+    }
+
+    pub fn with_font_scaling(mut self, scaling: FillPerMille) -> Self {
+        self.style.font.set_scaling(scaling);
         self
     }
 
