@@ -485,6 +485,36 @@ fn single_cross_align_center_box() {
 }
 
 #[test]
+fn single_cross_align_center_box_underflow() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed_depth(190, 277, 3);
+
+    let box1 = DefaultFactory::hbox().size(15).cross_size(477);
+
+    let mut outer = DefaultFactory::hbox()
+        .child(box1)
+        .cross_grow(1)
+        .style(StyleBuilder::new().with_align_items(AlignItems::Center));
+
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(15, outer.size_ref().width().0);
+    assert_eq!(277, outer.size_ref().height().0);
+    assert_eq!(15, outer.content_size().unwrap().width().0);
+    assert_eq!(377, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(-90, box1.offset_ref().y.0);
+    assert_eq!(15, box1.size_ref().width().0);
+    assert_eq!(477, box1.size_ref().height().0);
+}
+
+#[test]
 fn single_cross_align_baseline_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed_depth(190, 277, 267);
