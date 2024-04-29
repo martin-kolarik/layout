@@ -15,7 +15,7 @@ pub(crate) mod children;
 use crate::{BlockBox, Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition, Wrap};
 
 use self::{
-    dimension::DimAutoOrParent,
+    dimension::Dim,
     position::{Offset, Quad, Size},
     unit::{Fill, Unit},
 };
@@ -99,7 +99,7 @@ impl NewPageOptions {
     }
 
     pub fn with_break_if_not_room(mut self, offset: &Offset, size: &Size) -> Self {
-        self.must_be_in_page = Some((offset.y(), size.height()));
+        self.must_be_in_page = Some((offset.y, size.height()));
         self
     }
 
@@ -158,7 +158,7 @@ pub trait Factory {
         Self::hfilling().grow(weight)
     }
 
-    fn hspace(size: impl Into<DimAutoOrParent>) -> Filling {
+    fn hspace(size: impl Into<Dim>) -> Filling {
         Self::hfilling().size(size)
     }
 
@@ -178,7 +178,7 @@ pub trait Factory {
         Self::vfilling().grow(weight)
     }
 
-    fn vspace(size: impl Into<DimAutoOrParent>) -> Filling {
+    fn vspace(size: impl Into<Dim>) -> Filling {
         Self::vfilling().size(size)
     }
 

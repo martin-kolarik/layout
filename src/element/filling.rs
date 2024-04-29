@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
-    dimension::DimAutoOrParent,
+    dimension::Dim,
     position::{Offset, Size},
     unit::Fill,
     Axis, Error, Layout, MeasureContext, Position, Style, Styled,
@@ -33,7 +33,7 @@ impl Filling {
         self
     }
 
-    pub fn size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
+    pub fn size(mut self, size: impl Into<Dim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_basis(size);
         self
     }

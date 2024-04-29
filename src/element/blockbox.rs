@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
-    dimension::{DimAutoOrParent, DimOrParent},
+    dimension::{Dim, MaybeDim},
     position::{Offset, Size},
     unit::{sub_unit, Fill, Unit},
     AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
@@ -30,17 +30,17 @@ impl BlockBox {
         self
     }
 
-    pub fn size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
+    pub fn size(mut self, size: impl Into<Dim>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_basis(size);
         self
     }
 
-    pub fn min(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn min(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn max(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn max(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_max(size);
         self
     }
@@ -63,7 +63,7 @@ impl BlockBox {
         self
     }
 
-    pub fn cross_size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
+    pub fn cross_size(mut self, size: impl Into<Dim>) -> Self {
         Axis::Horizontal
             .cross()
             .dim_mut(&mut self.size)
@@ -71,7 +71,7 @@ impl BlockBox {
         self
     }
 
-    pub fn cross_min(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn cross_min(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal
             .cross()
             .dim_mut(&mut self.size)
@@ -79,7 +79,7 @@ impl BlockBox {
         self
     }
 
-    pub fn cross_max(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn cross_max(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal
             .cross()
             .dim_mut(&mut self.size)

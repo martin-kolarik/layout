@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::{
     children::lay_out_native,
-    dimension::{DimAutoOrParent, DimOrParent},
+    dimension::{Dim, MaybeDim},
     position::{Offset, Size},
     unit::{sub_unit, Fill, Unit},
     AlignItems, Axis, DefaultFactory, Error, Layout, MeasureContext, NewPageOptions, Position,
@@ -39,7 +39,7 @@ impl LayoutBox {
         self
     }
 
-    pub fn size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
+    pub fn size(mut self, size: impl Into<Dim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_basis(size);
         self
     }
@@ -49,12 +49,12 @@ impl LayoutBox {
         self
     }
 
-    pub fn min(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn min(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn max(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn max(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_max(size);
         self
     }
@@ -77,17 +77,17 @@ impl LayoutBox {
         self
     }
 
-    pub fn cross_size(mut self, size: impl Into<DimAutoOrParent>) -> Self {
+    pub fn cross_size(mut self, size: impl Into<Dim>) -> Self {
         self.axis.cross().dim_mut(&mut self.size).set_basis(size);
         self
     }
 
-    pub fn cross_min(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn cross_min(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.cross().dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn cross_max(mut self, size: impl Into<DimOrParent>) -> Self {
+    pub fn cross_max(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.cross().dim_mut(&mut self.size).set_max(size);
         self
     }

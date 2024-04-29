@@ -3,7 +3,7 @@ use std::sync::Arc;
 use smol_str::{SmolStr, ToSmolStr};
 
 use crate::{
-    dimension::{DimAutoOrParent, DimOrParent},
+    dimension::{Dim, MaybeDim},
     position::Quad,
     unit::{Fill, FillPerMille, Pt, Unit},
     Features, Rgba, Styled,
@@ -248,12 +248,12 @@ pub struct Style {
     font: Font,
     color: Option<Rgba>,
     background_color: Option<Rgba>,
-    width: DimAutoOrParent,
-    min_width: DimOrParent,
-    max_width: DimOrParent,
-    height: DimAutoOrParent,
-    min_height: DimOrParent,
-    max_height: DimOrParent,
+    width: Dim,
+    min_width: MaybeDim,
+    max_width: MaybeDim,
+    height: Dim,
+    min_height: MaybeDim,
+    max_height: MaybeDim,
     grow: Option<Fill>,
     shrink: Option<Fill>,
     wrap: Option<bool>,
@@ -280,12 +280,12 @@ impl Style {
             font: Font::__internal_new(),
             color: None,
             background_color: None,
-            width: DimAutoOrParent::None,
-            min_width: DimOrParent::None,
-            max_width: DimOrParent::None,
-            height: DimAutoOrParent::None,
-            min_height: DimOrParent::None,
-            max_height: DimOrParent::None,
+            width: Dim::content(),
+            min_width: MaybeDim::None,
+            max_width: MaybeDim::None,
+            height: Dim::content(),
+            min_height: MaybeDim::None,
+            max_height: MaybeDim::None,
             grow: None,
             shrink: None,
             wrap: None,
@@ -301,8 +301,8 @@ impl Style {
         Style {
             font: Font::new("default", Pt(10.0), None),
             color: Some(Rgba::black().clone()),
-            width: DimAutoOrParent::Content(None),
-            height: DimAutoOrParent::Content(None),
+            width: Dim::Content(None),
+            height: Dim::Content(None),
             ..Self::__internal_new()
         }
     }
@@ -358,12 +358,12 @@ impl Style {
                 .as_ref()
                 .or(parent.background_color.as_ref())
                 .cloned(),
-            width: self.width.merge(&parent.width),
-            min_width: self.min_width.merge(&parent.min_width),
-            max_width: self.max_width.merge(&parent.max_width),
-            height: self.height.merge(&parent.height),
-            min_height: self.min_height.merge(&parent.min_height),
-            max_height: self.max_height.merge(&parent.max_height),
+            width: self.width.or(parent.width),
+            min_width: self.min_width.or(parent.min_width),
+            max_width: self.max_width.or(parent.max_width),
+            height: self.height.or(parent.height),
+            min_height: self.min_height.or(parent.min_height),
+            max_height: self.max_height.or(parent.max_height),
             grow: self.grow.as_ref().or(parent.grow.as_ref()).cloned(),
             shrink: self.shrink.as_ref().or(parent.shrink.as_ref()).cloned(),
             wrap: self.wrap.as_ref().or(parent.wrap.as_ref()).cloned(),
@@ -387,28 +387,28 @@ impl Style {
         self.background_color.as_ref()
     }
 
-    pub fn width(&self) -> &DimAutoOrParent {
-        &self.width
+    pub fn width(&self) -> Dim {
+        self.width
     }
 
-    pub fn min_width(&self) -> &DimOrParent {
-        &self.min_width
+    pub fn min_width(&self) -> MaybeDim {
+        self.min_width
     }
 
-    pub fn max_width(&self) -> &DimOrParent {
-        &self.max_width
+    pub fn max_width(&self) -> MaybeDim {
+        self.max_width
     }
 
-    pub fn height(&self) -> &DimAutoOrParent {
-        &self.height
+    pub fn height(&self) -> Dim {
+        self.height
     }
 
-    pub fn min_height(&self) -> &DimOrParent {
-        &self.min_height
+    pub fn min_height(&self) -> MaybeDim {
+        self.min_height
     }
 
-    pub fn max_height(&self) -> &DimOrParent {
-        &self.max_height
+    pub fn max_height(&self) -> MaybeDim {
+        self.max_height
     }
 
     pub fn grow(&self) -> Option<Fill> {

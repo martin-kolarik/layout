@@ -6,14 +6,14 @@ use std::{
 
 use crate::unit::{add_fill, sub_fill, Fill, FillPerMille, Unit};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum DimOrParent {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum MaybeDim {
     None,
     Fixed(Unit),
     Parent(FillPerMille, Option<Unit>),
 }
 
-impl DimOrParent {
+impl MaybeDim {
     pub fn as_mut(&mut self) -> Option<&mut Unit> {
         match self {
             Self::None => None,
@@ -24,10 +24,6 @@ impl DimOrParent {
 
     pub fn is_parented(&self) -> bool {
         matches!(self, Self::Parent(..))
-    }
-
-    pub fn is_resolved(&self) -> bool {
-        matches!(self, Self::Fixed(_) | Self::Parent(_, Some(_)))
     }
 
     pub fn parent_fill(&self) -> FillPerMille {
@@ -55,17 +51,15 @@ impl DimOrParent {
         }
     }
 
-    pub fn merge(&self, parent: &Self) -> Self {
-        if matches!(self, Self::None) {
-            parent
-        } else {
-            self
+    pub fn or(self, other: Self) -> Self {
+        match &self {
+            Self::None => other,
+            _ => self,
         }
-        .clone()
     }
 }
 
-impl<IU> From<IU> for DimOrParent
+impl<IU> From<IU> for MaybeDim
 where
     IU: Into<Unit>,
 {
@@ -74,53 +68,56 @@ where
     }
 }
 
-impl From<FillPerMille> for DimOrParent {
+impl From<FillPerMille> for MaybeDim {
     fn from(fill: FillPerMille) -> Self {
         Self::Parent(fill, None)
     }
 }
 
-impl Add<&DimOrParent> for &DimOrParent {
-    type Output = DimOrParent;
+impl Add<&MaybeDim> for &MaybeDim {
+    type Output = MaybeDim;
 
-    fn add(self, rhs: &DimOrParent) -> Self::Output {
+    fn add(self, rhs: &MaybeDim) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimOrParent::None,
+            (None, None) => MaybeDim::None,
             (None, Some(_)) => rhs.clone(),
             (Some(_), None) => self.clone(),
-            (Some(l), Some(r)) => DimOrParent::Fixed(l + r),
+            (Some(l), Some(r)) => MaybeDim::Fixed(l + r),
         }
     }
 }
 
-impl Sub<&DimOrParent> for &DimOrParent {
-    type Output = DimOrParent;
+impl Sub<&MaybeDim> for &MaybeDim {
+    type Output = MaybeDim;
 
-    fn sub(self, rhs: &DimOrParent) -> Self::Output {
+    fn sub(self, rhs: &MaybeDim) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimOrParent::None,
-            (None, Some(r)) => DimOrParent::Fixed(Unit::zero() - r),
+            (None, None) => MaybeDim::None,
+            (None, Some(r)) => MaybeDim::Fixed(Unit::zero() - r),
             (Some(_), None) => self.clone(),
-            (Some(l), Some(r)) => DimOrParent::Fixed(l - r),
+            (Some(l), Some(r)) => MaybeDim::Fixed(l - r),
         }
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum DimAutoOrParent {
-    None,
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Dim {
     Content(Option<Unit>),
     Fixed(Unit),
     Parent(FillPerMille, Option<Unit>),
 }
 
-impl DimAutoOrParent {
+impl Dim {
+    pub const fn content() -> Self {
+        Self::Content(None)
+    }
+
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
 
     pub fn is_content(&self) -> bool {
-        matches!(self, Self::None | Self::Content(_))
+        matches!(self, Self::Content(_))
     }
 
     pub fn is_parented(&self) -> bool {
@@ -143,7 +140,6 @@ impl DimAutoOrParent {
 
     pub fn size(&self) -> Option<Unit> {
         match self {
-            Self::None => None,
             Self::Content(size) => *size,
             Self::Fixed(size) => Some(*size),
             Self::Parent(_, size) => *size,
@@ -155,7 +151,7 @@ impl DimAutoOrParent {
         match self {
             Self::Parent(fill, _) => *self = Self::Parent(*fill, Some(size)),
             Self::Content(_) => *self = Self::Content(Some(size)),
-            Self::None | Self::Fixed(_) => *self = Self::Fixed(size),
+            Self::Fixed(_) => *self = Self::Fixed(size),
         }
     }
 
@@ -163,7 +159,7 @@ impl DimAutoOrParent {
         let size = size.into();
         match self {
             Self::Parent(fill, None) => *self = Self::Parent(*fill, Some(size)),
-            Self::None | Self::Content(None) => *self = Self::Content(Some(size)),
+            Self::Content(None) => *self = Self::Content(Some(size)),
             _ => (),
         }
     }
@@ -204,17 +200,15 @@ impl DimAutoOrParent {
         }
     }
 
-    pub fn merge(&self, parent: &Self) -> Self {
-        if matches!(self, Self::None) {
-            parent
-        } else {
-            self
+    pub fn or(self, other: Self) -> Self {
+        match &self {
+            Self::Content(None) => other,
+            _ => self,
         }
-        .clone()
     }
 }
 
-impl<IU> From<IU> for DimAutoOrParent
+impl<IU> From<IU> for Dim
 where
     IU: Into<Unit>,
 {
@@ -223,53 +217,53 @@ where
     }
 }
 
-impl From<FillPerMille> for DimAutoOrParent {
+impl From<FillPerMille> for Dim {
     fn from(fill: FillPerMille) -> Self {
         Self::Parent(fill, None)
     }
 }
 
-impl From<DimOrParent> for DimAutoOrParent {
-    fn from(dim: DimOrParent) -> Self {
+impl From<MaybeDim> for Dim {
+    fn from(dim: MaybeDim) -> Self {
         match dim {
-            DimOrParent::None => Self::Content(None),
-            DimOrParent::Fixed(unit) => Self::Fixed(unit),
-            DimOrParent::Parent(fill, unit) => Self::Parent(fill, unit),
+            MaybeDim::None => Self::Content(None),
+            MaybeDim::Fixed(unit) => Self::Fixed(unit),
+            MaybeDim::Parent(fill, unit) => Self::Parent(fill, unit),
         }
     }
 }
 
-impl Add<&DimAutoOrParent> for &DimAutoOrParent {
-    type Output = DimAutoOrParent;
+impl Add<&Dim> for &Dim {
+    type Output = Dim;
 
-    fn add(self, rhs: &DimAutoOrParent) -> Self::Output {
+    fn add(self, rhs: &Dim) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimAutoOrParent::None,
+            (None, None) => Dim::content(),
             (None, Some(_)) => rhs.clone(),
             (Some(_), None) => self.clone(),
-            (Some(l), Some(r)) => DimAutoOrParent::Fixed(l + r),
+            (Some(l), Some(r)) => Dim::Fixed(l + r),
         }
     }
 }
 
-impl Sub<&DimAutoOrParent> for &DimAutoOrParent {
-    type Output = DimAutoOrParent;
+impl Sub<&Dim> for &Dim {
+    type Output = Dim;
 
-    fn sub(self, rhs: &DimAutoOrParent) -> Self::Output {
+    fn sub(self, rhs: &Dim) -> Self::Output {
         match (self.size(), rhs.size()) {
-            (None, None) => DimAutoOrParent::None,
-            (None, Some(r)) => DimAutoOrParent::Fixed(Unit::zero() - r),
+            (None, None) => Dim::content(),
+            (None, Some(r)) => Dim::Fixed(Unit::zero() - r),
             (Some(_), None) => self.clone(),
-            (Some(l), Some(r)) => DimAutoOrParent::Fixed(l - r),
+            (Some(l), Some(r)) => Dim::Fixed(l - r),
         }
     }
 }
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct Dimension {
-    basis: DimAutoOrParent,
-    min: DimOrParent,
-    max: DimOrParent,
+    basis: Dim,
+    min: MaybeDim,
+    max: MaybeDim,
     grow: Option<Fill>,
     shrink: Option<Fill>,
 }
@@ -286,9 +280,9 @@ impl Debug for Dimension {
 impl Dimension {
     pub fn none() -> Self {
         Self {
-            basis: DimAutoOrParent::None,
-            min: DimOrParent::None,
-            max: DimOrParent::None,
+            basis: Dim::Content(None),
+            min: MaybeDim::None,
+            max: MaybeDim::None,
             grow: None,
             shrink: None,
         }
@@ -296,9 +290,9 @@ impl Dimension {
 
     pub fn content() -> Self {
         Self {
-            basis: DimAutoOrParent::Content(None),
-            min: DimOrParent::None,
-            max: DimOrParent::None,
+            basis: Dim::Content(None),
+            min: MaybeDim::None,
+            max: MaybeDim::None,
             grow: None,
             shrink: None,
         }
@@ -306,9 +300,9 @@ impl Dimension {
 
     pub fn parented(fill: impl Into<FillPerMille>) -> Self {
         Self {
-            basis: DimAutoOrParent::Parent(fill.into(), None),
-            min: DimOrParent::None,
-            max: DimOrParent::None,
+            basis: Dim::Parent(fill.into(), None),
+            min: MaybeDim::None,
+            max: MaybeDim::None,
             grow: None,
             shrink: None,
         }
@@ -318,12 +312,12 @@ impl Dimension {
         size.into().into()
     }
 
-    pub fn with_min(mut self, min: impl Into<DimOrParent>) -> Self {
+    pub fn with_min(mut self, min: impl Into<MaybeDim>) -> Self {
         self.set_min(min);
         self
     }
 
-    pub fn with_max(mut self, max: impl Into<DimOrParent>) -> Self {
+    pub fn with_max(mut self, max: impl Into<MaybeDim>) -> Self {
         self.set_max(max);
         self
     }
@@ -340,38 +334,15 @@ impl Dimension {
 
     pub fn complete_with_style(
         &mut self,
-        size: &DimAutoOrParent,
-        min: &DimOrParent,
-        max: &DimOrParent,
+        size: Dim,
+        min: MaybeDim,
+        max: MaybeDim,
         grow: Option<Fill>,
         shrink: Option<Fill>,
     ) {
-        match (&self.min, min) {
-            (DimOrParent::None, DimOrParent::None) => self.min = DimOrParent::None,
-            (DimOrParent::None, min @ DimOrParent::Fixed(_))
-            | (DimOrParent::None, min @ DimOrParent::Parent(_, _)) => self.min = min.clone(),
-            (_, _) => (),
-        }
-
-        match (&self.max, max) {
-            (DimOrParent::None, DimOrParent::None) => self.max = DimOrParent::None,
-            (DimOrParent::None, max @ DimOrParent::Fixed(_))
-            | (DimOrParent::None, max @ DimOrParent::Parent(_, _)) => self.max = max.clone(),
-            (_, _) => (),
-        }
-
-        match (&self.basis, size) {
-            (DimAutoOrParent::None, DimAutoOrParent::None) => {
-                self.basis = DimAutoOrParent::Content(None)
-            }
-            (DimAutoOrParent::None, size @ DimAutoOrParent::Content(_))
-            | (DimAutoOrParent::None, size @ DimAutoOrParent::Fixed(_))
-            | (DimAutoOrParent::None, size @ DimAutoOrParent::Parent(_, _)) => {
-                self.basis = size.clone()
-            }
-            (_, _) => (),
-        }
-
+        self.basis = self.basis.or(size);
+        self.min = self.min.or(min);
+        self.max = self.max.or(max);
         self.grow = self.grow.or(grow);
         self.shrink = self.shrink.or(shrink);
     }
@@ -404,7 +375,7 @@ impl Dimension {
         self.basis.is_resolved()
     }
 
-    pub fn basis(&self) -> &DimAutoOrParent {
+    pub fn basis(&self) -> &Dim {
         &self.basis
     }
 
@@ -412,7 +383,7 @@ impl Dimension {
         self.basis.size()
     }
 
-    pub fn set_basis(&mut self, basis: impl Into<DimAutoOrParent>) {
+    pub fn set_basis(&mut self, basis: impl Into<Dim>) {
         let mut basis = basis.into();
         if let (Some(basis_size), Some(min)) = (basis.size(), self.min.size()) {
             if basis_size < min {
@@ -427,11 +398,11 @@ impl Dimension {
         self.basis = basis;
     }
 
-    pub fn min(&self) -> &DimOrParent {
+    pub fn min(&self) -> &MaybeDim {
         &self.min
     }
 
-    pub fn set_min(&mut self, min: impl Into<DimOrParent>) {
+    pub fn set_min(&mut self, min: impl Into<MaybeDim>) {
         let min = min.into();
         if let (Some(basis_size), Some(min_size)) = (self.basis.size(), min.size()) {
             if basis_size < min_size {
@@ -446,11 +417,11 @@ impl Dimension {
         self.min = min;
     }
 
-    pub fn max(&self) -> &DimOrParent {
+    pub fn max(&self) -> &MaybeDim {
         &self.max
     }
 
-    pub fn set_max(&mut self, max: impl Into<DimOrParent>) {
+    pub fn set_max(&mut self, max: impl Into<MaybeDim>) {
         let max = max.into();
         if let (Some(basis_size), Some(max_size)) = (self.basis.size(), max.size()) {
             if basis_size > max_size {
@@ -607,9 +578,9 @@ impl Dimension {
 impl From<Unit> for Dimension {
     fn from(size: Unit) -> Self {
         Self {
-            basis: DimAutoOrParent::Fixed(size),
-            min: DimOrParent::None,
-            max: DimOrParent::None,
+            basis: Dim::Fixed(size),
+            min: MaybeDim::None,
+            max: MaybeDim::None,
             shrink: None,
             grow: None,
         }
@@ -619,9 +590,9 @@ impl From<Unit> for Dimension {
 impl From<Fill> for Dimension {
     fn from(fill: Fill) -> Self {
         Self {
-            basis: DimAutoOrParent::Fixed(Unit::zero()),
-            min: DimOrParent::None,
-            max: DimOrParent::None,
+            basis: Dim::Fixed(Unit::zero()),
+            min: MaybeDim::None,
+            max: MaybeDim::None,
             shrink: None,
             grow: Some(fill),
         }
@@ -768,7 +739,7 @@ impl DivAssign<f64> for Dimension {
 #[cfg(test)]
 mod tests {
     use crate::{
-        dimension::DimAutoOrParent,
+        dimension::Dim,
         layout::dimension::Dimension,
         unit::{Fill, Unit},
     };
@@ -777,7 +748,7 @@ mod tests {
     fn it_constructs() {
         let dim: Dimension = Unit::from(15).into();
 
-        assert!(matches!(dim.basis, DimAutoOrParent::Fixed(Unit(15))));
+        assert!(matches!(dim.basis, Dim::Fixed(Unit(15))));
         assert_eq!(Some(Unit::from(15)), dim.basis.size());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
@@ -794,7 +765,7 @@ mod tests {
 
         let dim = Dimension::content();
 
-        assert!(matches!(dim.basis, DimAutoOrParent::Content(None)));
+        assert!(matches!(dim.basis, Dim::Content(None)));
         assert!(dim.basis.size().is_none());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
@@ -803,7 +774,7 @@ mod tests {
 
         let dim = Dimension::parented(3);
 
-        assert!(matches!(dim.basis, DimAutoOrParent::Parent(Fill(3), None)));
+        assert!(matches!(dim.basis, Dim::Parent(Fill(3), None)));
         assert!(dim.basis.size().is_none());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
