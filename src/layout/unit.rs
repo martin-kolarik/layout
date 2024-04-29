@@ -32,16 +32,6 @@ impl Unit {
 pub struct Fill(pub(crate) usize);
 pub type FillPerMille = Fill;
 
-impl Fill {
-    pub fn scaling(&self) -> f64 {
-        self.0 as f64 / 1000.0
-    }
-
-    pub fn permille(&self) -> usize {
-        self.0
-    }
-}
-
 impl Debug for Fill {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("Fill({})", self.0))
@@ -177,6 +167,7 @@ impl DivAssign<f64> for Unit {
     }
 }
 
+// (Fill, Fill) = (Numerator, Denominator)
 impl Mul<(Fill, Fill)> for Unit {
     type Output = Self;
 
@@ -186,6 +177,7 @@ impl Mul<(Fill, Fill)> for Unit {
     }
 }
 
+// (Fill, Fill) = (Numerator, Denominator)
 impl MulAssign<(Fill, Fill)> for Unit {
     fn mul_assign(&mut self, rhs: (Fill, Fill)) {
         let divisor = rhs.1 .0 as i64;
@@ -213,6 +205,14 @@ impl Fill {
 
     pub fn mille() -> Self {
         Self(1000)
+    }
+
+    pub fn scaling(&self) -> f64 {
+        self.0 as f64 / 1000.0
+    }
+
+    pub fn permille(&self) -> usize {
+        self.0
     }
 }
 

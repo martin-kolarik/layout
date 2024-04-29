@@ -130,8 +130,8 @@ mod tests {
             assert_eq!(0, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(0, item.size_ref().height().0);
         }
@@ -153,14 +153,14 @@ mod tests {
             assert_eq!(0, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(0, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(10, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(0, item.size_ref().height().0);
         }
@@ -182,14 +182,14 @@ mod tests {
             assert_eq!(0, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(0, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(13, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(0, item.size_ref().height().0);
         }
@@ -215,14 +215,14 @@ mod tests {
             assert_eq!(6, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(4, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(4, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
         }
@@ -248,14 +248,14 @@ mod tests {
             assert_eq!(6, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(8, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(8, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
         }
@@ -287,20 +287,20 @@ mod tests {
             assert_eq!(8, output[2].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(4, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(4, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(10, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(10, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -328,20 +328,20 @@ mod tests {
             assert_eq!(8, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(10, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(6, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(6, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -369,20 +369,20 @@ mod tests {
             assert_eq!(8, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(10, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(6, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(6, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -414,20 +414,20 @@ mod tests {
             assert_eq!(8, output[2].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(7, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(7, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(16, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(16, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -455,20 +455,20 @@ mod tests {
             assert_eq!(8, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(13, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(9, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(9, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -496,20 +496,20 @@ mod tests {
             assert_eq!(8, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(4, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(13, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(15, item.size_ref().width().0);
             assert_eq!(6, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(9, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(9, item.offset_ref().y.0);
             assert_eq!(10, item.size_ref().width().0);
             assert_eq!(8, item.size_ref().height().0);
         }
@@ -534,8 +534,8 @@ mod tests {
             assert_eq!(10, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(0, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -557,14 +557,14 @@ mod tests {
             assert_eq!(25, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(0, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(10, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(10, item.offset_ref().y.0);
             assert_eq!(0, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
         }
@@ -586,14 +586,14 @@ mod tests {
             assert_eq!(28, output[0].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(0, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(13, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(13, item.offset_ref().y.0);
             assert_eq!(0, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
         }
@@ -619,14 +619,14 @@ mod tests {
             assert_eq!(15, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(4, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(4, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
         }
@@ -652,14 +652,14 @@ mod tests {
             assert_eq!(15, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(8, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(8, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
         }
@@ -691,20 +691,20 @@ mod tests {
             assert_eq!(10, output[2].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(4, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(4, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(10, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(10, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -732,20 +732,20 @@ mod tests {
             assert_eq!(10, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(10, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(10, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(6, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(6, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -773,20 +773,20 @@ mod tests {
             assert_eq!(10, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(10, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(10, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(6, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(6, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -818,20 +818,20 @@ mod tests {
             assert_eq!(10, output[2].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(7, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(7, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(16, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(16, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -859,20 +859,20 @@ mod tests {
             assert_eq!(10, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(13, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(13, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(9, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(9, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }
@@ -900,20 +900,20 @@ mod tests {
             assert_eq!(10, output[1].size().height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(4, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x().0);
-            assert_eq!(13, item.offset_ref().y().0);
+            assert_eq!(0, item.offset_ref().x.0);
+            assert_eq!(13, item.offset_ref().y.0);
             assert_eq!(6, item.size_ref().width().0);
             assert_eq!(15, item.size_ref().height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(9, item.offset_ref().x().0);
-            assert_eq!(0, item.offset_ref().y().0);
+            assert_eq!(9, item.offset_ref().x.0);
+            assert_eq!(0, item.offset_ref().y.0);
             assert_eq!(8, item.size_ref().width().0);
             assert_eq!(10, item.size_ref().height().0);
         }

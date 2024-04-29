@@ -30,15 +30,15 @@ impl Axis {
 
     pub fn offset(&self, offset: &Offset) -> Unit {
         match self {
-            Axis::Horizontal => offset.x(),
-            Axis::Vertical => offset.y(),
+            Axis::Horizontal => offset.x,
+            Axis::Vertical => offset.y,
         }
     }
 
     pub fn set_offset(&self, offset: &mut Offset, value: Unit) {
         match self {
-            Axis::Horizontal => *offset.x_mut() = value,
-            Axis::Vertical => *offset.y_mut() = value,
+            Axis::Horizontal => offset.x = value,
+            Axis::Vertical => offset.y = value,
         }
     }
 

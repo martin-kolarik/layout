@@ -17,8 +17,8 @@ fn single_fixed_box_c_0_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -27,8 +27,8 @@ fn single_fixed_box_c_0_0() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -45,8 +45,8 @@ fn single_fixed_box_c_0_1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(12, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -55,8 +55,8 @@ fn single_fixed_box_c_0_1() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(12, box1.size_ref().height().0);
 }
@@ -74,8 +74,8 @@ fn single_fixed_box_c_1_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(12, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -84,8 +84,8 @@ fn single_fixed_box_c_1_0() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -103,8 +103,8 @@ fn single_fixed_box_c_1_1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(12, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -113,8 +113,8 @@ fn single_fixed_box_c_1_1() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(21, box1.size_ref().height().0);
 }
@@ -132,8 +132,8 @@ fn single_grow_main_0_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -142,8 +142,8 @@ fn single_grow_main_0_1_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(190, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -162,8 +162,8 @@ fn single_grow_main_1_0_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -172,8 +172,8 @@ fn single_grow_main_1_0_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -192,8 +192,8 @@ fn single_grow_main_1_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -202,14 +202,14 @@ fn single_grow_main_1_1_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(190, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
 
 #[test]
-fn single_grow_main_1_1_parent_box() {
+fn single_grow_main_1parent_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
@@ -224,8 +224,8 @@ fn single_grow_main_1_1_parent_box() {
     outer.measure(&mut Ctx, size.clone()).unwrap();
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -234,8 +234,70 @@ fn single_grow_main_1_1_parent_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(190, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+}
+
+#[test]
+fn single_grow_main_0_1parent_box() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let box1 = DefaultFactory::hbox().size(Fill::full());
+
+    let mut outer = DefaultFactory::hbox()
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(box1);
+
+    outer.measure(&mut Ctx, size.clone()).unwrap();
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(190, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(190, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(190, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+}
+
+#[test]
+fn single_grow_main_1parent_1parent_box() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let box1 = DefaultFactory::hbox().size(Fill::full());
+
+    let mut outer = DefaultFactory::hbox()
+        .size(Fill::full())
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(box1)
+        .grow(1);
+
+    outer.measure(&mut Ctx, size.clone()).unwrap();
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(190, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(190, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(190, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -253,8 +315,8 @@ fn single_grow_cross_0_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(7, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -263,8 +325,8 @@ fn single_grow_cross_0_1_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);
 }
@@ -283,8 +345,8 @@ fn single_grow_cross_1_0fix_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -293,8 +355,8 @@ fn single_grow_cross_1_0fix_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);
 }
@@ -313,8 +375,8 @@ fn single_grow_cross_1_0dyn_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -323,8 +385,8 @@ fn single_grow_cross_1_0dyn_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 }
@@ -343,8 +405,8 @@ fn single_grow_cross_1_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -353,8 +415,8 @@ fn single_grow_cross_1_1_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(277, box1.size_ref().height().0);
 }
@@ -376,8 +438,8 @@ fn single_cross_align_end_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -386,8 +448,8 @@ fn single_cross_align_end_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(280, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(280, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);
 }
@@ -406,8 +468,8 @@ fn single_cross_align_center_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -416,8 +478,8 @@ fn single_cross_align_center_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(145, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(145, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);
 }
@@ -439,8 +501,8 @@ fn single_cross_align_baseline_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(14, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(14, outer.offset_ref().y.0);
     assert_eq!(15, outer.size_ref().width().0);
     assert_eq!(277, outer.size_ref().height().0);
     assert_eq!(15, outer.content_size().unwrap().width().0);
@@ -449,8 +511,8 @@ fn single_cross_align_baseline_box() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(14, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(14, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(7, box1.size_ref().height().0);
 }
@@ -469,8 +531,8 @@ fn double_fixed_boxes_c_0_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(33, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(33, outer.content_size().unwrap().width().0);
@@ -479,14 +541,14 @@ fn double_fixed_boxes_c_0_0() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(25, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(25, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(18, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 }
@@ -507,8 +569,8 @@ fn triple_fixed_boxes_c() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(49, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(49, outer.content_size().unwrap().width().0);
@@ -517,20 +579,20 @@ fn triple_fixed_boxes_c() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(25, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(25, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(18, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(43, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(43, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(16, box3.size_ref().width().0);
     assert_eq!(0, box3.size_ref().height().0);
 }
@@ -555,8 +617,8 @@ fn triple_fixed_boxes_g() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(53, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(53, outer.content_size().unwrap().width().0);
@@ -565,20 +627,20 @@ fn triple_fixed_boxes_g() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(15, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(27, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(27, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(18, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(47, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(47, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(16, box3.size_ref().width().0);
     assert_eq!(0, box3.size_ref().height().0);
 }
@@ -599,8 +661,8 @@ fn triple_grow_boxes_c() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -609,20 +671,20 @@ fn triple_grow_boxes_c() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(43, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(53, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(53, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(103, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(156, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(156, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(44, box3.size_ref().width().0);
     assert_eq!(0, box3.size_ref().height().0);
 }
@@ -647,8 +709,8 @@ fn triple_grow_boxes_g() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(189, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(189, outer.content_size().unwrap().width().0);
@@ -657,20 +719,20 @@ fn triple_grow_boxes_g() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(42, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(54, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(54, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(100, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(156, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(156, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(43, box3.size_ref().width().0);
     assert_eq!(0, box3.size_ref().height().0);
 }
@@ -691,8 +753,8 @@ fn triple_fixed_boxes_c_wrap1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(160, outer.size_ref().width().0);
     assert_eq!(0, outer.size_ref().height().0);
     assert_eq!(160, outer.content_size().unwrap().width().0);
@@ -701,20 +763,20 @@ fn triple_fixed_boxes_c_wrap1() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(80, box1.size_ref().width().0);
     assert_eq!(0, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(90, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(90, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(80, box2.size_ref().width().0);
     assert_eq!(0, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(80, box3.size_ref().width().0);
     assert_eq!(0, box3.size_ref().height().0);
 }
@@ -735,8 +797,8 @@ fn triple_fixed_boxes_c_wrap2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(160, outer.size_ref().width().0);
     assert_eq!(35, outer.size_ref().height().0);
     assert_eq!(160, outer.content_size().unwrap().width().0);
@@ -745,20 +807,20 @@ fn triple_fixed_boxes_c_wrap2() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(80, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(90, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(90, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(80, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(25, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(25, box3.offset_ref().y.0);
     assert_eq!(80, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -784,8 +846,8 @@ fn triple_fixed_boxes_g_wrap() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(162, outer.size_ref().width().0);
     assert_eq!(37, outer.size_ref().height().0);
     assert_eq!(162, outer.content_size().unwrap().width().0);
@@ -794,20 +856,20 @@ fn triple_fixed_boxes_g_wrap() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(80, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(92, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(92, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(80, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(27, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(27, box3.offset_ref().y.0);
     assert_eq!(80, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -828,8 +890,8 @@ fn triple_fixed_boxes_c_wrap_grow1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(35, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -838,20 +900,20 @@ fn triple_fixed_boxes_c_wrap_grow1() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(90, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(100, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(100, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(100, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(25, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(25, box3.offset_ref().y.0);
     assert_eq!(80, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -872,8 +934,8 @@ fn triple_fixed_boxes_c_wrap_grow2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(35, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -882,20 +944,20 @@ fn triple_fixed_boxes_c_wrap_grow2() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(90, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(100, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(100, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(100, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(25, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(25, box3.offset_ref().y.0);
     assert_eq!(190, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -921,8 +983,8 @@ fn triple_fixed_boxes_g_wrap_grow1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(40, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -931,20 +993,20 @@ fn triple_fixed_boxes_g_wrap_grow1() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(88, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(103, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(103, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(97, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(30, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(30, box3.offset_ref().y.0);
     assert_eq!(80, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -970,8 +1032,8 @@ fn triple_fixed_boxes_g_wrap_grow2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(190, outer.size_ref().width().0);
     assert_eq!(40, outer.size_ref().height().0);
     assert_eq!(190, outer.content_size().unwrap().width().0);
@@ -980,20 +1042,20 @@ fn triple_fixed_boxes_g_wrap_grow2() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(88, box1.size_ref().width().0);
     assert_eq!(10, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(103, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(103, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(97, box2.size_ref().width().0);
     assert_eq!(15, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x().0);
-    assert_eq!(30, box3.offset_ref().y().0);
+    assert_eq!(10, box3.offset_ref().x.0);
+    assert_eq!(30, box3.offset_ref().y.0);
     assert_eq!(190, box3.size_ref().width().0);
     assert_eq!(20, box3.size_ref().height().0);
 }
@@ -1014,8 +1076,8 @@ fn triple_fixed_boxes_cross_fixed_start() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(120, outer.size_ref().width().0);
     assert_eq!(30, outer.size_ref().height().0);
     assert_eq!(120, outer.content_size().unwrap().width().0);
@@ -1024,20 +1086,20 @@ fn triple_fixed_boxes_cross_fixed_start() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(40, box1.size_ref().width().0);
     assert_eq!(20, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(50, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(50, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(40, box2.size_ref().width().0);
     assert_eq!(30, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(90, box3.offset_ref().x().0);
-    assert_eq!(10, box3.offset_ref().y().0);
+    assert_eq!(90, box3.offset_ref().x.0);
+    assert_eq!(10, box3.offset_ref().y.0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }
@@ -1058,8 +1120,8 @@ fn triple_fixed_boxes_cross_fixed_center() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(120, outer.size_ref().width().0);
     assert_eq!(30, outer.size_ref().height().0);
     assert_eq!(120, outer.content_size().unwrap().width().0);
@@ -1068,20 +1130,20 @@ fn triple_fixed_boxes_cross_fixed_center() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(15, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(15, box1.offset_ref().y.0);
     assert_eq!(40, box1.size_ref().width().0);
     assert_eq!(20, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(50, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(50, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(40, box2.size_ref().width().0);
     assert_eq!(30, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(90, box3.offset_ref().x().0);
-    assert_eq!(18, box3.offset_ref().y().0);
+    assert_eq!(90, box3.offset_ref().x.0);
+    assert_eq!(18, box3.offset_ref().y.0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }
@@ -1102,8 +1164,8 @@ fn triple_fixed_boxes_cross_fixed_end() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(120, outer.size_ref().width().0);
     assert_eq!(30, outer.size_ref().height().0);
     assert_eq!(120, outer.content_size().unwrap().width().0);
@@ -1112,20 +1174,20 @@ fn triple_fixed_boxes_cross_fixed_end() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(20, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(20, box1.offset_ref().y.0);
     assert_eq!(40, box1.size_ref().width().0);
     assert_eq!(20, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(50, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(50, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(40, box2.size_ref().width().0);
     assert_eq!(30, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(90, box3.offset_ref().x().0);
-    assert_eq!(25, box3.offset_ref().y().0);
+    assert_eq!(90, box3.offset_ref().x.0);
+    assert_eq!(25, box3.offset_ref().y.0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }
@@ -1146,8 +1208,8 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
     let size = Size::fixed_depth(190, 277, 247);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(120, outer.size_ref().width().0);
     assert_eq!(30, outer.size_ref().height().0);
     assert_eq!(120, outer.content_size().unwrap().width().0);
@@ -1156,20 +1218,20 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(18, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(18, box1.offset_ref().y.0);
     assert_eq!(40, box1.size_ref().width().0);
     assert_eq!(20, box1.size_ref().height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(50, box2.offset_ref().x().0);
-    assert_eq!(10, box2.offset_ref().y().0);
+    assert_eq!(50, box2.offset_ref().x.0);
+    assert_eq!(10, box2.offset_ref().y.0);
     assert_eq!(40, box2.size_ref().width().0);
     assert_eq!(30, box2.size_ref().height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(90, box3.offset_ref().x().0);
-    assert_eq!(20, box3.offset_ref().y().0);
+    assert_eq!(90, box3.offset_ref().x.0);
+    assert_eq!(20, box3.offset_ref().y.0);
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }

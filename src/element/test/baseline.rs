@@ -15,8 +15,8 @@ fn self_not_baseline_on_baseline() {
     )
     .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(0, box1.size_ref().width().0);
     assert_eq!(100, box1.size_ref().height().0);
     assert!(box1.size_ref().depth().is_none());
@@ -31,8 +31,8 @@ fn self_baseline_on_not_baseline() {
     box1.lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(0, box1.size_ref().width().0);
     assert_eq!(100, box1.size_ref().height().0);
     assert_eq!(85, box1.size_ref().depth().unwrap().0);
@@ -54,8 +54,8 @@ fn self_baseline_on_baseline() {
     )
     .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(25, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(25, box1.offset_ref().y.0);
     assert_eq!(0, box1.size_ref().width().0);
     assert_eq!(100, box1.size_ref().height().0);
     assert_eq!(85, box1.size_ref().depth().unwrap().0);
@@ -77,8 +77,8 @@ fn self_baseline_inherits() {
         .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(10, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
     assert_eq!(0, outer.size_ref().width().0);
     assert_eq!(100, outer.size_ref().height().0);
     assert_eq!(85, outer.size_ref().depth().unwrap().0);
@@ -88,8 +88,8 @@ fn self_baseline_inherits() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(10, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
     assert_eq!(0, box1.size_ref().width().0);
     assert_eq!(100, box1.size_ref().height().0);
     assert_eq!(85, box1.size_ref().depth().unwrap().0);
@@ -114,8 +114,8 @@ fn self_baseline_inherits_and_positions() {
         )
         .unwrap();
 
-    assert_eq!(10, outer.offset_ref().x().0);
-    assert_eq!(5, outer.offset_ref().y().0);
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(5, outer.offset_ref().y.0);
     assert_eq!(0, outer.size_ref().width().0);
     assert_eq!(100, outer.size_ref().height().0);
     assert_eq!(85, outer.size_ref().depth().unwrap().0);
@@ -125,8 +125,8 @@ fn self_baseline_inherits_and_positions() {
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x().0);
-    assert_eq!(5, box1.offset_ref().y().0);
+    assert_eq!(10, box1.offset_ref().x.0);
+    assert_eq!(5, box1.offset_ref().y.0);
     assert_eq!(0, box1.size_ref().width().0);
     assert_eq!(100, box1.size_ref().height().0);
     assert_eq!(85, box1.size_ref().depth().unwrap().0);

@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::{
-    dimension::DimAutoOrParent,
+    dimension::Dim,
     unit::{sub_unit, Unit},
     Axis, Style,
 };
@@ -13,8 +13,8 @@ use super::dimension::Dimension;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Offset {
-    x: Unit,
-    y: Unit,
+    pub x: Unit,
+    pub y: Unit,
 }
 
 impl Offset {
@@ -30,30 +30,6 @@ impl Offset {
             x: Unit::zero(),
             y: Unit::zero(),
         }
-    }
-
-    pub fn x(&self) -> Unit {
-        self.x
-    }
-
-    pub fn x_mut(&mut self) -> &mut Unit {
-        &mut self.x
-    }
-
-    pub fn y(&self) -> Unit {
-        self.y
-    }
-
-    pub fn y_mut(&mut self) -> &mut Unit {
-        &mut self.y
-    }
-
-    pub fn x_reset(&mut self) {
-        self.x = Unit::zero();
-    }
-
-    pub fn y_reset(&mut self) {
-        self.y = Unit::zero();
     }
 
     pub fn x_advance(&mut self, amount: impl Into<Unit>) {
@@ -235,7 +211,7 @@ impl Size {
         &mut self.height
     }
 
-    pub fn width_ref(&self) -> &DimAutoOrParent {
+    pub fn width_ref(&self) -> &Dim {
         self.width.basis()
     }
 
@@ -243,11 +219,11 @@ impl Size {
         self.width.size()
     }
 
-    pub fn set_width(&mut self, width: impl Into<DimAutoOrParent>) {
+    pub fn set_width(&mut self, width: impl Into<Dim>) {
         self.width.set_basis(width);
     }
 
-    pub fn height_ref(&self) -> &DimAutoOrParent {
+    pub fn height_ref(&self) -> &Dim {
         self.height.basis()
     }
 
@@ -255,7 +231,7 @@ impl Size {
         self.height.size()
     }
 
-    pub fn set_height(&mut self, height: impl Into<DimAutoOrParent>) {
+    pub fn set_height(&mut self, height: impl Into<Dim>) {
         self.height.set_basis(height);
     }
 
@@ -424,7 +400,7 @@ impl Quad {
     }
 
     pub fn offset(&self, offset: &Offset) -> Offset {
-        Offset::new(offset.x() + self.left_size(), offset.y() + self.top_size())
+        Offset::new(offset.x + self.left_size(), offset.y + self.top_size())
     }
 
     pub fn narrow(&self, offset: Option<&mut Offset>, size: Option<&mut Size>) {
@@ -487,8 +463,8 @@ mod tests {
     #[test]
     fn offset_constructs() {
         let ofs = Offset::zero();
-        assert_eq!(0, ofs.x().0);
-        assert_eq!(0, ofs.y().0);
+        assert_eq!(0, ofs.x.0);
+        assert_eq!(0, ofs.y.0);
     }
 
     #[test]
@@ -496,14 +472,14 @@ mod tests {
         let mut ofs = Offset::zero();
         ofs.x_advance(10);
 
-        assert_eq!(10, ofs.x().0);
-        assert_eq!(0, ofs.y().0);
+        assert_eq!(10, ofs.x.0);
+        assert_eq!(0, ofs.y.0);
 
         let mut ofs = Offset::zero();
         ofs.y_advance(10);
 
-        assert_eq!(0, ofs.x().0);
-        assert_eq!(10, ofs.y().0);
+        assert_eq!(0, ofs.x.0);
+        assert_eq!(10, ofs.y.0);
     }
 
     #[test]

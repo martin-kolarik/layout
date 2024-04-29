@@ -288,14 +288,14 @@ impl Layout for BlockBox {
         if let Some(stroke) = style.border_top() {
             ctx.line(
                 &self.offset,
-                &Offset::new(bottom_right.x(), top_left.y()),
+                &Offset::new(bottom_right.x, top_left.y),
                 stroke,
             );
         }
 
         if let Some(stroke) = style.border_right() {
             ctx.line(
-                &Offset::new(bottom_right.x(), top_left.y()),
+                &Offset::new(bottom_right.x, top_left.y),
                 &bottom_right,
                 stroke,
             );
@@ -304,17 +304,13 @@ impl Layout for BlockBox {
         if let Some(stroke) = style.border_bottom() {
             ctx.line(
                 &bottom_right,
-                &Offset::new(top_left.x(), bottom_right.y()),
+                &Offset::new(top_left.x, bottom_right.y),
                 stroke,
             );
         }
 
         if let Some(stroke) = style.border_left() {
-            ctx.line(
-                &Offset::new(top_left.x(), bottom_right.y()),
-                top_left,
-                stroke,
-            );
+            ctx.line(&Offset::new(top_left.x, bottom_right.y), top_left, stroke);
         }
 
         ctx.debug_frame(self.offset_ref(), self.size_ref());
@@ -361,16 +357,16 @@ mod tests {
         let mut children = bbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(156000, t2.offset_ref().x().0);
-        assert_eq!(256000, t2.offset_ref().y().0);
+        assert_eq!(156000, t2.offset_ref().x.0);
+        assert_eq!(256000, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x().0);
-        assert_eq!(0, t3.offset_ref().y().0);
+        assert_eq!(0, t3.offset_ref().x.0);
+        assert_eq!(0, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -400,16 +396,16 @@ mod tests {
         let mut children = bbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(100000, t1.offset_ref().x().0);
-        assert_eq!(100000, t1.offset_ref().y().0);
+        assert_eq!(100000, t1.offset_ref().x.0);
+        assert_eq!(100000, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(256000, t2.offset_ref().x().0);
-        assert_eq!(356000, t2.offset_ref().y().0);
+        assert_eq!(256000, t2.offset_ref().x.0);
+        assert_eq!(356000, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(100000, t3.offset_ref().x().0);
-        assert_eq!(100000, t3.offset_ref().y().0);
+        assert_eq!(100000, t3.offset_ref().x.0);
+        assert_eq!(100000, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -442,16 +438,16 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x().0);
-        assert_eq!(0, t2.offset_ref().y().0);
+        assert_eq!(105833, t2.offset_ref().x.0);
+        assert_eq!(0, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x().0);
-        assert_eq!(0, t3.offset_ref().y().0);
+        assert_eq!(2 * 105833, t3.offset_ref().x.0);
+        assert_eq!(0, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -477,15 +473,15 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x().0);
-        assert_eq!(35278, t2.offset_ref().y().0);
+        assert_eq!(0, t2.offset_ref().x.0);
+        assert_eq!(35278, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x().0);
-        assert_eq!(2 * 35278, t3.offset_ref().y().0);
+        assert_eq!(0, t3.offset_ref().x.0);
+        assert_eq!(2 * 35278, t3.offset_ref().y.0);
     }
 }

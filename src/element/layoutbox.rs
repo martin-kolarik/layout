@@ -562,14 +562,14 @@ impl Layout for LayoutBox {
         if let Some(stroke) = style.border_top() {
             ctx.line(
                 &self.offset,
-                &Offset::new(bottom_right.x(), top_left.y()),
+                &Offset::new(bottom_right.x, top_left.y),
                 stroke,
             );
         }
 
         if let Some(stroke) = style.border_right() {
             ctx.line(
-                &Offset::new(bottom_right.x(), top_left.y()),
+                &Offset::new(bottom_right.x, top_left.y),
                 &bottom_right,
                 stroke,
             );
@@ -578,17 +578,13 @@ impl Layout for LayoutBox {
         if let Some(stroke) = style.border_bottom() {
             ctx.line(
                 &bottom_right,
-                &Offset::new(top_left.x(), bottom_right.y()),
+                &Offset::new(top_left.x, bottom_right.y),
                 stroke,
             );
         }
 
         if let Some(stroke) = style.border_left() {
-            ctx.line(
-                &Offset::new(top_left.x(), bottom_right.y()),
-                top_left,
-                stroke,
-            );
+            ctx.line(&Offset::new(top_left.x, bottom_right.y), top_left, stroke);
         }
 
         ctx.debug_frame(self.offset_ref(), self.size_ref());

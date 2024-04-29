@@ -150,16 +150,16 @@ mod tests {
         let mut children = hbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x().0);
-        assert_eq!(0, t2.offset_ref().y().0);
+        assert_eq!(105833, t2.offset_ref().x.0);
+        assert_eq!(0, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x().0);
-        assert_eq!(0, t3.offset_ref().y().0);
+        assert_eq!(2 * 105833, t3.offset_ref().x.0);
+        assert_eq!(0, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -192,16 +192,16 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x().0);
-        assert_eq!(0, t2.offset_ref().y().0);
+        assert_eq!(105833, t2.offset_ref().x.0);
+        assert_eq!(0, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x().0);
-        assert_eq!(0, t3.offset_ref().y().0);
+        assert_eq!(2 * 105833, t3.offset_ref().x.0);
+        assert_eq!(0, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -228,16 +228,16 @@ mod tests {
         let mut children = vbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x().0);
-        assert_eq!(35278, t2.offset_ref().y().0);
+        assert_eq!(0, t2.offset_ref().x.0);
+        assert_eq!(35278, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x().0);
-        assert_eq!(2 * 35278, t3.offset_ref().y().0);
+        assert_eq!(0, t3.offset_ref().x.0);
+        assert_eq!(2 * 35278, t3.offset_ref().y.0);
     }
 
     #[test]
@@ -263,15 +263,15 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x().0);
-        assert_eq!(0, t1.offset_ref().y().0);
+        assert_eq!(0, t1.offset_ref().x.0);
+        assert_eq!(0, t1.offset_ref().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x().0);
-        assert_eq!(35278, t2.offset_ref().y().0);
+        assert_eq!(0, t2.offset_ref().x.0);
+        assert_eq!(35278, t2.offset_ref().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x().0);
-        assert_eq!(2 * 35278, t3.offset_ref().y().0);
+        assert_eq!(0, t3.offset_ref().x.0);
+        assert_eq!(2 * 35278, t3.offset_ref().y.0);
     }
 }

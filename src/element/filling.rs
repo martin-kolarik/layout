@@ -130,21 +130,21 @@ mod tests {
         let mut iter = outer.iter();
 
         let fill = iter.next().unwrap();
-        assert_eq!(10, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(10, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(0, fill.size_ref().width().0);
         assert_eq!(50, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
 
         let box1 = iter.next().unwrap();
-        assert_eq!(60, box1.offset_ref().x().0);
-        assert_eq!(10, box1.offset_ref().y().0);
+        assert_eq!(60, box1.offset_ref().x.0);
+        assert_eq!(10, box1.offset_ref().y.0);
         assert_eq!(25, box1.size_ref().width().0);
         assert_eq!(0, box1.size_ref().height().0);
 
         let fill = iter.next().unwrap();
-        assert_eq!(85, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(85, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(0, fill.size_ref().width().0);
         assert_eq!(25, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
@@ -175,15 +175,15 @@ mod tests {
         let mut iter = outer.iter();
 
         let fill = iter.next().unwrap();
-        assert_eq!(10, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(10, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(0, fill.size_ref().width().0);
         assert_eq!(67, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
 
         let box1 = iter.next().unwrap();
-        assert_eq!(77, box1.offset_ref().x().0);
-        assert_eq!(10, box1.offset_ref().y().0);
+        assert_eq!(77, box1.offset_ref().x.0);
+        assert_eq!(10, box1.offset_ref().y.0);
         assert_eq!(5, box1.size_ref().width().0);
         assert_eq!(100, box1.size_ref().height().0);
 
@@ -191,27 +191,27 @@ mod tests {
             let mut iter = box1.iter();
 
             let fill = iter.next().unwrap();
-            assert_eq!(77, fill.offset_ref().x().0);
-            assert_eq!(10, fill.offset_ref().y().0);
+            assert_eq!(77, fill.offset_ref().x.0);
+            assert_eq!(10, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
 
             let box1 = iter.next().unwrap();
-            assert_eq!(77, box1.offset_ref().x().0);
-            assert_eq!(60, box1.offset_ref().y().0);
+            assert_eq!(77, box1.offset_ref().x.0);
+            assert_eq!(60, box1.offset_ref().y.0);
             assert_eq!(5, box1.size_ref().width().0);
             assert_eq!(0, box1.size_ref().height().0);
 
             let fill = iter.next().unwrap();
-            assert_eq!(77, fill.offset_ref().x().0);
-            assert_eq!(60, fill.offset_ref().y().0);
+            assert_eq!(77, fill.offset_ref().x.0);
+            assert_eq!(60, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
         }
 
         let fill = iter.next().unwrap();
-        assert_eq!(77, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(77, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(33, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
     }
@@ -237,15 +237,15 @@ mod tests {
         let mut iter = outer.iter();
 
         let fill = iter.next().unwrap();
-        assert_eq!(10, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(10, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(0, fill.size_ref().width().0);
         assert_eq!(63, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
 
         let box1 = iter.next().unwrap();
-        assert_eq!(73, box1.offset_ref().x().0);
-        assert_eq!(10, box1.offset_ref().y().0);
+        assert_eq!(73, box1.offset_ref().x.0);
+        assert_eq!(10, box1.offset_ref().y.0);
         assert_eq!(5, box1.size_ref().width().0);
         assert_eq!(100, box1.size_ref().height().0);
 
@@ -253,27 +253,27 @@ mod tests {
             let mut iter = box1.iter();
 
             let fill = iter.next().unwrap();
-            assert_eq!(73, fill.offset_ref().x().0);
-            assert_eq!(10, fill.offset_ref().y().0);
+            assert_eq!(73, fill.offset_ref().x.0);
+            assert_eq!(10, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
 
             let box1 = iter.next().unwrap();
-            assert_eq!(73, box1.offset_ref().x().0);
-            assert_eq!(60, box1.offset_ref().y().0);
+            assert_eq!(73, box1.offset_ref().x.0);
+            assert_eq!(60, box1.offset_ref().y.0);
             assert_eq!(5, box1.size_ref().width().0);
             assert_eq!(0, box1.size_ref().height().0);
 
             let fill = iter.next().unwrap();
-            assert_eq!(73, fill.offset_ref().x().0);
-            assert_eq!(60, fill.offset_ref().y().0);
+            assert_eq!(73, fill.offset_ref().x.0);
+            assert_eq!(60, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
         }
 
         let fill = iter.next().unwrap();
-        assert_eq!(78, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(78, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(32, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
     }
@@ -304,14 +304,14 @@ mod tests {
         let mut iter = outer.iter();
 
         let fill = iter.next().unwrap();
-        assert_eq!(10, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(10, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(67, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
 
         let box1 = iter.next().unwrap();
-        assert_eq!(77, box1.offset_ref().x().0);
-        assert_eq!(10, box1.offset_ref().y().0);
+        assert_eq!(77, box1.offset_ref().x.0);
+        assert_eq!(10, box1.offset_ref().y.0);
         assert_eq!(0, box1.size_ref().width().0);
         assert_eq!(100, box1.size_ref().height().0);
 
@@ -319,27 +319,27 @@ mod tests {
             let mut iter = box1.iter();
 
             let fill = iter.next().unwrap();
-            assert_eq!(77, fill.offset_ref().x().0);
-            assert_eq!(10, fill.offset_ref().y().0);
+            assert_eq!(77, fill.offset_ref().x.0);
+            assert_eq!(10, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
 
             let box1 = iter.next().unwrap();
-            assert_eq!(77, box1.offset_ref().x().0);
-            assert_eq!(60, box1.offset_ref().y().0);
+            assert_eq!(77, box1.offset_ref().x.0);
+            assert_eq!(60, box1.offset_ref().y.0);
             assert_eq!(5, box1.size_ref().width().0);
             assert_eq!(0, box1.size_ref().height().0);
 
             let fill = iter.next().unwrap();
-            assert_eq!(77, fill.offset_ref().x().0);
-            assert_eq!(60, fill.offset_ref().y().0);
+            assert_eq!(77, fill.offset_ref().x.0);
+            assert_eq!(60, fill.offset_ref().y.0);
             assert_eq!(0, fill.size_ref().width().0);
             assert_eq!(50, fill.content_size().unwrap().height().0);
         }
 
         let fill = iter.next().unwrap();
-        assert_eq!(77, fill.offset_ref().x().0);
-        assert_eq!(10, fill.offset_ref().y().0);
+        assert_eq!(77, fill.offset_ref().x.0);
+        assert_eq!(10, fill.offset_ref().y.0);
         assert_eq!(33, fill.content_size().unwrap().width().0);
         assert_eq!(0, fill.size_ref().height().0);
     }
