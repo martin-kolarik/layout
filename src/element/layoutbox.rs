@@ -138,9 +138,7 @@ impl LayoutBox {
     }
 
     pub fn child_dyn(mut self, mut child: Box<dyn Layout>) -> Self {
-        let style = child.style_ref().inherit(self.style_ref());
-        child.size_mut().apply_style(self.axis, &style);
-        child.set_style(style);
+        child.set_style(child.style_ref().inherit(self.style_ref()));
         self.children.push(child);
         self
     }
@@ -152,9 +150,7 @@ impl LayoutBox {
         let children = children
             .into_iter()
             .map(|mut child| {
-                let style = child.style_ref().inherit(self.style_ref());
-                child.size_mut().apply_style(self.axis, &style);
-                child.set_style(style);
+                child.set_style(child.style_ref().inherit(self.style_ref()));
                 child
             })
             .collect::<Vec<_>>();
@@ -204,9 +200,7 @@ impl Styled for LayoutBox {
 
     fn set_style(&mut self, style: Arc<Style>) {
         self.children.iter_mut().for_each(|child| {
-            let style = child.style_ref().inherit(&style);
-            child.size_mut().apply_style(self.axis, &style);
-            child.set_style(style);
+            child.set_style(child.style_ref().inherit(&style));
         });
         self.size.apply_style(self.axis, &style);
         self.style = style;
