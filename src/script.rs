@@ -12,10 +12,12 @@ pub enum Element {
     Hbox(Vec<Format>, Vec<Element>),
     Hspace(Unit),
     Hfill(Fill),
+    HfillShrink(Fill),
 
     Vbox(Vec<Format>, Vec<Element>),
     Vspace(Unit),
     Vfill(Fill),
+    VfillShrink(Fill),
 
     Text(Vec<Format>, String),
 }
@@ -65,6 +67,11 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
         }
         Element::Hspace(space) => Box::new(DefaultFactory::hspace(space.clone())),
         Element::Hfill(fill) => Box::new(DefaultFactory::hfill(fill.clone())),
+        Element::HfillShrink(fill) => Box::new(
+            DefaultFactory::hfilling()
+                .grow(fill.clone())
+                .shrink(fill.clone()),
+        ),
 
         Element::Vbox(format, children) => {
             let mut vbox = DefaultFactory::vbox();
@@ -77,6 +84,11 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
         }
         Element::Vspace(space) => Box::new(DefaultFactory::vspace(space.clone())),
         Element::Vfill(fill) => Box::new(DefaultFactory::vfill(fill.clone())),
+        Element::VfillShrink(fill) => Box::new(
+            DefaultFactory::vfilling()
+                .grow(fill.clone())
+                .shrink(fill.clone()),
+        ),
 
         Element::Text(format, text) => {
             let mut text = DefaultFactory::text(text);
