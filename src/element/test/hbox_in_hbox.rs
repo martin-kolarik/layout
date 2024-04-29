@@ -1235,3 +1235,195 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
     assert_eq!(40, box3.size_ref().width().0);
     assert_eq!(15, box3.size_ref().height().0);
 }
+
+#[test]
+fn surrounded_single_1content_1box1() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let fill1 = DefaultFactory::hfill(1);
+    let box1 = DefaultFactory::hbox().size(15);
+    let fill2 = DefaultFactory::hfill(1);
+
+    let mut outer = DefaultFactory::hbox()
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(fill1)
+        .child(box1)
+        .child(fill2);
+
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(191, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(191, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let fill1 = iter.next().unwrap();
+
+    assert_eq!(10, fill1.offset_ref().x.0);
+    assert_eq!(10, fill1.offset_ref().y.0);
+    assert_eq!(88, fill1.content_size().unwrap().width().0);
+    assert_eq!(0, fill1.size_ref().height().0);
+
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(98, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(15, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+
+    let fill2 = iter.next().unwrap();
+
+    assert_eq!(113, fill2.offset_ref().x.0);
+    assert_eq!(10, fill2.offset_ref().y.0);
+    assert_eq!(88, fill2.content_size().unwrap().width().0);
+    assert_eq!(0, fill2.size_ref().height().0);
+}
+
+#[test]
+fn surrounded_single_1fixed_1box1() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let fill1 = DefaultFactory::hfill(1);
+    let box1 = DefaultFactory::hbox().size(15);
+    let fill2 = DefaultFactory::hfill(1);
+
+    let mut outer = DefaultFactory::hbox()
+        .size(190)
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(fill1)
+        .child(box1)
+        .child(fill2);
+
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(190, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(191, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let fill1 = iter.next().unwrap();
+
+    assert_eq!(10, fill1.offset_ref().x.0);
+    assert_eq!(10, fill1.offset_ref().y.0);
+    assert_eq!(88, fill1.content_size().unwrap().width().0);
+    assert_eq!(0, fill1.size_ref().height().0);
+
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(98, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(15, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+
+    let fill2 = iter.next().unwrap();
+
+    assert_eq!(113, fill2.offset_ref().x.0);
+    assert_eq!(10, fill2.offset_ref().y.0);
+    assert_eq!(88, fill2.content_size().unwrap().width().0);
+    assert_eq!(0, fill2.size_ref().height().0);
+}
+
+#[test]
+fn surrounded_single_1parented_1box1() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let fill1 = DefaultFactory::hfill(1);
+    let box1 = DefaultFactory::hbox().size(15);
+    let fill2 = DefaultFactory::hfill(1);
+
+    let mut outer = DefaultFactory::hbox()
+        .size(Fill::full())
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(fill1)
+        .child(box1)
+        .child(fill2);
+
+    outer.measure(&mut Ctx, size.clone()).unwrap();
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(190, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(191, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let fill1 = iter.next().unwrap();
+
+    assert_eq!(10, fill1.offset_ref().x.0);
+    assert_eq!(10, fill1.offset_ref().y.0);
+    assert_eq!(88, fill1.content_size().unwrap().width().0);
+    assert_eq!(0, fill1.size_ref().height().0);
+
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(98, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(15, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+
+    let fill2 = iter.next().unwrap();
+
+    assert_eq!(113, fill2.offset_ref().x.0);
+    assert_eq!(10, fill2.offset_ref().y.0);
+    assert_eq!(88, fill2.content_size().unwrap().width().0);
+    assert_eq!(0, fill2.size_ref().height().0);
+}
+
+#[test]
+fn surrounded_single_1grow_1box1() {
+    let position = Offset::new(10, 10);
+    let size = Size::fixed(190, 277);
+
+    let fill1 = DefaultFactory::hfill(1);
+    let box1 = DefaultFactory::hbox().size(15);
+    let fill2 = DefaultFactory::hfill(1);
+
+    let mut outer = DefaultFactory::hbox()
+        .style(StyleBuilder::new().with_align_items(AlignItems::Start))
+        .child(fill1)
+        .child(box1)
+        .child(fill2)
+        .grow(1);
+
+    outer.lay_out(&mut Ctx, position, size).unwrap();
+
+    assert_eq!(10, outer.offset_ref().x.0);
+    assert_eq!(10, outer.offset_ref().y.0);
+    assert_eq!(190, outer.size_ref().width().0);
+    assert_eq!(0, outer.size_ref().height().0);
+    assert_eq!(191, outer.content_size().unwrap().width().0);
+    assert_eq!(0, outer.content_size().unwrap().height().0);
+
+    let mut iter = outer.iter();
+    let fill1 = iter.next().unwrap();
+
+    assert_eq!(10, fill1.offset_ref().x.0);
+    assert_eq!(10, fill1.offset_ref().y.0);
+    assert_eq!(88, fill1.content_size().unwrap().width().0);
+    assert_eq!(0, fill1.size_ref().height().0);
+
+    let box1 = iter.next().unwrap();
+
+    assert_eq!(98, box1.offset_ref().x.0);
+    assert_eq!(10, box1.offset_ref().y.0);
+    assert_eq!(15, box1.size_ref().width().0);
+    assert_eq!(0, box1.size_ref().height().0);
+
+    let fill2 = iter.next().unwrap();
+
+    assert_eq!(113, fill2.offset_ref().x.0);
+    assert_eq!(10, fill2.offset_ref().y.0);
+    assert_eq!(88, fill2.content_size().unwrap().width().0);
+    assert_eq!(0, fill2.size_ref().height().0);
+}

@@ -37,6 +37,11 @@ pub trait Position {
         self.size_ref()
     }
 
+    // TODO
+    fn size_after_lay_out(&self) -> Size {
+        self.size_ref().clone()
+    }
+
     fn content_size(&self) -> Option<&Size> {
         None
     }

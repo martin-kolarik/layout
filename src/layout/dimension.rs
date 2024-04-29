@@ -271,8 +271,8 @@ pub struct Dimension {
 impl Debug for Dimension {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
-            "{:?}+{:?}-{:?}[{:?}->{:?}]",
-            self.basis, self.grow, self.shrink, self.min, self.max,
+            "{:?}]{:?}+{:?}-{:?}[{:?}",
+            self.min, self.basis, self.grow, self.shrink, self.max,
         ))
     }
 }

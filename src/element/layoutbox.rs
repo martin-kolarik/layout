@@ -497,8 +497,8 @@ impl Layout for LayoutBox {
 
                 // line_child_size incorporates bounding box of child offsetted in both axes.
                 // line_child_size can be bigger than child_size.
-                let line_child_size = child.size_after_wrap_ref();
-                let line_child_size = axis.extend_dim(line_child_size, child_axis_offset);
+                let line_child_size = child.size_after_lay_out();
+                let line_child_size = axis.extend_dim(&line_child_size, child_axis_offset);
                 let line_child_size = cross.extend_dim(&line_child_size, child_cross_offset);
 
                 // move forward in main axis, gap is added at the loop begin

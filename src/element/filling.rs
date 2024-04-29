@@ -70,6 +70,11 @@ impl Position for Filling {
         &self.size
     }
 
+    fn size_after_lay_out(&self) -> Size {
+        // TODO
+        self.content_size().cloned().unwrap_or_else(|| Size::zero())
+    }
+
     fn size_mut(&mut self) -> &mut Size {
         &mut self.size
     }
