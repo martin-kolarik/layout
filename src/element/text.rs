@@ -1,8 +1,11 @@
 use std::sync::Arc;
 
+use rtext::RefMap;
+
 use crate::{
     font::TextPosition,
     position::{Offset, Size},
+    unit::FillPerMille,
     Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
 };
 
@@ -98,8 +101,9 @@ impl Layout for Text {
 
             let text = ctx.typeset(&style, text)?;
             let font_size = font.size().unwrap();
+            let font_scaling = font.scaling().ref_map(FillPerMille::scaling).unwrap_or(1.0);
             self.size = Size::fixed_depth(
-                text.width * font_size,
+                text.width * font_size * font_scaling,
                 text.height * font_size,
                 text.depth * font_size,
             );
