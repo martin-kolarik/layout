@@ -16,7 +16,7 @@ rgb = { version = "^0.8", default-features = false, features = [
     "argb",
 ], optional = true }
 
-allsorts = { version = "^0.14", default-features = false, features = [
+allsorts = { version = "^0.15", default-features = false, features = [
     "flate2_zlib",
 ], optional = true }
 smol_str = { version = "^0.2", optional = true }
