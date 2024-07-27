@@ -31,7 +31,7 @@ impl Rgba {
 
     #[must_use]
     pub fn alpha(self, fraction: f32) -> Self {
-        Self(self.0.alpha(fraction))
+        Self(self.0.with_alpha(fraction))
     }
 
     pub fn into_rgba(self) -> (f32, f32, f32, f32) {
