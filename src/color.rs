@@ -1,4 +1,4 @@
-use oklab::{oklab_to_srgb, srgb_to_oklab, Oklab, RGB};
+use oklab::{oklab_to_srgb, srgb_to_oklab, Oklab, Rgb};
 use rgb::RGBA;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -58,7 +58,7 @@ impl Rgba {
             a: c * x,
             b: c * y,
         };
-        let RGB { r, g, b } = oklab_to_srgb(oklab);
+        let Rgb { r, g, b } = oklab_to_srgb(oklab);
         Self(RGBA { r, g, b, a })
     }
 
