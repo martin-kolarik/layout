@@ -1,7 +1,9 @@
 use oklab::{oklab_to_srgb, srgb_to_oklab, Oklab, Rgb};
 use rgb::RGBA;
+use smol_str::{SmolStr, SmolStrBuilder};
+use ufmt::uWrite;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rgba(RGBA<u8, f32>);
 
 impl Rgba {
@@ -27,6 +29,24 @@ impl Rgba {
 
     pub fn white() -> &'static Rgba {
         &WHITE
+    }
+
+    pub fn to_css_string(&self) -> String {
+        self.to_css_smolstr().into()
+    }
+
+    pub fn to_css_smolstr(&self) -> SmolStr {
+        let mut builder = Ufmtf(SmolStrBuilder::new());
+        ufmt::uwrite!(
+            &mut builder,
+            "rgba({}, {}, {}, {}%)",
+            self.0.r,
+            self.0.g,
+            self.0.b,
+            (self.0.a * 100.0).round() as u8
+        )
+        .unwrap();
+        builder.0.finish()
     }
 
     #[must_use]
@@ -155,29 +175,13 @@ impl From<u32> for Rgba {
     }
 }
 
-impl From<&Rgba> for Rgba {
-    fn from(rgba: &Rgba) -> Self {
-        rgba.clone()
-    }
-}
+struct Ufmtf(SmolStrBuilder);
 
-impl ToString for Rgba {
-    fn to_string(&self) -> String {
-        macro_rules! format {
-            ($($arg:tt)*) => {{
-                use ufmt;
-                let mut text = String::new();
-                ufmt::uwrite!(&mut text, $($arg)*).unwrap();
-                text
-            }}
-        }
+impl uWrite for Ufmtf {
+    type Error = ();
 
-        format!(
-            "rgba({}, {}, {}, {}%)",
-            self.0.r,
-            self.0.g,
-            self.0.b,
-            (self.0.a * 100.0).round() as u8
-        )
+    fn write_str(&mut self, s: &str) -> Result<(), ()> {
+        self.0.push_str(s);
+        Ok(())
     }
 }
