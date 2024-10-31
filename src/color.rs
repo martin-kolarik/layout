@@ -7,28 +7,28 @@ use ufmt::uWrite;
 pub struct Rgba(RGBA<u8, f32>);
 
 impl Rgba {
-    pub fn black() -> &'static Rgba {
-        &BLACK
+    pub const fn black() -> Rgba {
+        BLACK
     }
 
-    pub fn gray_25() -> &'static Rgba {
-        &GRAY_25
+    pub const fn gray_25() -> Rgba {
+        GRAY_25
     }
 
-    pub fn gray_33() -> &'static Rgba {
-        &GRAY_33
+    pub const fn gray_33() -> Rgba {
+        GRAY_33
     }
 
-    pub fn gray_50() -> &'static Rgba {
-        &GRAY_50
+    pub const fn gray_50() -> Rgba {
+        GRAY_50
     }
 
-    pub fn gray_63() -> &'static Rgba {
-        &GRAY_63
+    pub const fn gray_63() -> Rgba {
+        GRAY_63
     }
 
-    pub fn white() -> &'static Rgba {
-        &WHITE
+    pub const fn white() -> Rgba {
+        WHITE
     }
 
     pub fn to_css_string(&self) -> String {
@@ -115,42 +115,42 @@ impl Rgba {
     }
 }
 
-static BLACK: Rgba = Rgba(RGBA {
+const BLACK: Rgba = Rgba(RGBA {
     r: 0,
     g: 0,
     b: 0,
     a: 1.0,
 });
 
-static GRAY_25: Rgba = Rgba(RGBA {
+const GRAY_25: Rgba = Rgba(RGBA {
     r: 192,
     g: 192,
     b: 192,
     a: 1.0,
 });
 
-static GRAY_33: Rgba = Rgba(RGBA {
+const GRAY_33: Rgba = Rgba(RGBA {
     r: 172,
     g: 172,
     b: 172,
     a: 1.0,
 });
 
-static GRAY_50: Rgba = Rgba(RGBA {
+const GRAY_50: Rgba = Rgba(RGBA {
     r: 128,
     g: 128,
     b: 128,
     a: 1.0,
 });
 
-static GRAY_63: Rgba = Rgba(RGBA {
+const GRAY_63: Rgba = Rgba(RGBA {
     r: 96,
     g: 96,
     b: 96,
     a: 1.0,
 });
 
-static WHITE: Rgba = Rgba(RGBA {
+const WHITE: Rgba = Rgba(RGBA {
     r: 255,
     g: 255,
     b: 255,
