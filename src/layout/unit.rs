@@ -150,6 +150,18 @@ impl Mul<Unit> for f64 {
     }
 }
 
+impl Div<Unit> for Unit {
+    type Output = usize;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        if rhs.0 == 0 {
+            usize::MAX
+        } else {
+            (self.0 / rhs.0).abs() as usize
+        }
+    }
+}
+
 impl Div<f64> for Unit {
     type Output = Self;
 
