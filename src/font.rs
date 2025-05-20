@@ -70,16 +70,25 @@ impl TextPosition {
 
 #[derive(Debug)]
 pub struct GlyphPosition {
-    glyph_index: u16,
-    h_advance: Em,
-    v_advance: Em,
-    h_offset: Em,
-    v_offset: Em,
+    pub character: Option<char>,
+    pub glyph_index: u16,
+    pub h_advance: Em,
+    pub v_advance: Em,
+    pub h_offset: Em,
+    pub v_offset: Em,
 }
 
 impl GlyphPosition {
-    pub fn new(glyph_index: u16, h_advance: Em, v_advance: Em, h_offset: Em, v_offset: Em) -> Self {
+    pub fn new(
+        character: Option<char>,
+        glyph_index: u16,
+        h_advance: Em,
+        v_advance: Em,
+        h_offset: Em,
+        v_offset: Em,
+    ) -> Self {
         GlyphPosition {
+            character,
             glyph_index,
             h_advance,
             v_advance,
@@ -88,24 +97,8 @@ impl GlyphPosition {
         }
     }
 
-    pub fn glyph_index(&self) -> u16 {
-        self.glyph_index
-    }
-
     pub fn set_glyph_index(&mut self, index: u16) {
         self.glyph_index = index;
-    }
-
-    pub fn h_offset(&self) -> Em {
-        self.h_offset
-    }
-
-    pub fn v_offset(&self) -> Em {
-        self.v_offset
-    }
-
-    pub fn h_advance(&self) -> Em {
-        self.h_advance
     }
 
     pub fn h_advance_rest(&self) -> Em {

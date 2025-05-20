@@ -41,7 +41,7 @@ impl<'a> Line<'a> {
         &self.content
     }
 
-    pub fn content_mut(&'a mut self) -> &mut [&mut Box<dyn Layout>] {
+    pub fn content_mut(&'a mut self) -> &'a mut [&'a mut Box<dyn Layout>] {
         &mut self.content
     }
 }
