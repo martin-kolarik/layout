@@ -134,7 +134,7 @@ impl NewPageOptions {
 pub trait RenderContext: MeasureContext {
     fn new_page(&mut self, options: Option<NewPageOptions>) -> bool;
 
-    fn debug_frame(&self, content_position: &Offset, size: &Size);
+    fn debug_frame(&mut self, content_position: &Offset, size: &Size);
 
     fn line(&mut self, from: &Offset, to: &Offset, stroke: &Stroke);
     fn text(
