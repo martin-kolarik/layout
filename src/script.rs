@@ -1,9 +1,9 @@
 use smol_str::SmolStr;
 
 use crate::{
+    AlignItems, Border, DefaultFactory, Factory, Layout, Rgba, StyleBuilder,
     position::Quad,
     unit::{Fill, Pt, Unit},
-    AlignItems, Border, DefaultFactory, Factory, Layout, Rgba, StyleBuilder,
 };
 
 pub enum Element {
@@ -13,11 +13,13 @@ pub enum Element {
     Hspace(Unit),
     Hfill(Fill),
     HfillShrink(Fill),
+    Hwrap,
 
     Vbox(Vec<Format>, Vec<Element>),
     Vspace(Unit),
     Vfill(Fill),
     VfillShrink(Fill),
+    Vwrap,
 
     Text(Vec<Format>, String),
 }
@@ -75,6 +77,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
                 .grow(fill.clone())
                 .shrink(fill.clone()),
         ),
+        Element::Hwrap => Box::new(DefaultFactory::hwrap()),
 
         Element::Vbox(format, children) => {
             let mut vbox = DefaultFactory::vbox();
@@ -92,6 +95,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
                 .grow(fill.clone())
                 .shrink(fill.clone()),
         ),
+        Element::Vwrap => Box::new(DefaultFactory::vwrap()),
 
         Element::Text(format, text) => {
             let mut text = DefaultFactory::text(text);

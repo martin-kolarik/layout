@@ -1,10 +1,10 @@
 use std::sync::{Arc, OnceLock};
 
 use crate::{
-    position::{Offset, Size},
-    unit::Em,
     Error, GlyphPosition, MeasureContext, NewPageOptions, RenderContext, Stroke, Style,
     TextPosition,
+    position::{Offset, Size},
+    unit::Em,
 };
 
 pub(crate) mod baseline;
@@ -38,7 +38,14 @@ impl MeasureContext for usize {
             width: Em(30.0),
             height: Em(10.0),
             depth: Em(2.0),
-            positions: vec![GlyphPosition::new(1, Em(30.0), Em(0.0), Em(0.0), Em(0.0))],
+            positions: vec![GlyphPosition::new(
+                None,
+                1,
+                Em(30.0),
+                Em(0.0),
+                Em(0.0),
+                Em(0.0),
+            )],
         })
     }
 }
@@ -48,7 +55,7 @@ impl RenderContext for usize {
         todo!()
     }
 
-    fn debug_frame(&self, _: &Offset, _: &Size) {
+    fn debug_frame(&mut self, _: &Offset, _: &Size) {
         todo!()
     }
 
