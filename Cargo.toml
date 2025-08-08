@@ -9,7 +9,7 @@ color = ["oklab", "rgb", "ufmt"]
 layout = ["allsorts", "rtext", "thiserror", "tracing"]
 
 [dependencies]
-rtext = { git = "https://martinkolariknp@bitbucket.org/martinkolariknp/rtext.git", optional = true }
+rtext = { git = "https://github.com/martin-kolarik/rtext.git", optional = true }
 
 oklab = { version = "^1.1", optional = true }
 rgb = { version = "^0.8", default-features = false, features = [
