@@ -4,7 +4,9 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
-use crate::unit::{add_fill, sub_fill, Fill, FillPerMille, Unit};
+use rtext::Apply;
+
+use crate::unit::{Fill, FillPerMille, Unit, add_fill, sub_fill};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MaybeDim {
@@ -503,7 +505,8 @@ impl Dimension {
 
     pub fn size_available(&self, room: Unit) -> Unit {
         if self.is_content() {
-            room
+            room.apply_then(self.max.size(), |room, max| room.min(max))
+                .apply_then(self.min.size(), |room, min| room.max(min))
         } else {
             self.size_filled(room)
         }
@@ -515,25 +518,13 @@ impl Dimension {
             Ordering::Less => match (self.max.size(), self.grow) {
                 (_, None) => size,
                 (None, Some(_)) => room,
-                (Some(max), Some(_)) => {
-                    if room > max {
-                        max
-                    } else {
-                        room
-                    }
-                }
+                (Some(max), Some(_)) => room.min(max),
             },
             Ordering::Equal => size,
             Ordering::Greater => match (self.min.size(), self.shrink) {
                 (_, None) => size,
                 (None, Some(_)) => room,
-                (Some(min), Some(_)) => {
-                    if room < min {
-                        min
-                    } else {
-                        room
-                    }
-                }
+                (Some(min), Some(_)) => room.max(min),
             },
         }
     }
