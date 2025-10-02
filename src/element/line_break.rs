@@ -60,6 +60,10 @@ impl Position for LineBreak {
         &mut self.size_before_lay_out
     }
 
+    fn size_after_wrap_ref(&self) -> &Size {
+        &self.size
+    }
+
     fn size_after_lay_out(&self) -> Size {
         self.size.clone()
     }
