@@ -37,7 +37,7 @@ impl<'a> Line<'a> {
     }
 
     #[cfg(test)]
-    pub fn content(&'a self) -> &[&mut Box<dyn Layout>] {
+    pub fn content(&self) -> &[&mut Box<dyn Layout>] {
         &self.content
     }
 

@@ -1,16 +1,16 @@
 use std::sync::Arc;
 
 use crate::{
+    Axis, Error, Layout, MeasureContext, Position, Style, Styled,
     position::{Offset, Size},
     unit::Unit,
-    Axis, Error, Layout, MeasureContext, Position, Style, Styled,
 };
 
 pub struct Wrap {
     mark: Option<&'static str>,
     offset: Offset,
-    size_wrap: Size,
-    size_after_wrap: Size,
+    size_before_lay_out: Size,
+    size: Size,
     style: Arc<Style>,
 }
 
@@ -19,12 +19,12 @@ impl Wrap {
         Self {
             mark: None,
             offset: Offset::zero(),
-            size_wrap: if matches!(axis, Axis::Horizontal) {
+            size_before_lay_out: if matches!(axis, Axis::Horizontal) {
                 Size::fixed(Unit::infinity(), 0)
             } else {
                 Size::fixed(0, Unit::infinity())
             },
-            size_after_wrap: Size::none(),
+            size: Size::none(),
             style: Style::new(),
         }
     }
@@ -53,15 +53,15 @@ impl Position for Wrap {
     }
 
     fn size_ref(&self) -> &Size {
-        &self.size_wrap
+        &self.size_before_lay_out
     }
 
     fn size_mut(&mut self) -> &mut Size {
-        &mut self.size_wrap
+        &mut self.size_before_lay_out
     }
 
-    fn size_after_wrap_ref(&self) -> &Size {
-        &self.size_after_wrap
+    fn size_after_lay_out(&self) -> Size {
+        self.size.clone()
     }
 
     fn content_size(&self) -> Option<&Size> {
