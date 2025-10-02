@@ -10,12 +10,14 @@ pub enum Element {
     Bbox(Vec<Format>, Vec<Element>),
 
     Hbox(Vec<Format>, Vec<Element>),
+    HboxNoBreak(Vec<Format>, Vec<Element>),
     Hspace(Unit),
     Hfill(Fill),
     HfillShrink(Fill),
     Hwrap,
 
     Vbox(Vec<Format>, Vec<Element>),
+    VboxNoBreak(Vec<Format>, Vec<Element>),
     Vspace(Unit),
     Vfill(Fill),
     VfillShrink(Fill),
@@ -70,6 +72,15 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
                     .fold(hbox, |hbox, child| hbox.child_dyn(lay_out(child))),
             )
         }
+        Element::HboxNoBreak(format, children) => {
+            let mut hbox = DefaultFactory::hbox().avoid_break();
+            apply_format(&mut hbox, &format);
+            Box::new(
+                children
+                    .iter()
+                    .fold(hbox, |hbox, child| hbox.child_dyn(lay_out(child))),
+            )
+        }
         Element::Hspace(space) => Box::new(DefaultFactory::hspace(space.clone())),
         Element::Hfill(fill) => Box::new(DefaultFactory::hfill(fill.clone())),
         Element::HfillShrink(fill) => Box::new(
@@ -81,6 +92,15 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
 
         Element::Vbox(format, children) => {
             let mut vbox = DefaultFactory::vbox();
+            apply_format(&mut vbox, &format);
+            Box::new(
+                children
+                    .iter()
+                    .fold(vbox, |vbox, child| vbox.child_dyn(lay_out(child))),
+            )
+        }
+        Element::VboxNoBreak(format, children) => {
+            let mut vbox = DefaultFactory::vbox().avoid_break();
             apply_format(&mut vbox, &format);
             Box::new(
                 children

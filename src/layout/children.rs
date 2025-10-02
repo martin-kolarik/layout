@@ -1,4 +1,4 @@
-use crate::{unit::Unit, Axis, Layout};
+use crate::{Axis, Layout, unit::Unit};
 
 use super::position::{Offset, Size};
 
@@ -46,15 +46,15 @@ impl<'a> Line<'a> {
     }
 }
 
-pub fn lay_out_native(
+pub fn lay_out_native<'a>(
     axis: Axis,
-    children: &mut [Box<dyn Layout>],
+    children: &'a mut [Box<dyn Layout>],
     axis_room: impl Into<Unit>,
     axis_gap: impl Into<Unit>,
     cross_gap: impl Into<Unit>,
     wrap: bool,
     respect_baseline: bool,
-) -> Vec<Line> {
+) -> Vec<Line<'a>> {
     if children.is_empty() {
         return vec![];
     }
@@ -112,7 +112,7 @@ pub fn lay_out_native(
 mod tests {
 
     mod hbox {
-        use crate::{children::lay_out_native, Axis, DefaultFactory, Factory, Layout};
+        use crate::{Axis, DefaultFactory, Factory, Layout, children::lay_out_native};
 
         #[test]
         fn single_box() {
@@ -516,7 +516,7 @@ mod tests {
     }
 
     mod vbox {
-        use crate::{children::lay_out_native, Axis, DefaultFactory, Factory, Layout};
+        use crate::{Axis, DefaultFactory, Factory, Layout, children::lay_out_native};
 
         #[test]
         fn single_box() {
