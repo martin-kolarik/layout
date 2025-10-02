@@ -1,10 +1,10 @@
 use std::sync::Arc;
 
 use crate::{
+    Axis, Error, Layout, MeasureContext, Position, Style, Styled,
     dimension::Dim,
     position::{Offset, Size},
     unit::Fill,
-    Axis, Error, Layout, MeasureContext, Position, Style, Styled,
 };
 
 pub struct Filling {
@@ -111,9 +111,9 @@ impl Layout for Filling {
 #[cfg(test)]
 mod tests {
     use crate::{
+        DefaultFactory, Factory, Layout,
         position::{Offset, Size},
         test::Ctx,
-        DefaultFactory, Factory, Layout,
     };
 
     #[test]

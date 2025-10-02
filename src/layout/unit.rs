@@ -192,9 +192,9 @@ impl Mul<(Fill, Fill)> for Unit {
 // (Fill, Fill) = (Numerator, Denominator)
 impl MulAssign<(Fill, Fill)> for Unit {
     fn mul_assign(&mut self, rhs: (Fill, Fill)) {
-        let divisor = rhs.1 .0 as i64;
+        let divisor = rhs.1.0 as i64;
         let rounding = self.0.signum() * divisor / 2;
-        self.0 = (self.0 * rhs.0 .0 as i64 + rounding) / divisor;
+        self.0 = (self.0 * rhs.0.0 as i64 + rounding) / divisor;
     }
 }
 
@@ -528,7 +528,7 @@ impl Deref for Em {
 
 #[cfg(test)]
 mod tests {
-    use crate::unit::{add_fill, sub_fill, Fill, Unit};
+    use crate::unit::{Fill, Unit, add_fill, sub_fill};
 
     #[test]
     fn they_constructs() {

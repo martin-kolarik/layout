@@ -12,7 +12,7 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{BlockBox, Error, Filling, LayoutBox, Stroke, Style, Text, TextPosition, Wrap};
+use crate::{BlockBox, Error, Filling, LayoutBox, LineBreak, Stroke, Style, Text, TextPosition};
 
 use self::{
     dimension::Dim,
@@ -167,7 +167,7 @@ pub trait Factory {
         Self::hfilling().size(size)
     }
 
-    fn hwrap() -> Wrap;
+    fn hbreak() -> LineBreak;
 
     fn vbox() -> LayoutBox;
     fn vfilling() -> Filling;
@@ -187,7 +187,7 @@ pub trait Factory {
         Self::vfilling().size(size)
     }
 
-    fn vwrap() -> Wrap;
+    fn vbreak() -> LineBreak;
 
     fn text_str(text: &str) -> Text;
 }
@@ -213,8 +213,8 @@ impl Factory for DefaultFactory {
         Filling::new(Axis::Horizontal)
     }
 
-    fn hwrap() -> Wrap {
-        Wrap::new(Axis::Horizontal)
+    fn hbreak() -> LineBreak {
+        LineBreak::new(Axis::Horizontal)
     }
 
     fn vbox() -> LayoutBox {
@@ -225,8 +225,8 @@ impl Factory for DefaultFactory {
         Filling::new(Axis::Vertical)
     }
 
-    fn vwrap() -> Wrap {
-        Wrap::new(Axis::Vertical)
+    fn vbreak() -> LineBreak {
+        LineBreak::new(Axis::Vertical)
     }
 
     fn text_str(text: &str) -> Text {

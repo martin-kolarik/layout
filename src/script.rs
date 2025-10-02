@@ -14,14 +14,14 @@ pub enum Element {
     Hspace(Unit),
     Hfill(Fill),
     HfillShrink(Fill),
-    Hwrap,
+    Hbreak,
 
     Vbox(Vec<Format>, Vec<Element>),
     VboxNoBreak(Vec<Format>, Vec<Element>),
     Vspace(Unit),
     Vfill(Fill),
     VfillShrink(Fill),
-    Vwrap,
+    Vbreak,
 
     Text(Vec<Format>, String),
 }
@@ -88,7 +88,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
                 .grow(fill.clone())
                 .shrink(fill.clone()),
         ),
-        Element::Hwrap => Box::new(DefaultFactory::hwrap()),
+        Element::Hbreak => Box::new(DefaultFactory::hbreak()),
 
         Element::Vbox(format, children) => {
             let mut vbox = DefaultFactory::vbox();
@@ -115,7 +115,7 @@ pub fn lay_out(element: &Element) -> Box<dyn Layout> {
                 .grow(fill.clone())
                 .shrink(fill.clone()),
         ),
-        Element::Vwrap => Box::new(DefaultFactory::vwrap()),
+        Element::Vbreak => Box::new(DefaultFactory::vbreak()),
 
         Element::Text(format, text) => {
             let mut text = DefaultFactory::text(text);

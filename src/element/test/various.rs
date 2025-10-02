@@ -1,7 +1,7 @@
 use crate::{
+    DefaultFactory, Factory, Layout, StyleBuilder,
     position::{Offset, Quad, Size},
     unit::FillPerMille,
-    DefaultFactory, Factory, Layout, StyleBuilder,
 };
 
 #[test]

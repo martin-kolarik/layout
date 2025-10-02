@@ -1,10 +1,10 @@
 use std::sync::Arc;
 
 use crate::{
+    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
     dimension::{Dim, MaybeDim},
     position::{Offset, Size},
-    unit::{sub_unit, Fill, Unit},
-    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
+    unit::{Fill, Unit, sub_unit},
 };
 
 pub struct BlockBox {
@@ -326,8 +326,8 @@ impl Layout for BlockBox {
 #[cfg(test)]
 mod tests {
     use crate::{
-        position::{Offset, Size},
         DefaultFactory, Factory, Layout, Position, Style,
+        position::{Offset, Size},
     };
 
     #[test]

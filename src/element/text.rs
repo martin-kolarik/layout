@@ -3,10 +3,10 @@ use std::sync::Arc;
 use rtext::RefMap;
 
 use crate::{
+    Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
     font::TextPosition,
     position::{Offset, Size},
     unit::FillPerMille,
-    Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
 };
 
 enum InnerText {
@@ -126,8 +126,8 @@ impl Layout for Text {
 #[cfg(test)]
 mod tests {
     use crate::{
-        position::{Offset, Size},
         DefaultFactory, Factory, Layout, Style,
+        position::{Offset, Size},
     };
 
     #[test]

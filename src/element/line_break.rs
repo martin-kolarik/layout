@@ -6,7 +6,7 @@ use crate::{
     unit::Unit,
 };
 
-pub struct Wrap {
+pub struct LineBreak {
     mark: Option<&'static str>,
     offset: Offset,
     size_before_lay_out: Size,
@@ -14,7 +14,7 @@ pub struct Wrap {
     style: Arc<Style>,
 }
 
-impl Wrap {
+impl LineBreak {
     pub fn new(axis: Axis) -> Self {
         Self {
             mark: None,
@@ -35,9 +35,9 @@ impl Wrap {
     }
 }
 
-impl Position for Wrap {
+impl Position for LineBreak {
     fn element(&self) -> &str {
-        "Wrap"
+        "Break"
     }
 
     fn mark(&self) -> &str {
@@ -69,7 +69,7 @@ impl Position for Wrap {
     }
 }
 
-impl Styled for Wrap {
+impl Styled for LineBreak {
     fn style_ref(&self) -> &Style {
         self.style.as_ref()
     }
@@ -79,7 +79,7 @@ impl Styled for Wrap {
     }
 }
 
-impl Layout for Wrap {
+impl Layout for LineBreak {
     fn lay_out(
         &mut self,
         _: &mut dyn MeasureContext,

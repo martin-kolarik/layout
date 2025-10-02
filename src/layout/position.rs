@@ -4,9 +4,9 @@ use std::{
 };
 
 use crate::{
-    dimension::Dim,
-    unit::{sub_unit, Unit},
     Axis, Style,
+    dimension::Dim,
+    unit::{Unit, sub_unit},
 };
 
 use super::dimension::Dimension;

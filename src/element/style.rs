@@ -3,10 +3,10 @@ use std::sync::Arc;
 use smol_str::{SmolStr, ToSmolStr};
 
 use crate::{
+    Features, Rgba, Styled,
     dimension::{Dim, MaybeDim},
     position::Quad,
     unit::{Fill, FillPerMille, Pt, Unit},
-    Features, Rgba, Styled,
 };
 
 #[derive(Default, Debug, Clone, Copy)]

@@ -1,4 +1,4 @@
-use oklab::{oklab_to_srgb, srgb_to_oklab, Oklab, Rgb};
+use oklab::{Oklab, Rgb, oklab_to_srgb, srgb_to_oklab};
 use rgb::RGBA;
 use smol_str::{SmolStr, SmolStrBuilder};
 use ufmt::uWrite;
