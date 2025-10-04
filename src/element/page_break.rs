@@ -1,9 +1,8 @@
 use std::sync::Arc;
 
 use crate::{
-    Error, Layout, MeasureContext, Position, Style, Styled,
+    Error, Layout, MeasureContext, Position, RenderContext, Style, Styled,
     position::{Offset, Size},
-    unit::Unit,
 };
 
 pub struct PageBreak {
@@ -18,7 +17,7 @@ impl PageBreak {
         Self {
             mark: None,
             offset: Offset::zero(),
-            size: Size::fixed(0, Unit::infinity()),
+            size: Size::none(),
             style: Style::new(),
         }
     }
@@ -31,14 +30,14 @@ impl PageBreak {
 
 impl Position for PageBreak {
     fn element(&self) -> &str {
-        "Wrap"
+        "Break"
     }
 
     fn mark(&self) -> &str {
         self.mark.unwrap_or_default()
     }
 
-    fn offset_ref(&self) -> &Offset {
+    fn offset(&self) -> &Offset {
         &self.offset
     }
 
@@ -46,8 +45,8 @@ impl Position for PageBreak {
         &mut self.offset
     }
 
-    fn size_ref(&self) -> &Size {
-        &self.size
+    fn size(&self) -> &Size {
+        &Size::NONE
     }
 
     fn size_mut(&mut self) -> &mut Size {
@@ -85,6 +84,11 @@ impl Layout for PageBreak {
         _: Size,
     ) -> Result<(), Error> {
         self.offset = position;
+        Ok(())
+    }
+
+    fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
+        ctx.new_page(None);
         Ok(())
     }
 }

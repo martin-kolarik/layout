@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use crate::{
-    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext,
-    Style, StyleBuilder, Styled,
+    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, StyleBuilder,
+    Styled,
     children::lay_out_native,
     dimension::{Dim, MaybeDim},
     position::{Offset, Size},
@@ -14,7 +14,6 @@ pub struct LayoutBox {
     axis: Axis,
     offset: Offset,
     size: Size,
-    break_inside: bool,
     style: Arc<Style>,
     children: Vec<Box<dyn Layout>>,
     content_size: Option<Size>,
@@ -27,7 +26,6 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
-            break_inside: true,
             style: StyleBuilder::new().build(),
             children: vec![],
             content_size: None,
@@ -41,11 +39,6 @@ impl LayoutBox {
 
     pub fn axis_size(mut self, size: impl Into<Dim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_base(size);
-        self
-    }
-
-    pub fn avoid_break(mut self) -> Self {
-        self.break_inside = false;
         self
     }
 
@@ -162,7 +155,7 @@ impl LayoutBox {
         self.child_dyn(Box::new(crate::text(text)))
     }
 
-    pub fn into_inner(self) -> impl Iterator<Item = Box<dyn Layout>> {
+    pub fn into_children(self) -> impl Iterator<Item = Box<dyn Layout>> {
         self.children.into_iter()
     }
 }
@@ -543,12 +536,6 @@ impl Layout for LayoutBox {
     }
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
-        if !self.break_inside {
-            ctx.new_page(Some(
-                NewPageOptions::new().with_break_if_not_room(self.offset_ref(), self.size_ref()),
-            ));
-        }
-
         for child in self.iter() {
             child.render(ctx)?;
         }

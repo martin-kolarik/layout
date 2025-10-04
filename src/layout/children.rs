@@ -76,7 +76,8 @@ pub fn lay_out_native<'a>(
             axis_gap
         };
 
-        if wrap && axis.base_size(&line_size) + line_gap + axis.base_size(child.size()) > wrap_size {
+        if wrap && axis.base_size(&line_size) + line_gap + axis.base_size(child.size()) > wrap_size
+        {
             let next_line_offset = axis
                 .cross()
                 .advance_dim(&offset, axis.cross().base_size(&line_size) + cross_gap);
