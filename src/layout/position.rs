@@ -101,8 +101,8 @@ impl SubAssign for Offset {
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct Size {
-    width: FlexDim,
-    height: FlexDim,
+    pub width: FlexDim,
+    pub height: FlexDim,
     depth: Option<Unit>,
 }
 
@@ -155,6 +155,7 @@ impl Size {
         }
     }
 
+    // TODO: create const
     pub fn zero() -> Self {
         Self {
             width: Unit::zero().into(),
@@ -196,44 +197,20 @@ impl Size {
         );
     }
 
-    pub fn x_dim(&self) -> &FlexDim {
-        &self.width
+    pub fn base_width(&self) -> Unit {
+        self.width.base_size()
     }
 
-    pub fn x_dim_mut(&mut self) -> &mut FlexDim {
-        &mut self.width
+    pub fn set_base_width(&mut self, width: impl Into<Dim>) {
+        self.width.set_base(width);
     }
 
-    pub fn y_dim(&self) -> &FlexDim {
-        &self.height
+    pub fn base_height(&self) -> Unit {
+        self.height.base_size()
     }
 
-    pub fn y_dim_mut(&mut self) -> &mut FlexDim {
-        &mut self.height
-    }
-
-    pub fn width_ref(&self) -> &Dim {
-        &self.width.basis
-    }
-
-    pub fn width(&self) -> Unit {
-        self.width.size()
-    }
-
-    pub fn set_width(&mut self, width: impl Into<Dim>) {
-        self.width.set_basis(width);
-    }
-
-    pub fn height_ref(&self) -> &Dim {
-        &self.height.basis
-    }
-
-    pub fn height(&self) -> Unit {
-        self.height.size()
-    }
-
-    pub fn set_height(&mut self, height: impl Into<Dim>) {
-        self.height.set_basis(height);
+    pub fn set_base_height(&mut self, height: impl Into<Dim>) {
+        self.height.set_base(height);
     }
 
     pub fn depth(&self) -> Option<Unit> {
@@ -246,14 +223,14 @@ impl Size {
 
     pub fn ascent(&self) -> Option<Unit> {
         self.depth
-            .and_then(|depth| self.height.basis.size().map(|height| height - depth))
+            .and_then(|depth| self.height.base.size().map(|height| height - depth))
     }
 
     pub fn ascent_size(&self) -> Unit {
-        sub_unit(self.height.basis.size(), self.depth).unwrap_or_default()
+        sub_unit(self.height.base.size(), self.depth).unwrap_or_default()
     }
 
-    pub fn x_extend(&mut self, rhs: &Size, respect_baseline: bool) {
+    pub fn width_extend(&mut self, rhs: &Size, respect_baseline: bool) {
         self.width += &rhs.width;
         if respect_baseline {
             let ascent = self.ascent_size().max(rhs.ascent_size());
@@ -264,7 +241,7 @@ impl Size {
         }
     }
 
-    pub fn y_extend(&mut self, rhs: &Size, respect_baseline: bool) {
+    pub fn height_extend(&mut self, rhs: &Size, respect_baseline: bool) {
         self.width = self.width.max_of(&rhs.width);
         self.height += &rhs.height;
         if respect_baseline && self.depth.is_none() {
@@ -286,8 +263,8 @@ impl Add<&Size> for &Offset {
 
     fn add(self, rhs: &Size) -> Self::Output {
         Offset {
-            x: self.x + rhs.width(),
-            y: self.y + rhs.height(),
+            x: self.x + rhs.base_width(),
+            y: self.y + rhs.base_height(),
         }
     }
 }
@@ -410,15 +387,15 @@ impl Quad {
             offset.y_advance(self.top_size());
         }
         if let Some(size) = size {
-            if size.x_dim().is_resolved() {
-                let mut width = size.width_ref().clone();
-                width.set_size(size.width() - self.width());
-                size.set_width(width);
+            if size.width.is_resolved() {
+                let mut width = size.width.base;
+                width.set_size(size.base_width() - self.width());
+                size.set_base_width(width);
             }
-            if size.y_dim().is_resolved() {
-                let mut height = size.height_ref().clone();
-                height.set_size(size.height() - self.height());
-                size.set_height(height);
+            if size.height.is_resolved() {
+                let mut height = size.height.base;
+                height.set_size(size.base_height() - self.height());
+                size.set_base_height(height);
 
                 if let Some(depth) = &mut size.depth {
                     *depth -= self.bottom_size();
@@ -433,15 +410,15 @@ impl Quad {
             offset.y_advance(Unit::zero() - self.top_size());
         }
         if let Some(size) = size {
-            if size.x_dim().is_resolved() {
-                let mut width = size.width_ref().clone();
-                width.set_size(size.width() + self.width());
-                size.set_width(width);
+            if size.width.is_resolved() {
+                let mut width = size.width.base;
+                width.set_size(size.base_width() + self.width());
+                size.set_base_width(width);
             }
-            if size.y_dim().is_resolved() {
-                let mut height = size.height_ref().clone();
-                height.set_size(size.height() + self.height());
-                size.set_height(height);
+            if size.height.is_resolved() {
+                let mut height = size.height.base;
+                height.set_size(size.base_height() + self.height());
+                size.set_base_height(height);
 
                 if let Some(depth) = &mut size.depth {
                     *depth += self.bottom_size();
@@ -486,49 +463,49 @@ mod tests {
     #[test]
     fn size_constructs() {
         let size = Size::zero();
-        assert_eq!(0, size.width().0);
-        assert_eq!(0, size.height().0);
+        assert_eq!(0, size.base_width().0);
+        assert_eq!(0, size.base_height().0);
 
         let mut size = Size::zero();
-        size.set_width(10);
-        assert_eq!(10, size.width().0);
-        assert_eq!(0, size.height().0);
+        size.set_base_width(10);
+        assert_eq!(10, size.base_width().0);
+        assert_eq!(0, size.base_height().0);
 
         let mut size = Size::zero();
-        size.set_height(10);
-        assert_eq!(0, size.width().0);
-        assert_eq!(10, size.height().0);
+        size.set_base_height(10);
+        assert_eq!(0, size.base_width().0);
+        assert_eq!(10, size.base_height().0);
 
         let mut size = Size::content();
         assert!(size.width.is_content());
         assert!(size.height.is_content());
 
         size.set_depth(Some(2));
-        assert_eq!(0, size.width().0);
-        assert_eq!(0, size.height().0);
+        assert_eq!(0, size.base_width().0);
+        assert_eq!(0, size.base_height().0);
         assert_eq!(-2, size.ascent_size().0);
     }
 
     #[test]
     fn size_mut_works() {
         let mut size = Size::zero();
-        size.x_dim_mut().set_basis(10);
-        assert_eq!(10, size.width().0);
-        assert_eq!(0, size.height().0);
+        size.width.set_base(10);
+        assert_eq!(10, size.base_width().0);
+        assert_eq!(0, size.base_height().0);
 
         let mut size = Size::zero();
-        size.y_dim_mut().set_basis(10);
-        assert_eq!(0, size.width().0);
-        assert_eq!(10, size.height().0);
+        size.height.set_base(10);
+        assert_eq!(0, size.base_width().0);
+        assert_eq!(10, size.base_height().0);
     }
 
     #[test]
     fn depth_and_ascent() {
         let mut size = Size::content();
-        size.set_height(10);
+        size.set_base_height(10);
         size.set_depth(Some(2));
 
-        assert_eq!(10, size.height().0);
+        assert_eq!(10, size.base_height().0);
         assert_eq!(8, size.ascent_size().0);
     }
 
@@ -538,27 +515,27 @@ mod tests {
         let size2 = Size::fixed_depth(20, 12, 3);
 
         let mut size = size1.clone();
-        size.x_extend(&size2, true);
-        assert_eq!(30, size.width().0);
-        assert_eq!(13, size.height().0);
+        size.width_extend(&size2, true);
+        assert_eq!(30, size.base_width().0);
+        assert_eq!(13, size.base_height().0);
         assert_eq!(10, size.ascent_size().0);
 
         let mut size = size2.clone();
-        size.x_extend(&size1, true);
-        assert_eq!(30, size.width().0);
-        assert_eq!(13, size.height().0);
+        size.width_extend(&size1, true);
+        assert_eq!(30, size.base_width().0);
+        assert_eq!(13, size.base_height().0);
         assert_eq!(10, size.ascent_size().0);
 
         let mut size = size1.clone();
-        size.y_extend(&size2, true);
-        assert_eq!(20, size.width().0);
-        assert_eq!(24, size.height().0);
+        size.height_extend(&size2, true);
+        assert_eq!(20, size.base_width().0);
+        assert_eq!(24, size.base_height().0);
         assert_eq!(22, size.ascent_size().0);
 
         let mut size = size2;
-        size.y_extend(&size1, true);
-        assert_eq!(20, size.width().0);
-        assert_eq!(24, size.height().0);
+        size.height_extend(&size1, true);
+        assert_eq!(20, size.base_width().0);
+        assert_eq!(24, size.base_height().0);
         assert_eq!(21, size.ascent_size().0);
     }
 }

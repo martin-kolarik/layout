@@ -7,7 +7,7 @@ use crate::{
 
 #[test]
 fn single_fixed_box_c_0_0() {
-    let box1 = vbox().size(15);
+    let box1 = vbox().axis_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -17,25 +17,25 @@ fn single_fixed_box_c_0_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
 fn single_fixed_box_c_0_1() {
-    let box1 = vbox().size(15).cross_size(12);
+    let box1 = vbox().axis_size(15).cross_size(12);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -45,25 +45,25 @@ fn single_fixed_box_c_0_1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(12, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(12, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(12, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(12, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(12, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(12, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
 fn single_fixed_box_c_1_0() {
-    let box1 = vbox().size(15);
+    let box1 = vbox().axis_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -74,25 +74,25 @@ fn single_fixed_box_c_1_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(12, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(12, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
 fn single_fixed_box_c_1_1() {
-    let box1 = vbox().size(15).cross_size(21);
+    let box1 = vbox().axis_size(15).cross_size(21);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -103,20 +103,20 @@ fn single_fixed_box_c_1_1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(21, outer.size_ref().width().0);
-    assert_eq!(12, outer.size_ref().height().0);
-    assert_eq!(21, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(21, outer.size().base_width().0);
+    assert_eq!(12, outer.size().base_height().0);
+    assert_eq!(21, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(21, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(21, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -124,7 +124,7 @@ fn single_grow_main_0_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15).grow(1);
+    let box1 = vbox().axis_size(15).axis_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -132,20 +132,20 @@ fn single_grow_main_0_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -153,29 +153,29 @@ fn single_grow_main_1_0_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15);
+    let box1 = vbox().axis_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
-        .grow(1);
+        .axis_grow(1);
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(190, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(190, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -183,29 +183,29 @@ fn single_grow_main_1_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15).grow(1);
+    let box1 = vbox().axis_size(15).axis_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
-        .grow(1);
+        .axis_grow(1);
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(190, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(190, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -213,7 +213,7 @@ fn single_grow_cross_0_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15).cross_size(7).cross_grow(1);
+    let box1 = vbox().axis_size(15).cross_size(7).cross_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -221,20 +221,20 @@ fn single_grow_cross_0_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(190, outer.size_ref().width().0);
-    assert_eq!(15, outer.size_ref().height().0);
-    assert_eq!(190, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(190, outer.size().base_width().0);
+    assert_eq!(15, outer.size().base_height().0);
+    assert_eq!(190, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(190, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(190, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -242,7 +242,7 @@ fn single_grow_cross_1_0fix_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15).cross_size(7);
+    let box1 = vbox().axis_size(15).cross_size(7);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -251,20 +251,20 @@ fn single_grow_cross_1_0fix_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(7, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(7, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(7, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(7, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(7, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(7, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -272,7 +272,7 @@ fn single_grow_cross_1_0dyn_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15);
+    let box1 = vbox().axis_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -281,20 +281,20 @@ fn single_grow_cross_1_0dyn_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -302,7 +302,7 @@ fn single_grow_cross_1_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = vbox().size(15).cross_size(7).cross_grow(1);
+    let box1 = vbox().axis_size(15).cross_size(7).cross_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -311,20 +311,20 @@ fn single_grow_cross_1_1_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(190, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(190, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(190, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(190, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(190, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(190, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 // #[test]
@@ -335,7 +335,7 @@ fn single_cross_align_end_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed_depth(190, 277, 3);
 
-    let box1 = vbox().size(15).cross_size(7);
+    let box1 = vbox().axis_size(15).cross_size(7);
 
     let mut outer = hbox()
         .child(box1)
@@ -344,20 +344,20 @@ fn single_cross_align_end_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(7, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(7, outer.content_size().unwrap().width().0);
-    assert_eq!(277, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(7, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(7, outer.content_size().unwrap().base_width().0);
+    assert_eq!(277, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(272, box1.offset_ref().y.0);
-    assert_eq!(7, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(272, box1.offset().y.0);
+    assert_eq!(7, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -365,7 +365,7 @@ fn single_cross_align_center_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed_depth(190, 277, 3);
 
-    let box1 = vbox().size(15).cross_size(7);
+    let box1 = vbox().axis_size(15).cross_size(7);
 
     let mut outer = hbox()
         .child(box1)
@@ -374,20 +374,20 @@ fn single_cross_align_center_box() {
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(7, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(7, outer.content_size().unwrap().width().0);
-    assert_eq!(146, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(7, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(7, outer.content_size().unwrap().base_width().0);
+    assert_eq!(146, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(141, box1.offset_ref().y.0);
-    assert_eq!(7, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(141, box1.offset().y.0);
+    assert_eq!(7, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
@@ -395,7 +395,7 @@ fn single_cross_align_baseline_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed_depth(190, 277, 267);
 
-    let box1 = vbox().size(15).cross_size(7).depth(1);
+    let box1 = vbox().axis_size(15).cross_size(7).axis_depth(1);
 
     let mut outer = hbox()
         .child(box1)
@@ -403,30 +403,30 @@ fn single_cross_align_baseline_box() {
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         // cross_size and depth below is forced size assignment due to ommited measure call
         .cross_size(15)
-        .depth(1);
+        .axis_depth(1);
 
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(6, outer.offset_ref().y.0);
-    assert_eq!(7, outer.size_ref().width().0);
-    assert_eq!(277, outer.size_ref().height().0);
-    assert_eq!(7, outer.content_size().unwrap().width().0);
-    assert_eq!(15, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(6, outer.offset().y.0);
+    assert_eq!(7, outer.size().base_width().0);
+    assert_eq!(277, outer.size().base_height().0);
+    assert_eq!(7, outer.content_size().unwrap().base_width().0);
+    assert_eq!(15, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(6, box1.offset_ref().y.0);
-    assert_eq!(7, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(6, box1.offset().y.0);
+    assert_eq!(7, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 }
 
 #[test]
 fn double_fixed_boxes_c_0_0() {
-    let box1 = vbox().size(15);
-    let box2 = vbox().size(18);
+    let box1 = vbox().axis_size(15);
+    let box2 = vbox().axis_size(18);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -437,33 +437,33 @@ fn double_fixed_boxes_c_0_0() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(18, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(18, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(18, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(18, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(10, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(18, box2.size_ref().height().0);
+    assert_eq!(10, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(18, box2.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_c() {
-    let box1 = vbox().size(15);
-    let box2 = vbox().size(18);
-    let box3 = vbox().size(16);
+    let box1 = vbox().axis_size(15);
+    let box2 = vbox().axis_size(18);
+    let box3 = vbox().axis_size(16);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -475,39 +475,39 @@ fn triple_fixed_boxes_c() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(18, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(18, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(18, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(18, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(10, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(18, box2.size_ref().height().0);
+    assert_eq!(10, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(18, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(0, box3.size_ref().width().0);
-    assert_eq!(16, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(0, box3.size().base_width().0);
+    assert_eq!(16, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_g() {
-    let box1 = vbox().size(15);
-    let box2 = vbox().size(18);
-    let box3 = vbox().size(16);
+    let box1 = vbox().axis_size(15);
+    let box2 = vbox().axis_size(18);
+    let box3 = vbox().axis_size(16);
 
     let mut outer = hbox()
         .style(
@@ -523,39 +523,39 @@ fn triple_fixed_boxes_g() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(4, outer.size_ref().width().0);
-    assert_eq!(18, outer.size_ref().height().0);
-    assert_eq!(4, outer.content_size().unwrap().width().0);
-    assert_eq!(18, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(4, outer.size().base_width().0);
+    assert_eq!(18, outer.size().base_height().0);
+    assert_eq!(4, outer.content_size().unwrap().base_width().0);
+    assert_eq!(18, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(15, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(15, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(12, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(18, box2.size_ref().height().0);
+    assert_eq!(12, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(18, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(14, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(0, box3.size_ref().width().0);
-    assert_eq!(16, box3.size_ref().height().0);
+    assert_eq!(14, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(0, box3.size().base_width().0);
+    assert_eq!(16, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_grow_boxes_c() {
-    let box1 = vbox().size(15).grow(1);
-    let box2 = vbox().size(18).grow(3);
-    let box3 = vbox().size(16).grow(1);
+    let box1 = vbox().axis_size(15).axis_grow(1);
+    let box2 = vbox().axis_size(18).axis_grow(3);
+    let box3 = vbox().axis_size(16).axis_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -567,39 +567,39 @@ fn triple_grow_boxes_c() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(18, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(18, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(18, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(18, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(18, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(18, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(10, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(18, box2.size_ref().height().0);
+    assert_eq!(10, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(18, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(0, box3.size_ref().width().0);
-    assert_eq!(18, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(0, box3.size().base_width().0);
+    assert_eq!(18, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_grow_boxes_g() {
-    let box1 = vbox().size(15).grow(1);
-    let box2 = vbox().size(18).grow(3);
-    let box3 = vbox().size(16).grow(1);
+    let box1 = vbox().axis_size(15).axis_grow(1);
+    let box2 = vbox().axis_size(18).axis_grow(3);
+    let box3 = vbox().axis_size(16).axis_grow(1);
 
     let mut outer = hbox()
         .style(
@@ -615,39 +615,39 @@ fn triple_grow_boxes_g() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(4, outer.size_ref().width().0);
-    assert_eq!(18, outer.size_ref().height().0);
-    assert_eq!(4, outer.content_size().unwrap().width().0);
-    assert_eq!(18, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(4, outer.size().base_width().0);
+    assert_eq!(18, outer.size().base_height().0);
+    assert_eq!(4, outer.content_size().unwrap().base_width().0);
+    assert_eq!(18, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(18, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(18, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(12, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(18, box2.size_ref().height().0);
+    assert_eq!(12, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(18, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(14, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(0, box3.size_ref().width().0);
-    assert_eq!(18, box3.size_ref().height().0);
+    assert_eq!(14, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(0, box3.size().base_width().0);
+    assert_eq!(18, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_c_wrap1() {
-    let box1 = vbox().size(80);
-    let box2 = vbox().size(80);
-    let box3 = vbox().size(80);
+    let box1 = vbox().axis_size(80);
+    let box2 = vbox().axis_size(80);
+    let box3 = vbox().axis_size(80);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -659,39 +659,39 @@ fn triple_fixed_boxes_c_wrap1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(80, outer.size_ref().height().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(80, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(80, outer.size().base_height().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(80, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(10, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(0, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(10, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(0, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(0, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(0, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_c_wrap2() {
-    let box1 = vbox().size(80).cross_size(10);
-    let box2 = vbox().size(80).cross_size(15);
-    let box3 = vbox().size(80).cross_size(20);
+    let box1 = vbox().axis_size(80).cross_size(10);
+    let box2 = vbox().axis_size(80).cross_size(15);
+    let box3 = vbox().axis_size(80).cross_size(20);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -703,39 +703,39 @@ fn triple_fixed_boxes_c_wrap2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(45, outer.size_ref().width().0);
-    assert_eq!(80, outer.size_ref().height().0);
-    assert_eq!(45, outer.content_size().unwrap().width().0);
-    assert_eq!(80, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(45, outer.size().base_width().0);
+    assert_eq!(80, outer.size().base_height().0);
+    assert_eq!(45, outer.content_size().unwrap().base_width().0);
+    assert_eq!(80, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(10, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(10, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(20, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(15, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(20, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(15, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(35, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(20, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(35, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(20, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_g_wrap() {
-    let box1 = vbox().size(80).cross_size(80);
-    let box2 = vbox().size(80).cross_size(75);
-    let box3 = vbox().size(80).cross_size(85);
+    let box1 = vbox().axis_size(80).cross_size(80);
+    let box2 = vbox().axis_size(80).cross_size(75);
+    let box3 = vbox().axis_size(80).cross_size(85);
 
     let mut outer = hbox()
         .style(
@@ -752,39 +752,39 @@ fn triple_fixed_boxes_g_wrap() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(157, outer.size_ref().width().0);
-    assert_eq!(162, outer.size_ref().height().0);
-    assert_eq!(157, outer.content_size().unwrap().width().0);
-    assert_eq!(162, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(157, outer.size().base_width().0);
+    assert_eq!(162, outer.size().base_height().0);
+    assert_eq!(157, outer.content_size().unwrap().base_width().0);
+    assert_eq!(162, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(80, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(80, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(92, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(75, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(92, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(75, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(92, box3.offset_ref().y.0);
-    assert_eq!(85, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(92, box3.offset().y.0);
+    assert_eq!(85, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_c_wrap_grow1() {
-    let box1 = vbox().size(80).cross_size(10).grow(1);
-    let box2 = vbox().size(80).cross_size(15).grow(2);
-    let box3 = vbox().size(80).cross_size(20);
+    let box1 = vbox().axis_size(80).cross_size(10).axis_grow(1);
+    let box2 = vbox().axis_size(80).cross_size(15).axis_grow(2);
+    let box3 = vbox().axis_size(80).cross_size(20);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -796,39 +796,39 @@ fn triple_fixed_boxes_c_wrap_grow1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(45, outer.size_ref().width().0);
-    assert_eq!(80, outer.size_ref().height().0);
-    assert_eq!(45, outer.content_size().unwrap().width().0);
-    assert_eq!(80, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(45, outer.size().base_width().0);
+    assert_eq!(80, outer.size().base_height().0);
+    assert_eq!(45, outer.content_size().unwrap().base_width().0);
+    assert_eq!(80, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(10, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(10, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(20, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(15, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(20, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(15, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(35, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(20, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(35, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(20, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_c_wrap_grow2() {
-    let box1 = vbox().size(80).cross_size(10).grow(1);
-    let box2 = vbox().size(80).cross_size(15).grow(2);
-    let box3 = vbox().size(80).cross_size(20).grow(1);
+    let box1 = vbox().axis_size(80).cross_size(10).axis_grow(1);
+    let box2 = vbox().axis_size(80).cross_size(15).axis_grow(2);
+    let box3 = vbox().axis_size(80).cross_size(20).axis_grow(1);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -840,39 +840,39 @@ fn triple_fixed_boxes_c_wrap_grow2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(45, outer.size_ref().width().0);
-    assert_eq!(80, outer.size_ref().height().0);
-    assert_eq!(45, outer.content_size().unwrap().width().0);
-    assert_eq!(80, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(45, outer.size().base_width().0);
+    assert_eq!(80, outer.size().base_height().0);
+    assert_eq!(45, outer.content_size().unwrap().base_width().0);
+    assert_eq!(80, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(10, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(10, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(20, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(15, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(20, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(15, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(35, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(20, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(35, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(20, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_g_wrap_grow1() {
-    let box1 = vbox().size(80).cross_size(80).grow(1);
-    let box2 = vbox().size(80).cross_size(75).grow(2);
-    let box3 = vbox().size(80).cross_size(85);
+    let box1 = vbox().axis_size(80).cross_size(80).axis_grow(1);
+    let box2 = vbox().axis_size(80).cross_size(75).axis_grow(2);
+    let box3 = vbox().axis_size(80).cross_size(85);
 
     let mut outer = hbox()
         .style(
@@ -889,39 +889,39 @@ fn triple_fixed_boxes_g_wrap_grow1() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(160, outer.size_ref().width().0);
-    assert_eq!(165, outer.size_ref().height().0);
-    assert_eq!(160, outer.content_size().unwrap().width().0);
-    assert_eq!(165, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(160, outer.size().base_width().0);
+    assert_eq!(165, outer.size().base_height().0);
+    assert_eq!(160, outer.content_size().unwrap().base_width().0);
+    assert_eq!(165, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(80, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(80, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(95, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(75, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(95, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(75, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(95, box3.offset_ref().y.0);
-    assert_eq!(85, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(95, box3.offset().y.0);
+    assert_eq!(85, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_g_wrap_grow2() {
-    let box1 = vbox().size(80).cross_size(80).grow(1);
-    let box2 = vbox().size(80).cross_size(75).grow(2);
-    let box3 = vbox().size(80).cross_size(85).grow(2);
+    let box1 = vbox().axis_size(80).cross_size(80).axis_grow(1);
+    let box2 = vbox().axis_size(80).cross_size(75).axis_grow(2);
+    let box3 = vbox().axis_size(80).cross_size(85).axis_grow(2);
 
     let mut outer = hbox()
         .style(
@@ -938,39 +938,39 @@ fn triple_fixed_boxes_g_wrap_grow2() {
     let size = Size::fixed(190, 277);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(160, outer.size_ref().width().0);
-    assert_eq!(165, outer.size_ref().height().0);
-    assert_eq!(160, outer.content_size().unwrap().width().0);
-    assert_eq!(165, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(160, outer.size().base_width().0);
+    assert_eq!(165, outer.size().base_height().0);
+    assert_eq!(160, outer.content_size().unwrap().base_width().0);
+    assert_eq!(165, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(80, box1.size_ref().width().0);
-    assert_eq!(80, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(80, box1.size().base_width().0);
+    assert_eq!(80, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(95, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(75, box2.size_ref().width().0);
-    assert_eq!(80, box2.size_ref().height().0);
+    assert_eq!(95, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(75, box2.size().base_width().0);
+    assert_eq!(80, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(10, box3.offset_ref().x.0);
-    assert_eq!(95, box3.offset_ref().y.0);
-    assert_eq!(85, box3.size_ref().width().0);
-    assert_eq!(80, box3.size_ref().height().0);
+    assert_eq!(10, box3.offset().x.0);
+    assert_eq!(95, box3.offset().y.0);
+    assert_eq!(85, box3.size().base_width().0);
+    assert_eq!(80, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_start() {
-    let box1 = vbox().size(40).cross_size(20);
-    let box2 = vbox().size(40).cross_size(30);
-    let box3 = vbox().size(40).cross_size(15);
+    let box1 = vbox().axis_size(40).cross_size(20);
+    let box2 = vbox().axis_size(40).cross_size(30);
+    let box3 = vbox().axis_size(40).cross_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
@@ -982,39 +982,39 @@ fn triple_fixed_boxes_cross_fixed_start() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(65, outer.size_ref().width().0);
-    assert_eq!(40, outer.size_ref().height().0);
-    assert_eq!(65, outer.content_size().unwrap().width().0);
-    assert_eq!(40, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(65, outer.size().base_width().0);
+    assert_eq!(40, outer.size().base_height().0);
+    assert_eq!(65, outer.content_size().unwrap().base_width().0);
+    assert_eq!(40, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(20, box1.size_ref().width().0);
-    assert_eq!(40, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(20, box1.size().base_width().0);
+    assert_eq!(40, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(30, box2.offset_ref().x.0);
-    assert_eq!(10, box2.offset_ref().y.0);
-    assert_eq!(30, box2.size_ref().width().0);
-    assert_eq!(40, box2.size_ref().height().0);
+    assert_eq!(30, box2.offset().x.0);
+    assert_eq!(10, box2.offset().y.0);
+    assert_eq!(30, box2.size().base_width().0);
+    assert_eq!(40, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(60, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(15, box3.size_ref().width().0);
-    assert_eq!(40, box3.size_ref().height().0);
+    assert_eq!(60, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(15, box3.size().base_width().0);
+    assert_eq!(40, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_center() {
-    let box1 = vbox().size(40).cross_size(20);
-    let box2 = vbox().size(20).cross_size(30);
-    let box3 = vbox().size(40).cross_size(15);
+    let box1 = vbox().axis_size(40).cross_size(20);
+    let box2 = vbox().axis_size(20).cross_size(30);
+    let box3 = vbox().axis_size(40).cross_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Center))
@@ -1026,39 +1026,39 @@ fn triple_fixed_boxes_cross_fixed_center() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(65, outer.size_ref().width().0);
-    assert_eq!(40, outer.size_ref().height().0);
-    assert_eq!(65, outer.content_size().unwrap().width().0);
-    assert_eq!(40, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(65, outer.size().base_width().0);
+    assert_eq!(40, outer.size().base_height().0);
+    assert_eq!(65, outer.content_size().unwrap().base_width().0);
+    assert_eq!(40, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(20, box1.size_ref().width().0);
-    assert_eq!(40, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(20, box1.size().base_width().0);
+    assert_eq!(40, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(30, box2.offset_ref().x.0);
-    assert_eq!(20, box2.offset_ref().y.0);
-    assert_eq!(30, box2.size_ref().width().0);
-    assert_eq!(20, box2.size_ref().height().0);
+    assert_eq!(30, box2.offset().x.0);
+    assert_eq!(20, box2.offset().y.0);
+    assert_eq!(30, box2.size().base_width().0);
+    assert_eq!(20, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(60, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(15, box3.size_ref().width().0);
-    assert_eq!(40, box3.size_ref().height().0);
+    assert_eq!(60, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(15, box3.size().base_width().0);
+    assert_eq!(40, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_end() {
-    let box1 = vbox().size(40).cross_size(20);
-    let box2 = vbox().size(20).cross_size(30);
-    let box3 = vbox().size(40).cross_size(15);
+    let box1 = vbox().axis_size(40).cross_size(20);
+    let box2 = vbox().axis_size(20).cross_size(30);
+    let box3 = vbox().axis_size(40).cross_size(15);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::End))
@@ -1070,39 +1070,39 @@ fn triple_fixed_boxes_cross_fixed_end() {
     let size = Size::fixed_depth(190, 277, 3);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(65, outer.size_ref().width().0);
-    assert_eq!(40, outer.size_ref().height().0);
-    assert_eq!(65, outer.content_size().unwrap().width().0);
-    assert_eq!(40, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(65, outer.size().base_width().0);
+    assert_eq!(40, outer.size().base_height().0);
+    assert_eq!(65, outer.content_size().unwrap().base_width().0);
+    assert_eq!(40, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(20, box1.size_ref().width().0);
-    assert_eq!(40, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(20, box1.size().base_width().0);
+    assert_eq!(40, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(30, box2.offset_ref().x.0);
-    assert_eq!(30, box2.offset_ref().y.0);
-    assert_eq!(30, box2.size_ref().width().0);
-    assert_eq!(20, box2.size_ref().height().0);
+    assert_eq!(30, box2.offset().x.0);
+    assert_eq!(30, box2.offset().y.0);
+    assert_eq!(30, box2.size().base_width().0);
+    assert_eq!(20, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(60, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(15, box3.size_ref().width().0);
-    assert_eq!(40, box3.size_ref().height().0);
+    assert_eq!(60, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(15, box3.size().base_width().0);
+    assert_eq!(40, box3.size().base_height().0);
 }
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_baseline() {
-    let box1 = vbox().size(40).cross_size(20).depth(5);
-    let box2 = vbox().size(20).cross_size(30).depth(7);
-    let box3 = vbox().size(40).cross_size(15).depth(2);
+    let box1 = vbox().axis_size(40).cross_size(20).axis_depth(5);
+    let box2 = vbox().axis_size(20).cross_size(30).axis_depth(7);
+    let box3 = vbox().axis_size(40).cross_size(15).axis_depth(2);
 
     let mut outer = hbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
@@ -1114,30 +1114,30 @@ fn triple_fixed_boxes_cross_fixed_baseline() {
     let size = Size::fixed_depth(190, 277, 247);
     outer.lay_out(&mut Ctx, position, size).unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(65, outer.size_ref().width().0);
-    assert_eq!(45, outer.size_ref().height().0);
-    assert_eq!(65, outer.content_size().unwrap().width().0);
-    assert_eq!(45, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(65, outer.size().base_width().0);
+    assert_eq!(45, outer.size().base_height().0);
+    assert_eq!(65, outer.content_size().unwrap().base_width().0);
+    assert_eq!(45, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
 
     let box1 = iter.next().unwrap();
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(13, box1.offset_ref().y.0);
-    assert_eq!(20, box1.size_ref().width().0);
-    assert_eq!(40, box1.size_ref().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(13, box1.offset().y.0);
+    assert_eq!(20, box1.size().base_width().0);
+    assert_eq!(40, box1.size().base_height().0);
 
     let box2 = iter.next().unwrap();
-    assert_eq!(30, box2.offset_ref().x.0);
-    assert_eq!(35, box2.offset_ref().y.0);
-    assert_eq!(30, box2.size_ref().width().0);
-    assert_eq!(20, box2.size_ref().height().0);
+    assert_eq!(30, box2.offset().x.0);
+    assert_eq!(35, box2.offset().y.0);
+    assert_eq!(30, box2.size().base_width().0);
+    assert_eq!(20, box2.size().base_height().0);
 
     let box3 = iter.next().unwrap();
-    assert_eq!(60, box3.offset_ref().x.0);
-    assert_eq!(10, box3.offset_ref().y.0);
-    assert_eq!(15, box3.size_ref().width().0);
-    assert_eq!(40, box3.size_ref().height().0);
+    assert_eq!(60, box3.offset().x.0);
+    assert_eq!(10, box3.offset().y.0);
+    assert_eq!(15, box3.size().base_width().0);
+    assert_eq!(40, box3.size().base_height().0);
 }

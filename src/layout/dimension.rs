@@ -82,8 +82,8 @@ impl Add<&MaybeDim> for &MaybeDim {
     fn add(self, rhs: &MaybeDim) -> Self::Output {
         match (self.size(), rhs.size()) {
             (None, None) => MaybeDim::None,
-            (None, Some(_)) => rhs.clone(),
-            (Some(_), None) => self.clone(),
+            (None, Some(_)) => *rhs,
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => MaybeDim::Fixed(l + r),
         }
     }
@@ -96,7 +96,7 @@ impl Sub<&MaybeDim> for &MaybeDim {
         match (self.size(), rhs.size()) {
             (None, None) => MaybeDim::None,
             (None, Some(r)) => MaybeDim::Fixed(Unit::zero() - r),
-            (Some(_), None) => self.clone(),
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => MaybeDim::Fixed(l - r),
         }
     }
@@ -169,8 +169,8 @@ impl Dim {
     pub fn min_of(&self, r: &Self) -> Self {
         match (self.size(), r.size()) {
             (None, None) => Self::Content(None),
-            (None, Some(_)) => r.clone(),
-            (Some(_), None) => self.clone(),
+            (None, Some(_)) => *r,
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Self::Fixed(l.min(r)),
         }
     }
@@ -178,8 +178,8 @@ impl Dim {
     pub fn max_of(&self, r: &Self) -> Self {
         match (self.size(), r.size()) {
             (None, None) => Self::Content(None),
-            (None, Some(_)) => r.clone(),
-            (Some(_), None) => self.clone(),
+            (None, Some(_)) => *r,
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Self::Fixed(l.max(r)),
         }
     }
@@ -187,8 +187,8 @@ impl Dim {
     pub fn add(&self, r: &Self) -> Self {
         match (self.size(), r.size()) {
             (None, None) => Self::Content(None),
-            (None, Some(_)) => r.clone(),
-            (Some(_), None) => self.clone(),
+            (None, Some(_)) => *r,
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Self::Fixed(l + r),
         }
     }
@@ -197,7 +197,7 @@ impl Dim {
         match (self.size(), r.size()) {
             (None, None) => Self::Content(None),
             (None, Some(r)) => Self::Fixed(Unit::zero() - r),
-            (Some(_), None) => self.clone(),
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Self::Fixed(l - r),
         }
     }
@@ -241,8 +241,8 @@ impl Add<&Dim> for &Dim {
     fn add(self, rhs: &Dim) -> Self::Output {
         match (self.size(), rhs.size()) {
             (None, None) => Dim::content(),
-            (None, Some(_)) => rhs.clone(),
-            (Some(_), None) => self.clone(),
+            (None, Some(_)) => *rhs,
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Dim::Fixed(l + r),
         }
     }
@@ -255,7 +255,7 @@ impl Sub<&Dim> for &Dim {
         match (self.size(), rhs.size()) {
             (None, None) => Dim::content(),
             (None, Some(r)) => Dim::Fixed(Unit::zero() - r),
-            (Some(_), None) => self.clone(),
+            (Some(_), None) => *self,
             (Some(l), Some(r)) => Dim::Fixed(l - r),
         }
     }
@@ -263,7 +263,7 @@ impl Sub<&Dim> for &Dim {
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct FlexDim {
-    pub basis: Dim,
+    pub base: Dim,
     pub min: MaybeDim,
     pub max: MaybeDim,
     pub grow: Option<Fill>,
@@ -274,7 +274,7 @@ impl Debug for FlexDim {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
             "{:?}]{:?}+{:?}-{:?}[{:?}",
-            self.min, self.basis, self.grow, self.shrink, self.max,
+            self.min, self.base, self.grow, self.shrink, self.max,
         ))
     }
 }
@@ -282,7 +282,7 @@ impl Debug for FlexDim {
 impl FlexDim {
     pub const fn none() -> Self {
         Self {
-            basis: Dim::Content(None),
+            base: Dim::Content(None),
             min: MaybeDim::None,
             max: MaybeDim::None,
             grow: None,
@@ -292,7 +292,7 @@ impl FlexDim {
 
     pub const fn content() -> Self {
         Self {
-            basis: Dim::Content(None),
+            base: Dim::Content(None),
             min: MaybeDim::None,
             max: MaybeDim::None,
             grow: None,
@@ -302,7 +302,7 @@ impl FlexDim {
 
     pub fn parented(fill: impl Into<FillPerMille>) -> Self {
         Self {
-            basis: Dim::Parent(fill.into(), None),
+            base: Dim::Parent(fill.into(), None),
             min: MaybeDim::None,
             max: MaybeDim::None,
             grow: None,
@@ -342,7 +342,7 @@ impl FlexDim {
         grow: Option<Fill>,
         shrink: Option<Fill>,
     ) {
-        self.basis = self.basis.or(size);
+        self.base = self.base.or(size);
         self.min = self.min.or(min);
         self.max = self.max.or(max);
         self.grow = self.grow.or(grow);
@@ -350,19 +350,19 @@ impl FlexDim {
     }
 
     pub const fn is_fixed(&self) -> bool {
-        self.basis.is_fixed()
+        self.base.is_fixed()
     }
 
     pub const fn is_parented(&self) -> bool {
-        self.basis.is_parented()
+        self.base.is_parented()
     }
 
     pub const fn is_content(&self) -> bool {
-        self.basis.is_content()
+        self.base.is_content()
     }
 
     pub const fn is_content_fixed(&self) -> bool {
-        self.basis.is_content() && self.grow.is_none() && self.shrink.is_none()
+        self.base.is_content() && self.grow.is_none() && self.shrink.is_none()
     }
 
     pub const fn is_dyn(&self) -> bool {
@@ -374,34 +374,34 @@ impl FlexDim {
     }
 
     pub const fn is_resolved(&self) -> bool {
-        self.basis.is_resolved()
+        self.base.is_resolved()
     }
 
-    pub fn set_basis(&mut self, basis: impl Into<Dim>) {
-        let mut basis = basis.into();
-        if let (Some(basis_size), Some(min)) = (basis.size(), self.min.size()) {
-            if basis_size < min {
-                basis = self.min.clone().into();
+    pub fn set_base(&mut self, base: impl Into<Dim>) {
+        let mut base = base.into();
+        if let (Some(base_size), Some(min)) = (base.size(), self.min.size()) {
+            if base_size < min {
+                base = self.min.into();
             }
         }
-        if let (Some(basis_size), Some(max)) = (basis.size(), self.max.size()) {
-            if basis_size > max {
-                basis = self.max.clone().into();
+        if let (Some(base_size), Some(max)) = (base.size(), self.max.size()) {
+            if base_size > max {
+                base = self.max.into();
             }
         }
-        self.basis = basis;
+        self.base = base;
     }
 
     pub fn set_min(&mut self, min: impl Into<MaybeDim>) {
         let min = min.into();
-        if let (Some(basis_size), Some(min_size)) = (self.basis.size(), min.size()) {
-            if basis_size < min_size {
-                self.basis = min.clone().into()
+        if let (Some(base), Some(min_size)) = (self.base.size(), min.size()) {
+            if base < min_size {
+                self.base = min.into()
             }
         }
         if let (Some(max_size), Some(min_size)) = (self.max.size(), min.size()) {
             if max_size < min_size {
-                self.max = min.clone();
+                self.max = min;
             }
         }
         self.min = min;
@@ -409,22 +409,22 @@ impl FlexDim {
 
     pub fn set_max(&mut self, max: impl Into<MaybeDim>) {
         let max = max.into();
-        if let (Some(basis_size), Some(max_size)) = (self.basis.size(), max.size()) {
-            if basis_size > max_size {
-                self.basis = max.clone().into();
+        if let (Some(base_size), Some(max_size)) = (self.base.size(), max.size()) {
+            if base_size > max_size {
+                self.base = max.into();
             }
         }
         if let (Some(min_size), Some(max_size)) = (self.min.size(), max.size()) {
             if min_size > max_size {
-                self.min = max.clone();
+                self.min = max;
             }
         }
         self.max = max;
     }
 
     pub fn resolve_content(&mut self, content_size: impl Into<Unit>) {
-        if self.basis.is_content() {
-            self.basis.resolve(content_size.into());
+        if self.base.is_content() {
+            self.base.resolve(content_size.into());
         }
     }
 
@@ -436,8 +436,8 @@ impl FlexDim {
             if matches!(self.max.size(), Some(max) if max < min) {
                 self.max.resolve(min);
             }
-            if matches!(self.basis.size(), Some(basis) if basis < min) {
-                self.basis.resolve(min);
+            if matches!(self.base.size(), Some(base) if base < min) {
+                self.base.resolve(min);
             }
             self.min.resolve(min);
         }
@@ -447,23 +447,23 @@ impl FlexDim {
             if matches!(self.min.size(), Some(min) if min > max) {
                 self.min.resolve(max);
             }
-            if matches!(self.basis.size(), Some(basis) if basis > max) {
-                self.basis.resolve(max);
+            if matches!(self.base.size(), Some(base) if base > max) {
+                self.base.resolve(max);
             }
             self.max.resolve(max);
         }
 
-        if self.basis.is_parented() {
-            let basis = parent * (self.basis.parent_fill(), FillPerMille::mille());
+        if self.base.is_parented() {
+            let base = parent * (self.base.parent_fill(), FillPerMille::mille());
             match self.min.size() {
-                Some(min) if min > basis => self.basis.resolve(min),
+                Some(min) if min > base => self.base.resolve(min),
                 _ => (),
             }
             match self.max.size() {
-                Some(max) if max < basis => self.basis.resolve(max),
+                Some(max) if max < base => self.base.resolve(max),
                 _ => (),
             }
-            self.basis.resolve(basis);
+            self.base.resolve(base);
         }
     }
 
@@ -475,8 +475,8 @@ impl FlexDim {
         self.shrink = Some(fill.into());
     }
 
-    pub fn size(&self) -> Unit {
-        self.basis.size().unwrap_or_default()
+    pub fn base_size(&self) -> Unit {
+        self.base.size().unwrap_or_default()
     }
 
     pub fn size_available(&self, room: Unit) -> Unit {
@@ -489,7 +489,7 @@ impl FlexDim {
     }
 
     pub fn size_filled(&self, room: Unit) -> Unit {
-        let size = self.size();
+        let size = self.base_size();
         match size.cmp(&room) {
             Ordering::Less => match (self.max.size(), self.grow) {
                 (_, None) => size,
@@ -511,7 +511,7 @@ impl FlexDim {
         sum_grow: Option<Fill>,
         sum_shrink: Option<Fill>,
     ) -> Unit {
-        let size = self.size();
+        let size = self.base_size();
         match room_to_distribute.cmp(&Unit::zero()) {
             Ordering::Less => match (self.shrink, sum_shrink) {
                 (Some(shrink), Some(sum_shrink)) => {
@@ -531,13 +531,13 @@ impl FlexDim {
 
     pub fn min_of(&self, rhs: &FlexDim) -> Self {
         let mut min = self.clone();
-        min.basis = min.basis.min_of(&rhs.basis);
+        min.base = min.base.min_of(&rhs.base);
         min
     }
 
     pub fn max_of(&self, rhs: &FlexDim) -> Self {
         let mut max = self.clone();
-        max.basis = max.basis.max_of(&rhs.basis);
+        max.base = max.base.max_of(&rhs.base);
         max
     }
 }
@@ -545,7 +545,7 @@ impl FlexDim {
 impl From<Unit> for FlexDim {
     fn from(size: Unit) -> Self {
         Self {
-            basis: Dim::Fixed(size),
+            base: Dim::Fixed(size),
             min: MaybeDim::None,
             max: MaybeDim::None,
             shrink: None,
@@ -557,7 +557,7 @@ impl From<Unit> for FlexDim {
 impl From<Fill> for FlexDim {
     fn from(fill: Fill) -> Self {
         Self {
-            basis: Dim::Fixed(Unit::zero()),
+            base: Dim::Fixed(Unit::zero()),
             min: MaybeDim::None,
             max: MaybeDim::None,
             shrink: None,
@@ -578,7 +578,7 @@ impl Add<&Self> for FlexDim {
 #[allow(clippy::suspicious_op_assign_impl)]
 impl AddAssign<&Self> for FlexDim {
     fn add_assign(&mut self, rhs: &Self) {
-        self.basis = &self.basis + &rhs.basis;
+        self.base = &self.base + &rhs.base;
         self.min = &self.min + &rhs.min;
         self.max = &self.max + &rhs.max;
         self.grow = add_fill(self.grow, rhs.grow);
@@ -597,7 +597,7 @@ impl Add<Unit> for FlexDim {
 
 impl AddAssign<Unit> for FlexDim {
     fn add_assign(&mut self, rhs: Unit) {
-        self.basis.set_size(self.size() + rhs);
+        self.base.set_size(self.base_size() + rhs);
     }
 }
 
@@ -612,19 +612,19 @@ impl Sub<&Self> for FlexDim {
 
 impl SubAssign<&Self> for FlexDim {
     fn sub_assign(&mut self, rhs: &Self) {
-        self.basis = &self.basis - &rhs.basis;
+        self.base = &self.base - &rhs.base;
         self.min = &self.min - &rhs.min;
         self.max = &self.max - &rhs.max;
         self.grow = sub_fill(self.grow, rhs.grow);
         self.shrink = sub_fill(self.shrink, rhs.shrink);
 
-        if let (Some(base), Some(min)) = (self.basis.size(), self.min.size()) {
+        if let (Some(base), Some(min)) = (self.base.size(), self.min.size()) {
             if min > base {
                 self.min.set_size(base);
             }
         }
 
-        if let (Some(base), Some(max)) = (self.basis.size(), self.max.size()) {
+        if let (Some(base), Some(max)) = (self.base.size(), self.max.size()) {
             if max < base {
                 self.max.set_size(base);
             }
@@ -643,7 +643,7 @@ impl Sub<Unit> for FlexDim {
 
 impl SubAssign<Unit> for FlexDim {
     fn sub_assign(&mut self, rhs: Unit) {
-        self.basis.set_size(self.size() - rhs);
+        self.base.set_size(self.base_size() - rhs);
     }
 }
 
@@ -659,7 +659,7 @@ impl Mul<f64> for FlexDim {
 impl MulAssign<f64> for FlexDim {
     fn mul_assign(&mut self, rhs: f64) {
         let rhs = rhs.max(0.0);
-        self.basis.set_size(self.size() * rhs);
+        self.base.set_size(self.base_size() * rhs);
         if let Some(min) = self.min.as_mut() {
             *min *= rhs;
         }
@@ -687,7 +687,7 @@ impl Div<f64> for FlexDim {
 impl DivAssign<f64> for FlexDim {
     fn div_assign(&mut self, rhs: f64) {
         let rhs = rhs.max(1.0e-6);
-        self.basis.set_size(self.size() / rhs);
+        self.base.set_size(self.base_size() / rhs);
         if let Some(min) = self.min.as_mut() {
             *min /= rhs;
         }
@@ -715,8 +715,8 @@ mod tests {
     fn it_constructs() {
         let dim: FlexDim = Unit::from(15).into();
 
-        assert!(matches!(dim.basis, Dim::Fixed(Unit(15))));
-        assert_eq!(Some(Unit::from(15)), dim.basis.size());
+        assert!(matches!(dim.base, Dim::Fixed(Unit(15))));
+        assert_eq!(Some(Unit::from(15)), dim.base.size());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
         assert!(dim.grow.is_none());
@@ -724,7 +724,7 @@ mod tests {
 
         let dim: FlexDim = Fill::from(5).into();
 
-        assert_eq!(Some(Unit::zero()), dim.basis.size());
+        assert_eq!(Some(Unit::zero()), dim.base.size());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
         assert_eq!(Fill::from(5), dim.grow.unwrap());
@@ -732,8 +732,8 @@ mod tests {
 
         let dim = FlexDim::content();
 
-        assert!(matches!(dim.basis, Dim::Content(None)));
-        assert!(dim.basis.size().is_none());
+        assert!(matches!(dim.base, Dim::Content(None)));
+        assert!(dim.base.size().is_none());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
         assert!(dim.grow.is_none());
@@ -741,8 +741,8 @@ mod tests {
 
         let dim = FlexDim::parented(3);
 
-        assert!(matches!(dim.basis, Dim::Parent(Fill(3), None)));
-        assert!(dim.basis.size().is_none());
+        assert!(matches!(dim.base, Dim::Parent(Fill(3), None)));
+        assert!(dim.base.size().is_none());
         assert_eq!(None, dim.min.size());
         assert_eq!(None, dim.max.size());
         assert!(dim.grow.is_none());
@@ -753,7 +753,7 @@ mod tests {
     fn it_builds() {
         let mut dim = FlexDim::fixed(100).with_min(25);
 
-        assert_eq!(Some(Unit::from(100)), dim.basis.size());
+        assert_eq!(Some(Unit::from(100)), dim.base.size());
         assert_eq!(Some(Unit::from(25)), dim.min.size());
         assert_eq!(None, dim.max.size());
         assert!(dim.grow.is_none());
@@ -761,7 +761,7 @@ mod tests {
 
         dim = dim.with_max(400);
 
-        assert_eq!(Some(Unit::from(100)), dim.basis.size());
+        assert_eq!(Some(Unit::from(100)), dim.base.size());
         assert_eq!(Some(Unit::from(25)), dim.min.size());
         assert_eq!(Some(Unit::from(400)), dim.max.size());
         assert!(dim.grow.is_none());
@@ -769,7 +769,7 @@ mod tests {
 
         dim = dim.with_grow(2);
 
-        assert_eq!(Some(Unit::from(100)), dim.basis.size());
+        assert_eq!(Some(Unit::from(100)), dim.base.size());
         assert_eq!(Some(Unit::from(25)), dim.min.size());
         assert_eq!(Some(Unit::from(400)), dim.max.size());
         assert_eq!(Some(Fill::from(2)), dim.grow);
@@ -777,7 +777,7 @@ mod tests {
 
         dim = dim.with_shrink(3);
 
-        assert_eq!(Some(Unit::from(100)), dim.basis.size());
+        assert_eq!(Some(Unit::from(100)), dim.base.size());
         assert_eq!(Some(Unit::from(25)), dim.min.size());
         assert_eq!(Some(Unit::from(400)), dim.max.size());
         assert_eq!(Some(Fill::from(2)), dim.grow);
@@ -787,28 +787,28 @@ mod tests {
     #[test]
     fn size_is_zero() {
         let dim = FlexDim::content();
-        assert_eq!(None, dim.basis.size());
+        assert_eq!(None, dim.base.size());
         assert!(dim.is_content());
-        assert_eq!(Unit::zero(), dim.size());
+        assert_eq!(Unit::zero(), dim.base_size());
     }
 
     #[test]
     fn it_clamps() {
         let dim = FlexDim::fixed(10).with_min(15);
-        assert_eq!(Unit::from(15), dim.size());
+        assert_eq!(Unit::from(15), dim.base_size());
         assert_eq!(Unit::from(15), dim.min.size().unwrap());
 
         let dim = FlexDim::fixed(15).with_max(10);
-        assert_eq!(Unit::from(10), dim.size());
+        assert_eq!(Unit::from(10), dim.base_size());
         assert_eq!(Unit::from(10), dim.max.size().unwrap());
 
         let dim = FlexDim::fixed(10).with_min(15).with_max(5);
-        assert_eq!(Unit::from(5), dim.size());
+        assert_eq!(Unit::from(5), dim.base_size());
         assert_eq!(Unit::from(5), dim.min.size().unwrap());
         assert_eq!(Unit::from(5), dim.max.size().unwrap());
 
         let dim = FlexDim::fixed(10).with_max(5).with_min(15);
-        assert_eq!(Unit::from(15), dim.size());
+        assert_eq!(Unit::from(15), dim.base_size());
         assert_eq!(Unit::from(15), dim.min.size().unwrap());
         assert_eq!(Unit::from(15), dim.max.size().unwrap());
     }
@@ -816,10 +816,10 @@ mod tests {
     #[test]
     fn min_max() {
         let dim = FlexDim::fixed(15).min_of(&FlexDim::fixed(10));
-        assert_eq!(Unit::from(10), dim.size());
+        assert_eq!(Unit::from(10), dim.base_size());
 
         let dim = FlexDim::fixed(5).max_of(&FlexDim::fixed(10));
-        assert_eq!(Unit::from(10), dim.size());
+        assert_eq!(Unit::from(10), dim.base_size());
     }
 
     #[test]
@@ -836,21 +836,21 @@ mod tests {
             .with_grow(1);
 
         let dim = dim1.clone() + &dim2;
-        assert_eq!(Unit::from(21), dim.size());
+        assert_eq!(Unit::from(21), dim.base_size());
         assert_eq!(9, dim.min.size().unwrap().0);
         assert_eq!(31, dim.max.size().unwrap().0);
         assert_eq!(2, dim.shrink.unwrap().0);
         assert_eq!(3, dim.grow.unwrap().0);
 
         let dim = dim1.clone() - &dim2;
-        assert_eq!(Unit::from(-1), dim.size());
+        assert_eq!(Unit::from(-1), dim.base_size());
         assert_eq!(-1, dim.min.size().unwrap().0,);
         assert_eq!(-1, dim.max.size().unwrap().0,);
         assert_eq!(0, dim.shrink.unwrap().0,);
         assert_eq!(1, dim.grow.unwrap().0,);
 
         let dim = dim2 - &dim1;
-        assert_eq!(Unit::from(1), dim.size());
+        assert_eq!(Unit::from(1), dim.base_size());
         assert_eq!(-1, dim.min.size().unwrap().0,);
         assert_eq!(1, dim.max.size().unwrap().0,);
         assert_eq!(0, dim.shrink.unwrap().0,);
@@ -858,35 +858,35 @@ mod tests {
 
         let unit = Unit(2);
         let dim = dim1.clone() + unit;
-        assert_eq!(Unit::from(12), dim.size());
+        assert_eq!(Unit::from(12), dim.base_size());
         assert_eq!(5, dim.min.size().unwrap().0,);
         assert_eq!(15, dim.max.size().unwrap().0,);
         assert_eq!(1, dim.shrink.unwrap().0,);
         assert_eq!(2, dim.grow.unwrap().0,);
 
         let dim = dim1.clone() - unit;
-        assert_eq!(Unit::from(8), dim.size());
+        assert_eq!(Unit::from(8), dim.base_size());
         assert_eq!(5, dim.min.size().unwrap().0,);
         assert_eq!(15, dim.max.size().unwrap().0,);
         assert_eq!(1, dim.shrink.unwrap().0,);
         assert_eq!(2, dim.grow.unwrap().0,);
 
         let dim = dim1.clone() * 2.0;
-        assert_eq!(Unit::from(20), dim.size());
+        assert_eq!(Unit::from(20), dim.base_size());
         assert_eq!(10, dim.min.size().unwrap().0,);
         assert_eq!(30, dim.max.size().unwrap().0,);
         assert_eq!(2, dim.shrink.unwrap().0,);
         assert_eq!(4, dim.grow.unwrap().0,);
 
         let dim = dim1.clone() / 2.0;
-        assert_eq!(Unit::from(5), dim.size());
+        assert_eq!(Unit::from(5), dim.base_size());
         assert_eq!(2, dim.min.size().unwrap().0,);
         assert_eq!(7, dim.max.size().unwrap().0,);
         assert_eq!(0, dim.shrink.unwrap().0,);
         assert_eq!(1, dim.grow.unwrap().0,);
 
         let dim = dim1 * -2.0;
-        assert_eq!(Unit::from(0), dim.size());
+        assert_eq!(Unit::from(0), dim.base_size());
         assert_eq!(0, dim.min.size().unwrap().0,);
         assert_eq!(0, dim.max.size().unwrap().0);
         assert_eq!(0, dim.shrink.unwrap().0);

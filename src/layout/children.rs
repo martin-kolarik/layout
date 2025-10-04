@@ -76,10 +76,10 @@ pub fn lay_out_native<'a>(
             axis_gap
         };
 
-        if wrap && axis.size(&line_size) + line_gap + axis.size(child.size_ref()) > wrap_size {
+        if wrap && axis.base_size(&line_size) + line_gap + axis.base_size(child.size()) > wrap_size {
             let next_line_offset = axis
                 .cross()
-                .advance_dim(&offset, axis.cross().size(&line_size) + cross_gap);
+                .advance_dim(&offset, axis.cross().base_size(&line_size) + cross_gap);
 
             remaining -= line.len();
             lines.push(Line::new(axis.cross().offset(&offset), line_size, line));
@@ -96,7 +96,7 @@ pub fn lay_out_native<'a>(
         line_size = axis.extend_size(&line_size, child.size_after_wrap_ref(), respect_baseline);
 
         *child.offset_mut() = offset.clone();
-        offset = axis.advance_dim(&offset, axis.size(child.size_after_wrap_ref()));
+        offset = axis.advance_dim(&offset, axis.base_size(child.size_after_wrap_ref()));
 
         line.push(child);
     }
@@ -116,7 +116,7 @@ mod tests {
 
         #[test]
         fn single_box() {
-            let box1 = hbox().size(10);
+            let box1 = hbox().axis_size(10);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
@@ -126,20 +126,20 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(10, output[0].size().width().0);
-            assert_eq!(0, output[0].size().height().0);
+            assert_eq!(10, output[0].size().base_width().0);
+            assert_eq!(0, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(0, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(0, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes() {
-            let box1 = hbox().size(10);
-            let box2 = hbox().size(15);
+            let box1 = hbox().axis_size(10);
+            let box2 = hbox().axis_size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -149,26 +149,26 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(25, output[0].size().width().0);
-            assert_eq!(0, output[0].size().height().0);
+            assert_eq!(25, output[0].size().base_width().0);
+            assert_eq!(0, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(0, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(0, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(0, item.size_ref().height().0);
+            assert_eq!(10, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(0, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_gap() {
-            let box1 = hbox().size(10);
-            let box2 = hbox().size(15);
+            let box1 = hbox().axis_size(10);
+            let box2 = hbox().axis_size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -178,26 +178,26 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(28, output[0].size().width().0);
-            assert_eq!(0, output[0].size().height().0);
+            assert_eq!(28, output[0].size().base_width().0);
+            assert_eq!(0, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(0, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(0, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(0, item.size_ref().height().0);
+            assert_eq!(13, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(0, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_wrap() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -207,30 +207,30 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(10, output[0].size().width().0);
-            assert_eq!(4, output[0].size().height().0);
+            assert_eq!(10, output[0].size().base_width().0);
+            assert_eq!(4, output[0].size().base_height().0);
 
             assert_eq!(4, output[1].offset().0);
-            assert_eq!(15, output[1].size().width().0);
-            assert_eq!(6, output[1].size().height().0);
+            assert_eq!(15, output[1].size().base_width().0);
+            assert_eq!(6, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(4, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(4, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_wrap_gap() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -240,31 +240,31 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(10, output[0].size().width().0);
-            assert_eq!(4, output[0].size().height().0);
+            assert_eq!(10, output[0].size().base_width().0);
+            assert_eq!(4, output[0].size().base_height().0);
 
             assert_eq!(8, output[1].offset().0);
-            assert_eq!(15, output[1].size().width().0);
-            assert_eq!(6, output[1].size().height().0);
+            assert_eq!(15, output[1].size().base_width().0);
+            assert_eq!(6, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(8, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(8, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_1() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -275,41 +275,41 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(10, output[0].size().width().0);
-            assert_eq!(4, output[0].size().height().0);
+            assert_eq!(10, output[0].size().base_width().0);
+            assert_eq!(4, output[0].size().base_height().0);
 
             assert_eq!(4, output[1].offset().0);
-            assert_eq!(15, output[1].size().width().0);
-            assert_eq!(6, output[1].size().height().0);
+            assert_eq!(15, output[1].size().base_width().0);
+            assert_eq!(6, output[1].size().base_height().0);
 
             assert_eq!(10, output[2].offset().0);
-            assert_eq!(10, output[2].size().width().0);
-            assert_eq!(8, output[2].size().height().0);
+            assert_eq!(10, output[2].size().base_width().0);
+            assert_eq!(8, output[2].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(4, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(4, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(10, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(10, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_2() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -320,37 +320,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(25, output[0].size().width().0);
-            assert_eq!(6, output[0].size().height().0);
+            assert_eq!(25, output[0].size().base_width().0);
+            assert_eq!(6, output[0].size().base_height().0);
 
             assert_eq!(6, output[1].offset().0);
-            assert_eq!(10, output[1].size().width().0);
-            assert_eq!(8, output[1].size().height().0);
+            assert_eq!(10, output[1].size().base_width().0);
+            assert_eq!(8, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(10, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(6, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(6, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_3() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -361,37 +361,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(25, output[0].size().width().0);
-            assert_eq!(6, output[0].size().height().0);
+            assert_eq!(25, output[0].size().base_width().0);
+            assert_eq!(6, output[0].size().base_height().0);
 
             assert_eq!(6, output[1].offset().0);
-            assert_eq!(10, output[1].size().width().0);
-            assert_eq!(8, output[1].size().height().0);
+            assert_eq!(10, output[1].size().base_width().0);
+            assert_eq!(8, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(10, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(10, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(6, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(6, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_1() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -402,41 +402,41 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(10, output[0].size().width().0);
-            assert_eq!(4, output[0].size().height().0);
+            assert_eq!(10, output[0].size().base_width().0);
+            assert_eq!(4, output[0].size().base_height().0);
 
             assert_eq!(7, output[1].offset().0);
-            assert_eq!(15, output[1].size().width().0);
-            assert_eq!(6, output[1].size().height().0);
+            assert_eq!(15, output[1].size().base_width().0);
+            assert_eq!(6, output[1].size().base_height().0);
 
             assert_eq!(16, output[2].offset().0);
-            assert_eq!(10, output[2].size().width().0);
-            assert_eq!(8, output[2].size().height().0);
+            assert_eq!(10, output[2].size().base_width().0);
+            assert_eq!(8, output[2].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(7, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(7, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(16, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(16, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_2() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -447,37 +447,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(28, output[0].size().width().0);
-            assert_eq!(6, output[0].size().height().0);
+            assert_eq!(28, output[0].size().base_width().0);
+            assert_eq!(6, output[0].size().base_height().0);
 
             assert_eq!(9, output[1].offset().0);
-            assert_eq!(10, output[1].size().width().0);
-            assert_eq!(8, output[1].size().height().0);
+            assert_eq!(10, output[1].size().base_width().0);
+            assert_eq!(8, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(13, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(9, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(9, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_3() {
-            let box1 = hbox().size(10).cross_size(4);
-            let box2 = hbox().size(15).cross_size(6);
-            let box3 = hbox().size(10).cross_size(8);
+            let box1 = hbox().axis_size(10).cross_size(4);
+            let box2 = hbox().axis_size(15).cross_size(6);
+            let box3 = hbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -488,30 +488,30 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(28, output[0].size().width().0);
-            assert_eq!(6, output[0].size().height().0);
+            assert_eq!(28, output[0].size().base_width().0);
+            assert_eq!(6, output[0].size().base_height().0);
 
             assert_eq!(9, output[1].offset().0);
-            assert_eq!(10, output[1].size().width().0);
-            assert_eq!(8, output[1].size().height().0);
+            assert_eq!(10, output[1].size().base_width().0);
+            assert_eq!(8, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(4, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(4, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(13, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(15, item.size_ref().width().0);
-            assert_eq!(6, item.size_ref().height().0);
+            assert_eq!(13, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(15, item.size().base_width().0);
+            assert_eq!(6, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(9, item.offset_ref().y.0);
-            assert_eq!(10, item.size_ref().width().0);
-            assert_eq!(8, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(9, item.offset().y.0);
+            assert_eq!(10, item.size().base_width().0);
+            assert_eq!(8, item.size().base_height().0);
         }
     }
 
@@ -520,7 +520,7 @@ mod tests {
 
         #[test]
         fn single_box() {
-            let box1 = vbox().size(10);
+            let box1 = vbox().axis_size(10);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
@@ -530,20 +530,20 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(0, output[0].size().width().0);
-            assert_eq!(10, output[0].size().height().0);
+            assert_eq!(0, output[0].size().base_width().0);
+            assert_eq!(10, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(0, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(0, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes() {
-            let box1 = vbox().size(10);
-            let box2 = vbox().size(15);
+            let box1 = vbox().axis_size(10);
+            let box2 = vbox().axis_size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -553,26 +553,26 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(0, output[0].size().width().0);
-            assert_eq!(25, output[0].size().height().0);
+            assert_eq!(0, output[0].size().base_width().0);
+            assert_eq!(25, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(0, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(0, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(10, item.offset_ref().y.0);
-            assert_eq!(0, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(10, item.offset().y.0);
+            assert_eq!(0, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_gap() {
-            let box1 = vbox().size(10);
-            let box2 = vbox().size(15);
+            let box1 = vbox().axis_size(10);
+            let box2 = vbox().axis_size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -582,26 +582,26 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(0, output[0].size().width().0);
-            assert_eq!(28, output[0].size().height().0);
+            assert_eq!(0, output[0].size().base_width().0);
+            assert_eq!(28, output[0].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(0, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(0, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(13, item.offset_ref().y.0);
-            assert_eq!(0, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(13, item.offset().y.0);
+            assert_eq!(0, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_wrap() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -611,30 +611,30 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(4, output[0].size().width().0);
-            assert_eq!(10, output[0].size().height().0);
+            assert_eq!(4, output[0].size().base_width().0);
+            assert_eq!(10, output[0].size().base_height().0);
 
             assert_eq!(4, output[1].offset().0);
-            assert_eq!(6, output[1].size().width().0);
-            assert_eq!(15, output[1].size().height().0);
+            assert_eq!(6, output[1].size().base_width().0);
+            assert_eq!(15, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(4, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(4, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
         }
 
         #[test]
         fn two_boxes_wrap_gap() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -644,31 +644,31 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(4, output[0].size().width().0);
-            assert_eq!(10, output[0].size().height().0);
+            assert_eq!(4, output[0].size().base_width().0);
+            assert_eq!(10, output[0].size().base_height().0);
 
             assert_eq!(8, output[1].offset().0);
-            assert_eq!(6, output[1].size().width().0);
-            assert_eq!(15, output[1].size().height().0);
+            assert_eq!(6, output[1].size().base_width().0);
+            assert_eq!(15, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(8, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(8, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_1() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -679,41 +679,41 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(4, output[0].size().width().0);
-            assert_eq!(10, output[0].size().height().0);
+            assert_eq!(4, output[0].size().base_width().0);
+            assert_eq!(10, output[0].size().base_height().0);
 
             assert_eq!(4, output[1].offset().0);
-            assert_eq!(6, output[1].size().width().0);
-            assert_eq!(15, output[1].size().height().0);
+            assert_eq!(6, output[1].size().base_width().0);
+            assert_eq!(15, output[1].size().base_height().0);
 
             assert_eq!(10, output[2].offset().0);
-            assert_eq!(8, output[2].size().width().0);
-            assert_eq!(10, output[2].size().height().0);
+            assert_eq!(8, output[2].size().base_width().0);
+            assert_eq!(10, output[2].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(4, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(4, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(10, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(10, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_2() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -724,37 +724,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(6, output[0].size().width().0);
-            assert_eq!(25, output[0].size().height().0);
+            assert_eq!(6, output[0].size().base_width().0);
+            assert_eq!(25, output[0].size().base_height().0);
 
             assert_eq!(6, output[1].offset().0);
-            assert_eq!(8, output[1].size().width().0);
-            assert_eq!(10, output[1].size().height().0);
+            assert_eq!(8, output[1].size().base_width().0);
+            assert_eq!(10, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(10, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(10, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(6, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(6, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_exact_3() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -765,37 +765,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(6, output[0].size().width().0);
-            assert_eq!(25, output[0].size().height().0);
+            assert_eq!(6, output[0].size().base_width().0);
+            assert_eq!(25, output[0].size().base_height().0);
 
             assert_eq!(6, output[1].offset().0);
-            assert_eq!(8, output[1].size().width().0);
-            assert_eq!(10, output[1].size().height().0);
+            assert_eq!(8, output[1].size().base_width().0);
+            assert_eq!(10, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(10, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(10, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(6, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(6, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_1() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -806,41 +806,41 @@ mod tests {
             assert_eq!(1, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(4, output[0].size().width().0);
-            assert_eq!(10, output[0].size().height().0);
+            assert_eq!(4, output[0].size().base_width().0);
+            assert_eq!(10, output[0].size().base_height().0);
 
             assert_eq!(7, output[1].offset().0);
-            assert_eq!(6, output[1].size().width().0);
-            assert_eq!(15, output[1].size().height().0);
+            assert_eq!(6, output[1].size().base_width().0);
+            assert_eq!(15, output[1].size().base_height().0);
 
             assert_eq!(16, output[2].offset().0);
-            assert_eq!(8, output[2].size().width().0);
-            assert_eq!(10, output[2].size().height().0);
+            assert_eq!(8, output[2].size().base_width().0);
+            assert_eq!(10, output[2].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(7, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(7, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[2].content()[0];
-            assert_eq!(16, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(16, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_2() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -851,37 +851,37 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(6, output[0].size().width().0);
-            assert_eq!(28, output[0].size().height().0);
+            assert_eq!(6, output[0].size().base_width().0);
+            assert_eq!(28, output[0].size().base_height().0);
 
             assert_eq!(9, output[1].offset().0);
-            assert_eq!(8, output[1].size().width().0);
-            assert_eq!(10, output[1].size().height().0);
+            assert_eq!(8, output[1].size().base_width().0);
+            assert_eq!(10, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(13, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(13, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(9, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(9, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
 
         #[test]
         fn three_boxes_wrap_gap_exact_3() {
-            let box1 = vbox().size(10).cross_size(4);
-            let box2 = vbox().size(15).cross_size(6);
-            let box3 = vbox().size(10).cross_size(8);
+            let box1 = vbox().axis_size(10).cross_size(4);
+            let box2 = vbox().axis_size(15).cross_size(6);
+            let box3 = vbox().axis_size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -892,30 +892,30 @@ mod tests {
             assert_eq!(2, output[0].len());
 
             assert_eq!(0, output[0].offset().0);
-            assert_eq!(6, output[0].size().width().0);
-            assert_eq!(28, output[0].size().height().0);
+            assert_eq!(6, output[0].size().base_width().0);
+            assert_eq!(28, output[0].size().base_height().0);
 
             assert_eq!(9, output[1].offset().0);
-            assert_eq!(8, output[1].size().width().0);
-            assert_eq!(10, output[1].size().height().0);
+            assert_eq!(8, output[1].size().base_width().0);
+            assert_eq!(10, output[1].size().base_height().0);
 
             let item = &output[0].content()[0];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(4, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(4, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
 
             let item = &output[0].content()[1];
-            assert_eq!(0, item.offset_ref().x.0);
-            assert_eq!(13, item.offset_ref().y.0);
-            assert_eq!(6, item.size_ref().width().0);
-            assert_eq!(15, item.size_ref().height().0);
+            assert_eq!(0, item.offset().x.0);
+            assert_eq!(13, item.offset().y.0);
+            assert_eq!(6, item.size().base_width().0);
+            assert_eq!(15, item.size().base_height().0);
 
             let item = &output[1].content()[0];
-            assert_eq!(9, item.offset_ref().x.0);
-            assert_eq!(0, item.offset_ref().y.0);
-            assert_eq!(8, item.size_ref().width().0);
-            assert_eq!(10, item.size_ref().height().0);
+            assert_eq!(9, item.offset().x.0);
+            assert_eq!(0, item.offset().y.0);
+            assert_eq!(8, item.size().base_width().0);
+            assert_eq!(10, item.size().base_height().0);
         }
     }
 }

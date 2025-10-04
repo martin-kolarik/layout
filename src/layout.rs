@@ -23,19 +23,19 @@ pub trait Position {
         ""
     }
 
-    fn offset_ref(&self) -> &Offset;
+    fn offset(&self) -> &Offset;
     fn offset_mut(&mut self) -> &mut Offset;
 
-    fn size_ref(&self) -> &Size;
+    fn size(&self) -> &Size;
     fn size_mut(&mut self) -> &mut Size;
 
     fn size_after_wrap_ref(&self) -> &Size {
-        self.size_ref()
+        self.size()
     }
 
     // TODO
     fn size_after_lay_out(&self) -> Size {
-        self.size_ref().clone()
+        self.size().clone()
     }
 
     fn content_size(&self) -> Option<&Size> {

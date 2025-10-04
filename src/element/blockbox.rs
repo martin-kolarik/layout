@@ -30,32 +30,32 @@ impl BlockBox {
         self
     }
 
-    pub fn size(mut self, size: impl Into<Dim>) -> Self {
-        Axis::Horizontal.dim_mut(&mut self.size).set_basis(size);
+    pub fn axis_size(mut self, size: impl Into<Dim>) -> Self {
+        Axis::Horizontal.dim_mut(&mut self.size).set_base(size);
         self
     }
 
-    pub fn min(mut self, size: impl Into<MaybeDim>) -> Self {
+    pub fn axis_min(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn max(mut self, size: impl Into<MaybeDim>) -> Self {
+    pub fn axis_max(mut self, size: impl Into<MaybeDim>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_max(size);
         self
     }
 
-    pub fn grow(mut self, weight: impl Into<Fill>) -> Self {
+    pub fn axis_grow(mut self, weight: impl Into<Fill>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_grow(weight);
         self
     }
 
-    pub fn shrink(mut self, weight: impl Into<Fill>) -> Self {
+    pub fn axis_shrink(mut self, weight: impl Into<Fill>) -> Self {
         Axis::Horizontal.dim_mut(&mut self.size).set_shrink(weight);
         self
     }
 
-    pub fn depth(mut self, depth: impl Into<Unit>) -> Self {
+    pub fn axis_depth(mut self, depth: impl Into<Unit>) -> Self {
         if !matches!(self.style.align_items(), AlignItems::Baseline) {
             tracing::warn!("Depth set for a box having items not aligned on a baseline");
         }
@@ -67,7 +67,7 @@ impl BlockBox {
         Axis::Horizontal
             .cross()
             .dim_mut(&mut self.size)
-            .set_basis(size);
+            .set_base(size);
         self
     }
 
@@ -164,7 +164,7 @@ impl Position for BlockBox {
         self.mark.unwrap_or_default()
     }
 
-    fn offset_ref(&self) -> &Offset {
+    fn offset(&self) -> &Offset {
         &self.offset
     }
 
@@ -172,7 +172,7 @@ impl Position for BlockBox {
         &mut self.offset
     }
 
-    fn size_ref(&self) -> &Size {
+    fn size(&self) -> &Size {
         &self.size
     }
 
@@ -194,12 +194,12 @@ impl Styled for BlockBox {
 
 impl Layout for BlockBox {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, mut room: Size) -> Result<(), Error> {
-        let axis_room = Axis::Horizontal.size(&room);
+        let axis_room = Axis::Horizontal.base_size(&room);
         Axis::Horizontal
             .dim_mut(self.size_mut())
             .resolve_parented(axis_room);
 
-        let cross_room = Axis::Vertical.size(&room);
+        let cross_room = Axis::Vertical.base_size(&room);
         Axis::Vertical
             .dim_mut(self.size_mut())
             .resolve_parented(cross_room);
@@ -219,9 +219,9 @@ impl Layout for BlockBox {
         };
 
         let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
-        if respect_baseline && self.size_ref().depth().is_none() {
+        if respect_baseline && self.size().depth().is_none() {
             self.size
-                .set_depth(ascent.map(|ascent| self.size.height() - ascent));
+                .set_depth(ascent.map(|ascent| self.size.base_height() - ascent));
         }
 
         Ok(())
@@ -253,8 +253,8 @@ impl Layout for BlockBox {
             self.size.ascent()
         } else {
             for child in self.children.iter_mut() {
-                let child_offset = child.offset_ref() + &offset;
-                child.lay_out(ctx, child_offset, child.size_ref().clone())?;
+                let child_offset = child.offset() + &offset;
+                child.lay_out(ctx, child_offset, child.size().clone())?;
             }
             self.children
                 .first()
@@ -268,9 +268,9 @@ impl Layout for BlockBox {
         self.offset = offset;
 
         let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
-        if respect_baseline && self.size_ref().depth().is_none() {
+        if respect_baseline && self.size().depth().is_none() {
             self.size
-                .set_depth(ascent.map(|ascent| self.size.height() - ascent));
+                .set_depth(ascent.map(|ascent| self.size.base_height() - ascent));
         }
 
         Ok(())
@@ -282,7 +282,7 @@ impl Layout for BlockBox {
         }
 
         let style = self.style_ref();
-        let top_left = self.offset_ref();
+        let top_left = self.offset();
         let bottom_right = top_left + &self.size;
 
         if let Some(stroke) = style.border_top() {
@@ -313,7 +313,7 @@ impl Layout for BlockBox {
             ctx.line(&Offset::new(top_left.x, bottom_right.y), top_left, stroke);
         }
 
-        ctx.debug_frame(self.offset_ref(), self.size_ref());
+        ctx.debug_frame(self.offset(), self.size());
 
         Ok(())
     }
@@ -326,7 +326,9 @@ impl Layout for BlockBox {
 #[cfg(test)]
 mod tests {
     use crate::{
-        Layout, Position, Style, bbox, hbox, position::{Offset, Size}, text, vbox
+        Layout, Position, Style, bbox, hbox,
+        position::{Offset, Size},
+        text, vbox,
     };
 
     #[test]
@@ -356,16 +358,16 @@ mod tests {
         let mut children = bbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(156000, t2.offset_ref().x.0);
-        assert_eq!(256000, t2.offset_ref().y.0);
+        assert_eq!(156000, t2.offset().x.0);
+        assert_eq!(256000, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x.0);
-        assert_eq!(0, t3.offset_ref().y.0);
+        assert_eq!(0, t3.offset().x.0);
+        assert_eq!(0, t3.offset().y.0);
     }
 
     #[test]
@@ -395,16 +397,16 @@ mod tests {
         let mut children = bbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(100000, t1.offset_ref().x.0);
-        assert_eq!(100000, t1.offset_ref().y.0);
+        assert_eq!(100000, t1.offset().x.0);
+        assert_eq!(100000, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(256000, t2.offset_ref().x.0);
-        assert_eq!(356000, t2.offset_ref().y.0);
+        assert_eq!(256000, t2.offset().x.0);
+        assert_eq!(356000, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(100000, t3.offset_ref().x.0);
-        assert_eq!(100000, t3.offset_ref().y.0);
+        assert_eq!(100000, t3.offset().x.0);
+        assert_eq!(100000, t3.offset().y.0);
     }
 
     #[test]
@@ -431,16 +433,16 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x.0);
-        assert_eq!(0, t2.offset_ref().y.0);
+        assert_eq!(105833, t2.offset().x.0);
+        assert_eq!(0, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x.0);
-        assert_eq!(0, t3.offset_ref().y.0);
+        assert_eq!(2 * 105833, t3.offset().x.0);
+        assert_eq!(0, t3.offset().y.0);
     }
 
     #[test]
@@ -466,15 +468,15 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x.0);
-        assert_eq!(35278, t2.offset_ref().y.0);
+        assert_eq!(0, t2.offset().x.0);
+        assert_eq!(35278, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x.0);
-        assert_eq!(2 * 35278, t3.offset_ref().y.0);
+        assert_eq!(0, t3.offset().x.0);
+        assert_eq!(2 * 35278, t3.offset().y.0);
     }
 }

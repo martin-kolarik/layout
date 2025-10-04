@@ -39,8 +39,8 @@ impl LayoutBox {
         self
     }
 
-    pub fn size(mut self, size: impl Into<Dim>) -> Self {
-        self.axis.dim_mut(&mut self.size).set_basis(size);
+    pub fn axis_size(mut self, size: impl Into<Dim>) -> Self {
+        self.axis.dim_mut(&mut self.size).set_base(size);
         self
     }
 
@@ -49,27 +49,27 @@ impl LayoutBox {
         self
     }
 
-    pub fn min(mut self, size: impl Into<MaybeDim>) -> Self {
+    pub fn axis_min(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_min(size);
         self
     }
 
-    pub fn max(mut self, size: impl Into<MaybeDim>) -> Self {
+    pub fn axis_max(mut self, size: impl Into<MaybeDim>) -> Self {
         self.axis.dim_mut(&mut self.size).set_max(size);
         self
     }
 
-    pub fn grow(mut self, weight: impl Into<Fill>) -> Self {
+    pub fn axis_grow(mut self, weight: impl Into<Fill>) -> Self {
         self.axis.dim_mut(&mut self.size).set_grow(weight);
         self
     }
 
-    pub fn shrink(mut self, weight: impl Into<Fill>) -> Self {
+    pub fn axis_shrink(mut self, weight: impl Into<Fill>) -> Self {
         self.axis.dim_mut(&mut self.size).set_shrink(weight);
         self
     }
 
-    pub fn depth(mut self, depth: impl Into<Unit>) -> Self {
+    pub fn axis_depth(mut self, depth: impl Into<Unit>) -> Self {
         if !matches!(self.style.align_items(), AlignItems::Baseline) {
             tracing::warn!("Depth set for a box having items not aligned on a baseline");
         }
@@ -78,7 +78,7 @@ impl LayoutBox {
     }
 
     pub fn cross_size(mut self, size: impl Into<Dim>) -> Self {
-        self.axis.cross().dim_mut(&mut self.size).set_basis(size);
+        self.axis.cross().dim_mut(&mut self.size).set_base(size);
         self
     }
 
@@ -176,7 +176,7 @@ impl Position for LayoutBox {
         self.mark.unwrap_or_default()
     }
 
-    fn offset_ref(&self) -> &Offset {
+    fn offset(&self) -> &Offset {
         &self.offset
     }
 
@@ -184,7 +184,7 @@ impl Position for LayoutBox {
         &mut self.offset
     }
 
-    fn size_ref(&self) -> &Size {
+    fn size(&self) -> &Size {
         &self.size
     }
 
@@ -214,11 +214,11 @@ impl Styled for LayoutBox {
 impl Layout for LayoutBox {
     fn measure(&mut self, ctx: &mut dyn MeasureContext, mut room: Size) -> Result<(), Error> {
         let axis = self.axis;
-        let axis_room = axis.size(&room);
+        let axis_room = axis.base_size(&room);
         axis.dim_mut(self.size_mut()).resolve_parented(axis_room);
 
         let cross = axis.cross();
-        let cross_room = cross.size(&room);
+        let cross_room = cross.base_size(&room);
         cross.dim_mut(self.size_mut()).resolve_parented(cross_room);
 
         let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
@@ -238,7 +238,7 @@ impl Layout for LayoutBox {
             }
 
             self.style_ref().padding().narrow(None, Some(&mut room));
-            let axis_room = axis.size(&room);
+            let axis_room = axis.base_size(&room);
             let axis_room = axis.dim(&self_size).size_available(axis_room);
             let wrap = self
                 .style_ref()
@@ -295,11 +295,11 @@ impl Layout for LayoutBox {
         self.style_ref().padding().widen(None, Some(&mut self_size));
 
         axis.dim_mut(self.size_mut())
-            .resolve_content(axis.size(&self_size));
+            .resolve_content(axis.base_size(&self_size));
         cross
             .dim_mut(self.size_mut())
-            .resolve_content(cross.size(&self_size));
-        if respect_baseline && self.size_ref().depth().is_none() {
+            .resolve_content(cross.base_size(&self_size));
+        if respect_baseline && self.size().depth().is_none() {
             self.size_mut().set_depth(self_size.depth());
         }
 
@@ -326,10 +326,10 @@ impl Layout for LayoutBox {
         let cross_takes_native = cross.dim(&size).is_content_fixed();
 
         // dimensions preparation
-        let axis_room = axis.size(&room);
+        let axis_room = axis.base_size(&room);
         let axis_size = axis.dim(&size).size_available(axis_room);
 
-        let cross_room = cross.size(&room);
+        let cross_room = cross.base_size(&room);
         let cross_size = cross.dim(&size).size_available(cross_room);
 
         let wrap = self
@@ -397,14 +397,14 @@ impl Layout for LayoutBox {
                 content_size = cross.extend_dim(&content_size, cross_gap);
             }
 
-            let room_to_distribute = axis_size - axis.size(&native_line_size);
+            let room_to_distribute = axis_size - axis.base_size(&native_line_size);
             let sum_grow = axis.dim(&native_line_size).grow;
             let sum_shrink = axis.dim(&native_line_size).shrink;
 
             // If lines are more, or if cross axis has no dimension, use native size.
             // Otherwise (single line with cross axis known size) cross axis may stretch.
             let line_cross_room = if multi_line || cross_takes_native {
-                cross.size(&native_line_size)
+                cross.base_size(&native_line_size)
             } else {
                 cross_size
             };
@@ -441,7 +441,7 @@ impl Layout for LayoutBox {
                 } else {
                     cross
                         .dim(child_size)
-                        .size_filled(cross.size(&native_line_size))
+                        .size_filled(cross.base_size(&native_line_size))
                 };
 
                 // Baseline alignment
@@ -510,7 +510,7 @@ impl Layout for LayoutBox {
 
             // Move forward in cross axis (over lines), gap is added at the loop begin.
             // Multiple lines never stretch (the same behavior as FlexBox has).
-            position = cross.advance_dim(&position, cross.size(&line_size));
+            position = cross.advance_dim(&position, cross.base_size(&line_size));
             content_size = cross.extend_size(
                 &content_size,
                 &line_size,
@@ -536,7 +536,7 @@ impl Layout for LayoutBox {
         // Adopt children depth, if I have not it set.
         if self.size.depth().is_none() {
             self.size
-                .set_depth(first_ascent.map(|first_ascent| self.size.height() - first_ascent));
+                .set_depth(first_ascent.map(|first_ascent| self.size.base_height() - first_ascent));
         }
 
         Ok(())
@@ -554,7 +554,7 @@ impl Layout for LayoutBox {
         }
 
         let style = self.style_ref();
-        let top_left = self.offset_ref();
+        let top_left = self.offset();
         let bottom_right = top_left + &self.size;
 
         if let Some(stroke) = style.border_top() {
@@ -585,7 +585,7 @@ impl Layout for LayoutBox {
             ctx.line(&Offset::new(top_left.x, bottom_right.y), top_left, stroke);
         }
 
-        ctx.debug_frame(self.offset_ref(), self.size_ref());
+        ctx.debug_frame(self.offset(), self.size());
 
         Ok(())
     }

@@ -7,7 +7,7 @@ use crate::{
 
 #[test]
 fn self_not_baseline_on_baseline() {
-    let mut box1 = vbox().size(100);
+    let mut box1 = vbox().axis_size(100);
 
     box1.lay_out(
         &mut Ctx,
@@ -16,36 +16,36 @@ fn self_not_baseline_on_baseline() {
     )
     .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(100, box1.size_ref().height().0);
-    assert!(box1.size_ref().depth().is_none());
-    assert_eq!(0, box1.content_size().unwrap().width().0);
-    assert_eq!(0, box1.content_size().unwrap().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(100, box1.size().base_height().0);
+    assert!(box1.size().depth().is_none());
+    assert_eq!(0, box1.content_size().unwrap().base_width().0);
+    assert_eq!(0, box1.content_size().unwrap().base_height().0);
 }
 
 #[test]
 fn self_baseline_on_not_baseline() {
-    let mut box1 = vbox().size(100).depth(85);
+    let mut box1 = vbox().axis_size(100).axis_depth(85);
 
     box1.lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(100, box1.size_ref().height().0);
-    assert_eq!(85, box1.size_ref().depth().unwrap().0);
-    assert_eq!(0, box1.content_size().unwrap().width().0);
-    assert_eq!(0, box1.content_size().unwrap().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(100, box1.size().base_height().0);
+    assert_eq!(85, box1.size().depth().unwrap().0);
+    assert_eq!(0, box1.content_size().unwrap().base_width().0);
+    assert_eq!(0, box1.content_size().unwrap().base_height().0);
 }
 
 #[test]
 fn self_baseline_on_baseline() {
     let mut box1 = vbox()
-        .size(100)
-        .depth(85)
+        .axis_size(100)
+        .axis_depth(85)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
 
     box1.lay_out(
@@ -55,57 +55,57 @@ fn self_baseline_on_baseline() {
     )
     .unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(25, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(100, box1.size_ref().height().0);
-    assert_eq!(85, box1.size_ref().depth().unwrap().0);
-    assert_eq!(0, box1.content_size().unwrap().width().0);
-    assert_eq!(0, box1.content_size().unwrap().height().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(25, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(100, box1.size().base_height().0);
+    assert_eq!(85, box1.size().depth().unwrap().0);
+    assert_eq!(0, box1.content_size().unwrap().base_width().0);
+    assert_eq!(0, box1.content_size().unwrap().base_height().0);
 }
 
 #[test]
 fn self_baseline_inherits() {
-    let box1 = vbox().size(100).depth(85);
+    let box1 = vbox().axis_size(100).axis_depth(85);
 
     let mut outer = vbox()
         .child(box1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         // depth here is artificial as there measure pass is missing
-        .depth(85);
+        .axis_depth(85);
 
     outer
         .lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(10, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(100, outer.size_ref().height().0);
-    assert_eq!(85, outer.size_ref().depth().unwrap().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(100, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(10, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(100, outer.size().base_height().0);
+    assert_eq!(85, outer.size().depth().unwrap().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(100, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(10, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(100, box1.size_ref().height().0);
-    assert_eq!(85, box1.size_ref().depth().unwrap().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(10, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(100, box1.size().base_height().0);
+    assert_eq!(85, box1.size().depth().unwrap().0);
 }
 
 #[test]
 fn self_baseline_inherits_and_positions() {
-    let box1 = vbox().size(100).depth(85);
+    let box1 = vbox().axis_size(100).axis_depth(85);
 
     let mut outer = vbox()
         .child(box1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         // size and depth are set due to emulate missing measure phase
-        .size(100)
-        .depth(85);
+        .axis_size(100)
+        .axis_depth(85);
 
     outer
         .lay_out(
@@ -115,20 +115,20 @@ fn self_baseline_inherits_and_positions() {
         )
         .unwrap();
 
-    assert_eq!(10, outer.offset_ref().x.0);
-    assert_eq!(5, outer.offset_ref().y.0);
-    assert_eq!(0, outer.size_ref().width().0);
-    assert_eq!(100, outer.size_ref().height().0);
-    assert_eq!(85, outer.size_ref().depth().unwrap().0);
-    assert_eq!(0, outer.content_size().unwrap().width().0);
-    assert_eq!(100, outer.content_size().unwrap().height().0);
+    assert_eq!(10, outer.offset().x.0);
+    assert_eq!(5, outer.offset().y.0);
+    assert_eq!(0, outer.size().base_width().0);
+    assert_eq!(100, outer.size().base_height().0);
+    assert_eq!(85, outer.size().depth().unwrap().0);
+    assert_eq!(0, outer.content_size().unwrap().base_width().0);
+    assert_eq!(100, outer.content_size().unwrap().base_height().0);
 
     let mut iter = outer.iter();
     let box1 = iter.next().unwrap();
 
-    assert_eq!(10, box1.offset_ref().x.0);
-    assert_eq!(5, box1.offset_ref().y.0);
-    assert_eq!(0, box1.size_ref().width().0);
-    assert_eq!(100, box1.size_ref().height().0);
-    assert_eq!(85, box1.size_ref().depth().unwrap().0);
+    assert_eq!(10, box1.offset().x.0);
+    assert_eq!(5, box1.offset().y.0);
+    assert_eq!(0, box1.size().base_width().0);
+    assert_eq!(100, box1.size().base_height().0);
+    assert_eq!(85, box1.size().depth().unwrap().0);
 }

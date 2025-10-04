@@ -42,7 +42,7 @@ impl Position for Wrap {
         self.mark.unwrap_or_default()
     }
 
-    fn offset_ref(&self) -> &Offset {
+    fn offset(&self) -> &Offset {
         &self.offset
     }
 
@@ -50,7 +50,7 @@ impl Position for Wrap {
         &mut self.offset
     }
 
-    fn size_ref(&self) -> &Size {
+    fn size(&self) -> &Size {
         &self.size
     }
 

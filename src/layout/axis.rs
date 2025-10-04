@@ -53,22 +53,22 @@ impl Axis {
 
     pub fn dim<'s>(&self, size: &'s Size) -> &'s FlexDim {
         match self {
-            Axis::Horizontal => size.x_dim(),
-            Axis::Vertical => size.y_dim(),
+            Axis::Horizontal => &size.width,
+            Axis::Vertical => &size.height,
         }
     }
 
     pub fn dim_mut<'s>(&self, size: &'s mut Size) -> &'s mut FlexDim {
         match self {
-            Axis::Horizontal => size.x_dim_mut(),
-            Axis::Vertical => size.y_dim_mut(),
+            Axis::Horizontal => &mut size.width,
+            Axis::Vertical => &mut size.height,
         }
     }
 
-    pub fn size(&self, size: &Size) -> Unit {
+    pub fn base_size(&self, size: &Size) -> Unit {
         match self {
-            Axis::Horizontal => size.width(),
-            Axis::Vertical => size.height(),
+            Axis::Horizontal => size.base_width(),
+            Axis::Vertical => size.base_height(),
         }
     }
 
@@ -81,8 +81,8 @@ impl Axis {
     pub fn extend_size(&self, size: &Size, amount: &Size, respect_baseline: bool) -> Size {
         let mut size = size.clone();
         match self {
-            Axis::Horizontal => size.x_extend(amount, respect_baseline),
-            Axis::Vertical => size.y_extend(amount, respect_baseline),
+            Axis::Horizontal => size.width_extend(amount, respect_baseline),
+            Axis::Vertical => size.height_extend(amount, respect_baseline),
         }
         size
     }
@@ -90,9 +90,9 @@ impl Axis {
     pub fn resolve_content_size(&self, size: &mut Size, inner_size: &Size, outer_room: Unit) {
         let dim = self.dim_mut(size);
         if dim.is_content_fixed() {
-            dim.set_basis(self.size(inner_size));
+            dim.set_base(self.base_size(inner_size));
         } else {
-            dim.set_basis(dim.size_filled(outer_room));
+            dim.set_base(dim.size_filled(outer_room));
         }
     }
 }

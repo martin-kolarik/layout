@@ -58,7 +58,7 @@ impl Position for Text {
         self.mark.unwrap_or_default()
     }
 
-    fn offset_ref(&self) -> &Offset {
+    fn offset(&self) -> &Offset {
         &self.offset
     }
 
@@ -66,7 +66,7 @@ impl Position for Text {
         &mut self.offset
     }
 
-    fn size_ref(&self) -> &Size {
+    fn size(&self) -> &Size {
         &self.size
     }
 
@@ -115,8 +115,8 @@ impl Layout for Text {
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
         if let InnerText::Layout(text) = &self.text {
             if !text.positions.is_empty() {
-                ctx.text(self.offset_ref(), &self.style, text, false);
-                ctx.debug_frame(self.offset_ref(), self.size_ref());
+                ctx.text(self.offset(), &self.style, text, false);
+                ctx.debug_frame(self.offset(), self.size());
             }
         }
         Ok(())
@@ -155,16 +155,16 @@ mod tests {
         let mut children = hbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x.0);
-        assert_eq!(0, t2.offset_ref().y.0);
+        assert_eq!(105833, t2.offset().x.0);
+        assert_eq!(0, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x.0);
-        assert_eq!(0, t3.offset_ref().y.0);
+        assert_eq!(2 * 105833, t3.offset().x.0);
+        assert_eq!(0, t3.offset().y.0);
     }
 
     #[test]
@@ -191,16 +191,16 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(105833, t2.offset_ref().x.0);
-        assert_eq!(0, t2.offset_ref().y.0);
+        assert_eq!(105833, t2.offset().x.0);
+        assert_eq!(0, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(2 * 105833, t3.offset_ref().x.0);
-        assert_eq!(0, t3.offset_ref().y.0);
+        assert_eq!(2 * 105833, t3.offset().x.0);
+        assert_eq!(0, t3.offset().y.0);
     }
 
     #[test]
@@ -227,16 +227,16 @@ mod tests {
         let mut children = vbox.iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x.0);
-        assert_eq!(35278, t2.offset_ref().y.0);
+        assert_eq!(0, t2.offset().x.0);
+        assert_eq!(35278, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x.0);
-        assert_eq!(2 * 35278, t3.offset_ref().y.0);
+        assert_eq!(0, t3.offset().x.0);
+        assert_eq!(2 * 35278, t3.offset().y.0);
     }
 
     #[test]
@@ -262,15 +262,15 @@ mod tests {
         let mut children = children.next().unwrap().iter();
 
         let t1 = children.next().unwrap();
-        assert_eq!(0, t1.offset_ref().x.0);
-        assert_eq!(0, t1.offset_ref().y.0);
+        assert_eq!(0, t1.offset().x.0);
+        assert_eq!(0, t1.offset().y.0);
 
         let t2 = children.next().unwrap();
-        assert_eq!(0, t2.offset_ref().x.0);
-        assert_eq!(35278, t2.offset_ref().y.0);
+        assert_eq!(0, t2.offset().x.0);
+        assert_eq!(35278, t2.offset().y.0);
 
         let t3 = children.next().unwrap();
-        assert_eq!(0, t3.offset_ref().x.0);
-        assert_eq!(2 * 35278, t3.offset_ref().y.0);
+        assert_eq!(0, t3.offset().x.0);
+        assert_eq!(2 * 35278, t3.offset().y.0);
     }
 }
