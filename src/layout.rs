@@ -12,13 +12,9 @@ pub mod unit;
 
 pub(crate) mod children;
 
-use crate::{BlockBox, Error, Filling, LayoutBox, LineBreak, Stroke, Style, Text, TextPosition};
+use crate::{Error, Stroke, Style, TextPosition};
 
-use self::{
-    dimension::Dim,
-    position::{Offset, Quad, Size},
-    unit::{Fill, Unit},
-};
+use self::position::{Offset, Quad, Size};
 
 pub trait Position {
     fn element(&self) -> &str;
@@ -91,46 +87,6 @@ pub trait MeasureContext {
     fn typeset(&mut self, style: &Style, text: &str) -> Result<TextPosition, Error>;
 }
 
-#[derive(Default)]
-pub struct NewPageOptions {
-    must_be_in_page: Option<(Unit, Unit)>,
-    margin: Option<Quad>,
-    size: Option<Size>,
-}
-
-impl NewPageOptions {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    pub fn with_break_if_not_room(mut self, offset: &Offset, size: &Size) -> Self {
-        self.must_be_in_page = Some((offset.y, size.height()));
-        self
-    }
-
-    pub fn with_margin(mut self, margin: Quad) -> Self {
-        self.margin = Some(margin);
-        self
-    }
-
-    pub fn with_size(mut self, size: Size) -> Self {
-        self.size = Some(size);
-        self
-    }
-
-    pub fn must_be_in_page(&self) -> Option<(Unit, Unit)> {
-        self.must_be_in_page
-    }
-
-    pub fn margin(&self) -> Option<&Quad> {
-        self.margin.as_ref()
-    }
-
-    pub fn size(&self) -> Option<&Size> {
-        self.size.as_ref()
-    }
-}
-
 pub trait RenderContext: MeasureContext {
     fn new_page(&mut self, options: Option<NewPageOptions>) -> bool;
 
@@ -146,90 +102,24 @@ pub trait RenderContext: MeasureContext {
     );
 }
 
-pub trait Factory {
-    fn bbox() -> BlockBox;
-
-    fn hbox() -> LayoutBox;
-    fn hfilling() -> Filling;
-
-    fn hcbox(layout: impl Layout + 'static) -> LayoutBox {
-        Self::hbox()
-            .child(Self::hfill(1))
-            .child(layout)
-            .child(Self::hfill(1))
-    }
-
-    fn hfill(weight: impl Into<Fill>) -> Filling {
-        Self::hfilling().grow(weight)
-    }
-
-    fn hspace(size: impl Into<Dim>) -> Filling {
-        Self::hfilling().size(size)
-    }
-
-    fn hbreak() -> LineBreak;
-
-    fn vbox() -> LayoutBox;
-    fn vfilling() -> Filling;
-
-    fn vcbox(layout: impl Layout + 'static) -> LayoutBox {
-        Self::vbox()
-            .child(Self::vfill(1))
-            .child(layout)
-            .child(Self::vfill(1))
-    }
-
-    fn vfill(weight: impl Into<Fill>) -> Filling {
-        Self::vfilling().grow(weight)
-    }
-
-    fn vspace(size: impl Into<Dim>) -> Filling {
-        Self::vfilling().size(size)
-    }
-
-    fn vbreak() -> LineBreak;
-
-    fn text_str(text: &str) -> Text;
+#[derive(Default)]
+pub struct NewPageOptions {
+    pub margin: Option<Quad>,
+    pub size: Option<Size>,
 }
 
-pub struct DefaultFactory;
-
-impl DefaultFactory {
-    pub fn text(text: impl ToString) -> Text {
-        Text::new(text)
-    }
-}
-
-impl Factory for DefaultFactory {
-    fn bbox() -> BlockBox {
-        BlockBox::new()
+impl NewPageOptions {
+    pub fn new() -> Self {
+        Default::default()
     }
 
-    fn hbox() -> LayoutBox {
-        LayoutBox::new(Axis::Horizontal)
+    pub fn with_margin(mut self, margin: Quad) -> Self {
+        self.margin = Some(margin);
+        self
     }
 
-    fn hfilling() -> Filling {
-        Filling::new(Axis::Horizontal)
-    }
-
-    fn hbreak() -> LineBreak {
-        LineBreak::new(Axis::Horizontal)
-    }
-
-    fn vbox() -> LayoutBox {
-        LayoutBox::new(Axis::Vertical)
-    }
-
-    fn vfilling() -> Filling {
-        Filling::new(Axis::Vertical)
-    }
-
-    fn vbreak() -> LineBreak {
-        LineBreak::new(Axis::Vertical)
-    }
-
-    fn text_str(text: &str) -> Text {
-        Text::new(text)
+    pub fn with_size(mut self, size: Size) -> Self {
+        self.size = Some(size);
+        self
     }
 }

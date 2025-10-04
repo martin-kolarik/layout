@@ -112,11 +112,11 @@ pub fn lay_out_native<'a>(
 mod tests {
 
     mod hbox {
-        use crate::{Axis, DefaultFactory, Factory, Layout, children::lay_out_native};
+        use crate::{Axis, Layout, children::lay_out_native, hbox};
 
         #[test]
         fn single_box() {
-            let box1 = DefaultFactory::hbox().size(10);
+            let box1 = hbox().size(10);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
@@ -138,8 +138,8 @@ mod tests {
 
         #[test]
         fn two_boxes() {
-            let box1 = DefaultFactory::hbox().size(10);
-            let box2 = DefaultFactory::hbox().size(15);
+            let box1 = hbox().size(10);
+            let box2 = hbox().size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -167,8 +167,8 @@ mod tests {
 
         #[test]
         fn two_boxes_gap() {
-            let box1 = DefaultFactory::hbox().size(10);
-            let box2 = DefaultFactory::hbox().size(15);
+            let box1 = hbox().size(10);
+            let box2 = hbox().size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -196,8 +196,8 @@ mod tests {
 
         #[test]
         fn two_boxes_wrap() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -229,8 +229,8 @@ mod tests {
 
         #[test]
         fn two_boxes_wrap_gap() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -262,9 +262,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_1() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -307,9 +307,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_2() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -348,9 +348,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_3() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -389,9 +389,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_1() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -434,9 +434,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_2() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -475,9 +475,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_3() {
-            let box1 = DefaultFactory::hbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::hbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::hbox().size(10).cross_size(8);
+            let box1 = hbox().size(10).cross_size(4);
+            let box2 = hbox().size(15).cross_size(6);
+            let box3 = hbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -516,11 +516,11 @@ mod tests {
     }
 
     mod vbox {
-        use crate::{Axis, DefaultFactory, Factory, Layout, children::lay_out_native};
+        use crate::{Axis, Layout, children::lay_out_native, vbox};
 
         #[test]
         fn single_box() {
-            let box1 = DefaultFactory::vbox().size(10);
+            let box1 = vbox().size(10);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1)];
 
@@ -542,8 +542,8 @@ mod tests {
 
         #[test]
         fn two_boxes() {
-            let box1 = DefaultFactory::vbox().size(10);
-            let box2 = DefaultFactory::vbox().size(15);
+            let box1 = vbox().size(10);
+            let box2 = vbox().size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -571,8 +571,8 @@ mod tests {
 
         #[test]
         fn two_boxes_gap() {
-            let box1 = DefaultFactory::vbox().size(10);
-            let box2 = DefaultFactory::vbox().size(15);
+            let box1 = vbox().size(10);
+            let box2 = vbox().size(15);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -600,8 +600,8 @@ mod tests {
 
         #[test]
         fn two_boxes_wrap() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -633,8 +633,8 @@ mod tests {
 
         #[test]
         fn two_boxes_wrap_gap() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
 
             let mut children: Vec<Box<dyn Layout>> = vec![Box::new(box1), Box::new(box2)];
 
@@ -666,9 +666,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_1() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -711,9 +711,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_2() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -752,9 +752,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_exact_3() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -793,9 +793,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_1() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -838,9 +838,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_2() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];
@@ -879,9 +879,9 @@ mod tests {
 
         #[test]
         fn three_boxes_wrap_gap_exact_3() {
-            let box1 = DefaultFactory::vbox().size(10).cross_size(4);
-            let box2 = DefaultFactory::vbox().size(15).cross_size(6);
-            let box3 = DefaultFactory::vbox().size(10).cross_size(8);
+            let box1 = vbox().size(10).cross_size(4);
+            let box2 = vbox().size(15).cross_size(6);
+            let box3 = vbox().size(10).cross_size(8);
 
             let mut children: Vec<Box<dyn Layout>> =
                 vec![Box::new(box1), Box::new(box2), Box::new(box3)];

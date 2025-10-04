@@ -1,14 +1,15 @@
 use crate::{
-    AlignItems, DefaultFactory, Factory, Layout, Position, StyleBuilder,
+    AlignItems, Layout, Position, StyleBuilder, hbox,
     position::{Offset, Size},
     test::Ctx,
+    vbox,
 };
 
 #[test]
 fn single_fixed_box_c_0_0() {
-    let box1 = DefaultFactory::hbox().size(15);
+    let box1 = hbox().size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1);
 
@@ -34,9 +35,9 @@ fn single_fixed_box_c_0_0() {
 
 #[test]
 fn single_fixed_box_c_0_1() {
-    let box1 = DefaultFactory::hbox().size(15).cross_size(12);
+    let box1 = hbox().size(15).cross_size(12);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1);
 
@@ -62,9 +63,9 @@ fn single_fixed_box_c_0_1() {
 
 #[test]
 fn single_fixed_box_c_1_0() {
-    let box1 = DefaultFactory::hbox().size(15);
+    let box1 = hbox().size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .cross_size(12);
@@ -91,9 +92,9 @@ fn single_fixed_box_c_1_0() {
 
 #[test]
 fn single_fixed_box_c_1_1() {
-    let box1 = DefaultFactory::hbox().size(15).cross_size(21);
+    let box1 = hbox().size(15).cross_size(21);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .cross_size(12);
@@ -123,9 +124,9 @@ fn single_grow_main_0_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).grow(1);
+    let box1 = hbox().size(15).grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1);
 
@@ -152,9 +153,9 @@ fn single_grow_main_1_0_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15);
+    let box1 = hbox().size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .grow(1);
@@ -182,9 +183,9 @@ fn single_grow_main_1_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).grow(1);
+    let box1 = hbox().size(15).grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .grow(1);
@@ -212,9 +213,9 @@ fn single_grow_cross_0_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7).cross_grow(1);
+    let box1 = hbox().size(15).cross_size(7).cross_grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1);
 
@@ -241,9 +242,9 @@ fn single_grow_cross_1_0fix_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7);
+    let box1 = hbox().size(15).cross_size(7);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .cross_grow(1);
@@ -271,9 +272,9 @@ fn single_grow_cross_1_0dyn_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15);
+    let box1 = hbox().size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .cross_grow(1);
@@ -301,9 +302,9 @@ fn single_grow_cross_1_1_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7).cross_grow(1);
+    let box1 = hbox().size(15).cross_size(7).cross_grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .cross_grow(1);
@@ -334,9 +335,9 @@ fn single_cross_align_end_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7);
+    let box1 = hbox().size(15).cross_size(7);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .child(box1)
         .cross_grow(1)
         .style(StyleBuilder::new().with_align_items(AlignItems::End));
@@ -364,9 +365,9 @@ fn single_cross_align_center_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed(190, 277);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7);
+    let box1 = hbox().size(15).cross_size(7);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .child(box1)
         .cross_grow(1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Center));
@@ -394,9 +395,9 @@ fn single_cross_align_baseline_box() {
     let position = Offset::new(10, 10);
     let size = Size::fixed_depth(190, 277, 267);
 
-    let box1 = DefaultFactory::hbox().size(15).cross_size(7).depth(1);
+    let box1 = hbox().size(15).cross_size(7).depth(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .child(box1)
         .cross_grow(1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
@@ -424,10 +425,10 @@ fn single_cross_align_baseline_box() {
 
 #[test]
 fn double_fixed_boxes_c_0_0() {
-    let box1 = DefaultFactory::hbox().size(15);
-    let box2 = DefaultFactory::hbox().size(18);
+    let box1 = hbox().size(15);
+    let box2 = hbox().size(18);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2);
@@ -460,11 +461,11 @@ fn double_fixed_boxes_c_0_0() {
 
 #[test]
 fn triple_fixed_boxes_c() {
-    let box1 = DefaultFactory::hbox().size(15);
-    let box2 = DefaultFactory::hbox().size(18);
-    let box3 = DefaultFactory::hbox().size(16);
+    let box1 = hbox().size(15);
+    let box2 = hbox().size(18);
+    let box3 = hbox().size(16);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -504,11 +505,11 @@ fn triple_fixed_boxes_c() {
 
 #[test]
 fn triple_fixed_boxes_g() {
-    let box1 = DefaultFactory::hbox().size(15);
-    let box2 = DefaultFactory::hbox().size(18);
-    let box3 = DefaultFactory::hbox().size(16);
+    let box1 = hbox().size(15);
+    let box2 = hbox().size(18);
+    let box3 = hbox().size(16);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
@@ -553,11 +554,11 @@ fn triple_fixed_boxes_g() {
 
 #[test]
 fn triple_grow_boxes_c() {
-    let box1 = DefaultFactory::hbox().size(15).grow(1);
-    let box2 = DefaultFactory::hbox().size(18).grow(3);
-    let box3 = DefaultFactory::hbox().size(16).grow(1);
+    let box1 = hbox().size(15).grow(1);
+    let box2 = hbox().size(18).grow(3);
+    let box3 = hbox().size(16).grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -597,11 +598,11 @@ fn triple_grow_boxes_c() {
 
 #[test]
 fn triple_grow_boxes_g() {
-    let box1 = DefaultFactory::hbox().size(15).grow(1);
-    let box2 = DefaultFactory::hbox().size(18).grow(3);
-    let box3 = DefaultFactory::hbox().size(16).grow(1);
+    let box1 = hbox().size(15).grow(1);
+    let box2 = hbox().size(18).grow(3);
+    let box3 = hbox().size(16).grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
@@ -646,11 +647,11 @@ fn triple_grow_boxes_g() {
 
 #[test]
 fn triple_fixed_boxes_c_wrap1() {
-    let box1 = DefaultFactory::hbox().size(80);
-    let box2 = DefaultFactory::hbox().size(80);
-    let box3 = DefaultFactory::hbox().size(80);
+    let box1 = hbox().size(80);
+    let box2 = hbox().size(80);
+    let box3 = hbox().size(80);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -690,11 +691,11 @@ fn triple_fixed_boxes_c_wrap1() {
 
 #[test]
 fn triple_fixed_boxes_c_wrap2() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20);
+    let box1 = hbox().size(80).cross_size(10);
+    let box2 = hbox().size(80).cross_size(15);
+    let box3 = hbox().size(80).cross_size(20);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -734,11 +735,11 @@ fn triple_fixed_boxes_c_wrap2() {
 
 #[test]
 fn triple_fixed_boxes_g_wrap() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20);
+    let box1 = hbox().size(80).cross_size(10);
+    let box2 = hbox().size(80).cross_size(15);
+    let box3 = hbox().size(80).cross_size(20);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
@@ -783,11 +784,11 @@ fn triple_fixed_boxes_g_wrap() {
 
 #[test]
 fn triple_fixed_boxes_c_wrap_grow1() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10).grow(1);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15).grow(2);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20);
+    let box1 = hbox().size(80).cross_size(10).grow(1);
+    let box2 = hbox().size(80).cross_size(15).grow(2);
+    let box3 = hbox().size(80).cross_size(20);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -827,11 +828,11 @@ fn triple_fixed_boxes_c_wrap_grow1() {
 
 #[test]
 fn triple_fixed_boxes_c_wrap_grow2() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10).grow(1);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15).grow(2);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20).grow(1);
+    let box1 = hbox().size(80).cross_size(10).grow(1);
+    let box2 = hbox().size(80).cross_size(15).grow(2);
+    let box3 = hbox().size(80).cross_size(20).grow(1);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -871,11 +872,11 @@ fn triple_fixed_boxes_c_wrap_grow2() {
 
 #[test]
 fn triple_fixed_boxes_g_wrap_grow1() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10).grow(1);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15).grow(2);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20);
+    let box1 = hbox().size(80).cross_size(10).grow(1);
+    let box2 = hbox().size(80).cross_size(15).grow(2);
+    let box3 = hbox().size(80).cross_size(20);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
@@ -920,11 +921,11 @@ fn triple_fixed_boxes_g_wrap_grow1() {
 
 #[test]
 fn triple_fixed_boxes_g_wrap_grow2() {
-    let box1 = DefaultFactory::hbox().size(80).cross_size(10).grow(1);
-    let box2 = DefaultFactory::hbox().size(80).cross_size(15).grow(2);
-    let box3 = DefaultFactory::hbox().size(80).cross_size(20).grow(2);
+    let box1 = hbox().size(80).cross_size(10).grow(1);
+    let box2 = hbox().size(80).cross_size(15).grow(2);
+    let box3 = hbox().size(80).cross_size(20).grow(2);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(
             StyleBuilder::new()
                 .with_align_items(AlignItems::Start)
@@ -969,11 +970,11 @@ fn triple_fixed_boxes_g_wrap_grow2() {
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_start() {
-    let box1 = DefaultFactory::hbox().size(40).cross_size(20);
-    let box2 = DefaultFactory::hbox().size(40).cross_size(30);
-    let box3 = DefaultFactory::hbox().size(40).cross_size(15);
+    let box1 = hbox().size(40).cross_size(20);
+    let box2 = hbox().size(40).cross_size(30);
+    let box3 = hbox().size(40).cross_size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Start))
         .child(box1)
         .child(box2)
@@ -1013,11 +1014,11 @@ fn triple_fixed_boxes_cross_fixed_start() {
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_center() {
-    let box1 = DefaultFactory::hbox().size(40).cross_size(20);
-    let box2 = DefaultFactory::hbox().size(40).cross_size(30);
-    let box3 = DefaultFactory::hbox().size(40).cross_size(15);
+    let box1 = hbox().size(40).cross_size(20);
+    let box2 = hbox().size(40).cross_size(30);
+    let box3 = hbox().size(40).cross_size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Center))
         .child(box1)
         .child(box2)
@@ -1057,11 +1058,11 @@ fn triple_fixed_boxes_cross_fixed_center() {
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_end() {
-    let box1 = DefaultFactory::hbox().size(40).cross_size(20);
-    let box2 = DefaultFactory::hbox().size(40).cross_size(30);
-    let box3 = DefaultFactory::hbox().size(40).cross_size(15);
+    let box1 = hbox().size(40).cross_size(20);
+    let box2 = hbox().size(40).cross_size(30);
+    let box3 = hbox().size(40).cross_size(15);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::End))
         .child(box1)
         .child(box2)
@@ -1101,11 +1102,11 @@ fn triple_fixed_boxes_cross_fixed_end() {
 
 #[test]
 fn triple_fixed_boxes_cross_fixed_baseline() {
-    let box1 = DefaultFactory::hbox().size(40).cross_size(20).depth(5);
-    let box2 = DefaultFactory::hbox().size(40).cross_size(30).depth(7);
-    let box3 = DefaultFactory::hbox().size(40).cross_size(15).depth(2);
+    let box1 = hbox().size(40).cross_size(20).depth(5);
+    let box2 = hbox().size(40).cross_size(30).depth(7);
+    let box3 = hbox().size(40).cross_size(15).depth(2);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         .child(box1)
         .child(box2)

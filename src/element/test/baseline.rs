@@ -1,12 +1,13 @@
 use crate::{
-    AlignItems, DefaultFactory, Factory, Layout, Position, StyleBuilder,
+    AlignItems, Layout, Position, StyleBuilder,
     position::{Offset, Size},
     test::Ctx,
+    vbox,
 };
 
 #[test]
 fn self_not_baseline_on_baseline() {
-    let mut box1 = DefaultFactory::vbox().size(100);
+    let mut box1 = vbox().size(100);
 
     box1.lay_out(
         &mut Ctx,
@@ -26,7 +27,7 @@ fn self_not_baseline_on_baseline() {
 
 #[test]
 fn self_baseline_on_not_baseline() {
-    let mut box1 = DefaultFactory::vbox().size(100).depth(85);
+    let mut box1 = vbox().size(100).depth(85);
 
     box1.lay_out(&mut Ctx, Offset::new(10, 10), Size::fixed(190, 277))
         .unwrap();
@@ -42,7 +43,7 @@ fn self_baseline_on_not_baseline() {
 
 #[test]
 fn self_baseline_on_baseline() {
-    let mut box1 = DefaultFactory::vbox()
+    let mut box1 = vbox()
         .size(100)
         .depth(85)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline));
@@ -65,9 +66,9 @@ fn self_baseline_on_baseline() {
 
 #[test]
 fn self_baseline_inherits() {
-    let box1 = DefaultFactory::vbox().size(100).depth(85);
+    let box1 = vbox().size(100).depth(85);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .child(box1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         // depth here is artificial as there measure pass is missing
@@ -97,9 +98,9 @@ fn self_baseline_inherits() {
 
 #[test]
 fn self_baseline_inherits_and_positions() {
-    let box1 = DefaultFactory::vbox().size(100).depth(85);
+    let box1 = vbox().size(100).depth(85);
 
-    let mut outer = DefaultFactory::vbox()
+    let mut outer = vbox()
         .child(box1)
         .style(StyleBuilder::new().with_align_items(AlignItems::Baseline))
         // size and depth are set due to emulate missing measure phase

@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use crate::{
-    AlignItems, Axis, DefaultFactory, Error, Layout, MeasureContext, NewPageOptions, Position,
-    RenderContext, Style, StyleBuilder, Styled,
+    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext,
+    Style, StyleBuilder, Styled,
     children::lay_out_native,
     dimension::{Dim, MaybeDim},
     position::{Offset, Size},
@@ -159,7 +159,11 @@ impl LayoutBox {
     }
 
     pub fn text(self, text: impl ToString) -> Self {
-        self.child_dyn(Box::new(DefaultFactory::text(text)))
+        self.child_dyn(Box::new(crate::text(text)))
+    }
+
+    pub fn into_inner(self) -> impl Iterator<Item = Box<dyn Layout>> {
+        self.children.into_iter()
     }
 }
 
@@ -264,7 +268,7 @@ impl Layout for LayoutBox {
                 lines
                     .iter()
                     .enumerate()
-                    .fold(Size::none(), |mut sum, (index, line)| {
+                    .fold(Size::NONE, |mut sum, (index, line)| {
                         *axis.dim_mut(&mut sum) = axis.dim(&sum).max_of(axis.dim(line.size()));
                         let with_gap = if index == 0 {
                             Size::none()
@@ -394,8 +398,8 @@ impl Layout for LayoutBox {
             }
 
             let room_to_distribute = axis_size - axis.size(&native_line_size);
-            let sum_grow = axis.dim(&native_line_size).grow();
-            let sum_shrink = axis.dim(&native_line_size).shrink();
+            let sum_grow = axis.dim(&native_line_size).grow;
+            let sum_shrink = axis.dim(&native_line_size).shrink;
 
             // If lines are more, or if cross axis has no dimension, use native size.
             // Otherwise (single line with cross axis known size) cross axis may stretch.

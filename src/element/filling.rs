@@ -111,18 +111,19 @@ impl Layout for Filling {
 #[cfg(test)]
 mod tests {
     use crate::{
-        DefaultFactory, Factory, Layout,
+        Layout, hbox, hfilling,
         position::{Offset, Size},
         test::Ctx,
+        vbox, vfilling,
     };
 
     #[test]
     fn h_center() {
-        let mut outer = DefaultFactory::hbox()
+        let mut outer = hbox()
             .size(100)
-            .child(DefaultFactory::hfilling().grow(2))
-            .child(DefaultFactory::hbox().size(25))
-            .child(DefaultFactory::hfilling().grow(1));
+            .child(hfilling().grow(2))
+            .child(hbox().size(25))
+            .child(hfilling().grow(1));
 
         outer
             .lay_out(
@@ -157,17 +158,17 @@ mod tests {
 
     #[test]
     fn v_center_auto_vbox_width_nomeasure() {
-        let mut outer = DefaultFactory::hbox()
+        let mut outer = hbox()
             .size(100)
-            .child(DefaultFactory::hfilling().grow(2))
+            .child(hfilling().grow(2))
             .child(
-                DefaultFactory::vbox()
+                vbox()
                     .size(100)
-                    .child(DefaultFactory::vfilling().grow(1))
-                    .child(DefaultFactory::hbox().size(5))
-                    .child(DefaultFactory::vfilling().grow(1)),
+                    .child(vfilling().grow(1))
+                    .child(hbox().size(5))
+                    .child(vfilling().grow(1)),
             )
-            .child(DefaultFactory::hfilling().grow(1));
+            .child(hfilling().grow(1));
 
         outer
             .lay_out(
@@ -223,17 +224,17 @@ mod tests {
 
     #[test]
     fn v_center_auto_vbox_width() {
-        let mut outer = DefaultFactory::hbox()
+        let mut outer = hbox()
             .size(100)
-            .child(DefaultFactory::hfilling().grow(2))
+            .child(hfilling().grow(2))
             .child(
-                DefaultFactory::vbox()
+                vbox()
                     .size(100)
-                    .child(DefaultFactory::vfilling().grow(1))
-                    .child(DefaultFactory::hbox().size(5))
-                    .child(DefaultFactory::vfilling().grow(1)),
+                    .child(vfilling().grow(1))
+                    .child(hbox().size(5))
+                    .child(vfilling().grow(1)),
             )
-            .child(DefaultFactory::hfilling().grow(1));
+            .child(hfilling().grow(1));
 
         let size = Size::fixed_depth(190, 277, 267);
         outer.measure(&mut Ctx, size.clone()).unwrap();
@@ -285,18 +286,18 @@ mod tests {
 
     #[test]
     fn v_center_zero_vbox_width() {
-        let mut outer = DefaultFactory::hbox()
+        let mut outer = hbox()
             .size(100)
-            .child(DefaultFactory::hfilling().grow(2))
+            .child(hfilling().grow(2))
             .child(
-                DefaultFactory::vbox()
+                vbox()
                     .size(100)
                     .cross_size(0)
-                    .child(DefaultFactory::vfilling().grow(1))
-                    .child(DefaultFactory::hbox().size(5))
-                    .child(DefaultFactory::vfilling().grow(1)),
+                    .child(vfilling().grow(1))
+                    .child(hbox().size(5))
+                    .child(vfilling().grow(1)),
             )
-            .child(DefaultFactory::hfilling().grow(1));
+            .child(hfilling().grow(1));
 
         outer
             .lay_out(

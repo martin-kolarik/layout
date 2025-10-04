@@ -9,7 +9,7 @@ use crate::{
     unit::{Unit, sub_unit},
 };
 
-use super::dimension::Dimension;
+use super::dimension::FlexDim;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Offset {
@@ -101,8 +101,8 @@ impl SubAssign for Offset {
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct Size {
-    width: Dimension,
-    height: Dimension,
+    width: FlexDim,
+    height: FlexDim,
     depth: Option<Unit>,
 }
 
@@ -117,27 +117,28 @@ impl Debug for Size {
 }
 
 impl Size {
+    pub const NONE: Self = Self {
+        width: FlexDim::none(),
+        height: FlexDim::none(),
+        depth: None,
+    };
+
     pub fn none() -> Self {
-        Self {
-            width: Dimension::none(),
-            height: Dimension::none(),
-            depth: None,
-        }
+        Self::NONE.clone()
     }
 
-    pub fn content() -> Self {
+    pub const fn content() -> Self {
         Self {
-            width: Dimension::content(),
-            height: Dimension::content(),
+            width: FlexDim::content(),
+            height: FlexDim::content(),
             depth: None,
         }
     }
 
     pub fn fixed(width: impl Into<Unit>, height: impl Into<Unit>) -> Self {
-        let height = height.into();
         Self {
-            width: Dimension::fixed(width),
-            height: Dimension::fixed(height),
+            width: FlexDim::fixed(width),
+            height: FlexDim::fixed(height),
             depth: None,
         }
     }
@@ -148,8 +149,8 @@ impl Size {
         depth: impl Into<Unit>,
     ) -> Self {
         Self {
-            width: Dimension::fixed(width),
-            height: Dimension::fixed(height),
+            width: FlexDim::fixed(width),
+            height: FlexDim::fixed(height),
             depth: Some(depth.into()),
         }
     }
@@ -195,24 +196,24 @@ impl Size {
         );
     }
 
-    pub fn x_dim(&self) -> &Dimension {
+    pub fn x_dim(&self) -> &FlexDim {
         &self.width
     }
 
-    pub fn x_dim_mut(&mut self) -> &mut Dimension {
+    pub fn x_dim_mut(&mut self) -> &mut FlexDim {
         &mut self.width
     }
 
-    pub fn y_dim(&self) -> &Dimension {
+    pub fn y_dim(&self) -> &FlexDim {
         &self.height
     }
 
-    pub fn y_dim_mut(&mut self) -> &mut Dimension {
+    pub fn y_dim_mut(&mut self) -> &mut FlexDim {
         &mut self.height
     }
 
     pub fn width_ref(&self) -> &Dim {
-        self.width.basis()
+        &self.width.basis
     }
 
     pub fn width(&self) -> Unit {
@@ -224,7 +225,7 @@ impl Size {
     }
 
     pub fn height_ref(&self) -> &Dim {
-        self.height.basis()
+        &self.height.basis
     }
 
     pub fn height(&self) -> Unit {
@@ -245,11 +246,11 @@ impl Size {
 
     pub fn ascent(&self) -> Option<Unit> {
         self.depth
-            .and_then(|depth| self.height.basis_size().map(|height| height - depth))
+            .and_then(|depth| self.height.basis.size().map(|height| height - depth))
     }
 
     pub fn ascent_size(&self) -> Unit {
-        sub_unit(self.height.basis_size(), self.depth).unwrap_or_default()
+        sub_unit(self.height.basis.size(), self.depth).unwrap_or_default()
     }
 
     pub fn x_extend(&mut self, rhs: &Size, respect_baseline: bool) {

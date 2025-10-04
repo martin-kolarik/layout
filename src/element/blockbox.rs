@@ -326,20 +326,19 @@ impl Layout for BlockBox {
 #[cfg(test)]
 mod tests {
     use crate::{
-        DefaultFactory, Factory, Layout, Position, Style,
-        position::{Offset, Size},
+        Layout, Position, Style, bbox, hbox, position::{Offset, Size}, text, vbox
     };
 
     #[test]
     fn text_in_bbox_from_zero() {
-        let t1 = DefaultFactory::text("a");
+        let t1 = text("a");
 
-        let mut t2 = DefaultFactory::text("b");
+        let mut t2 = text("b");
         *t2.offset_mut() = Offset::new(156000, 256000);
 
-        let t3 = DefaultFactory::text("c");
+        let t3 = text("c");
 
-        let mut bbox = DefaultFactory::bbox()
+        let mut bbox = bbox()
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -371,14 +370,14 @@ mod tests {
 
     #[test]
     fn text_in_bbox_from_offset() {
-        let t1 = DefaultFactory::text("a");
+        let t1 = text("a");
 
-        let mut t2 = DefaultFactory::text("b");
+        let mut t2 = text("b");
         *t2.offset_mut() = Offset::new(156000, 256000);
 
-        let t3 = DefaultFactory::text("c");
+        let t3 = text("c");
 
-        let mut bbox = DefaultFactory::bbox()
+        let mut bbox = bbox()
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -410,20 +409,14 @@ mod tests {
 
     #[test]
     fn text_in_hbox_in_bbox_from_zero() {
-        let t1 = DefaultFactory::text("a").mark("t1");
-        let t2 = DefaultFactory::text("b").mark("t2");
-        let t3 = DefaultFactory::text("c").mark("t3");
+        let t1 = text("a").mark("t1");
+        let t2 = text("b").mark("t2");
+        let t3 = text("c").mark("t3");
 
-        let mut bbox = DefaultFactory::bbox()
+        let mut bbox = bbox()
             .style(Style::new_default())
             .mark("h1")
-            .child(
-                DefaultFactory::hbox()
-                    .mark("h2")
-                    .child(t1)
-                    .child(t2)
-                    .child(t3),
-            );
+            .child(hbox().mark("h2").child(t1).child(t2).child(t3));
 
         bbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
@@ -452,13 +445,13 @@ mod tests {
 
     #[test]
     fn text_in_vbox_in_bbox() {
-        let t1 = DefaultFactory::text("a");
-        let t2 = DefaultFactory::text("b");
-        let t3 = DefaultFactory::text("c");
+        let t1 = text("a");
+        let t2 = text("b");
+        let t3 = text("c");
 
-        let mut bbox = DefaultFactory::bbox()
+        let mut bbox = bbox()
             .style(Style::new_default())
-            .child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
+            .child(vbox().child(t1).child(t2).child(t3));
 
         bbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();

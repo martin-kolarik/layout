@@ -3,7 +3,7 @@ use std::ops::AddAssign;
 use crate::unit::Unit;
 
 use super::{
-    dimension::Dimension,
+    dimension::FlexDim,
     position::{Offset, Size},
 };
 
@@ -51,14 +51,14 @@ impl Axis {
         offset
     }
 
-    pub fn dim<'s>(&self, size: &'s Size) -> &'s Dimension {
+    pub fn dim<'s>(&self, size: &'s Size) -> &'s FlexDim {
         match self {
             Axis::Horizontal => size.x_dim(),
             Axis::Vertical => size.y_dim(),
         }
     }
 
-    pub fn dim_mut<'s>(&self, size: &'s mut Size) -> &'s mut Dimension {
+    pub fn dim_mut<'s>(&self, size: &'s mut Size) -> &'s mut FlexDim {
         match self {
             Axis::Horizontal => size.x_dim_mut(),
             Axis::Vertical => size.y_dim_mut(),

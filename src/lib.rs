@@ -30,6 +30,12 @@ mod layout;
 pub use self::layout::*;
 
 #[cfg(feature = "layout")]
+#[macro_use]
+mod implementation;
+#[cfg(feature = "layout")]
+pub use self::implementation::*;
+
+#[cfg(feature = "layout")]
 mod order_decorator;
 #[cfg(feature = "layout")]
 pub use self::order_decorator::*;

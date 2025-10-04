@@ -51,7 +51,7 @@ pub struct Pt(pub f64);
 pub struct Em(pub f64);
 
 impl Em {
-    pub fn is_zero(&self) -> bool {
+    pub const fn is_zero(&self) -> bool {
         self.0 == 0.0
     }
 }
@@ -199,31 +199,31 @@ impl MulAssign<(Fill, Fill)> for Unit {
 }
 
 impl Fill {
-    pub fn new(fill: usize) -> Self {
+    pub const fn new(fill: usize) -> Self {
         Self(fill)
     }
 
-    pub fn none() -> Self {
+    pub const fn none() -> Self {
         Self(0)
     }
 
-    pub fn equal() -> Self {
+    pub const fn equal() -> Self {
         Self(1)
     }
 
-    pub fn full() -> Self {
+    pub const fn full() -> Self {
         Self(1000)
     }
 
-    pub fn mille() -> Self {
+    pub const fn mille() -> Self {
         Self(1000)
     }
 
-    pub fn scaling(&self) -> f64 {
+    pub const fn scaling(&self) -> f64 {
         self.0 as f64 / 1000.0
     }
 
-    pub fn permille(&self) -> usize {
+    pub const fn permille(&self) -> usize {
         self.0
     }
 }

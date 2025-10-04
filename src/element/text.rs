@@ -126,17 +126,18 @@ impl Layout for Text {
 #[cfg(test)]
 mod tests {
     use crate::{
-        DefaultFactory, Factory, Layout, Style,
+        Layout, Style, hbox,
         position::{Offset, Size},
+        text, vbox,
     };
 
     #[test]
     fn text_in_hbox() {
-        let t1 = DefaultFactory::text("a");
-        let t2 = DefaultFactory::text("b");
-        let t3 = DefaultFactory::text("c");
+        let t1 = text("a");
+        let t2 = text("b");
+        let t3 = text("c");
 
-        let mut hbox = DefaultFactory::hbox()
+        let mut hbox = hbox()
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -168,20 +169,14 @@ mod tests {
 
     #[test]
     fn text_in_hbox_in_hbox() {
-        let t1 = DefaultFactory::text("a").mark("t1");
-        let t2 = DefaultFactory::text("b").mark("t2");
-        let t3 = DefaultFactory::text("c").mark("t3");
+        let t1 = text("a").mark("t1");
+        let t2 = text("b").mark("t2");
+        let t3 = text("c").mark("t3");
 
-        let mut hbox = DefaultFactory::hbox()
+        let mut hbox = hbox()
             .style(Style::new_default())
             .mark("h1")
-            .child(
-                DefaultFactory::hbox()
-                    .mark("h2")
-                    .child(t1)
-                    .child(t2)
-                    .child(t3),
-            );
+            .child(hbox().mark("h2").child(t1).child(t2).child(t3));
 
         hbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
@@ -210,11 +205,11 @@ mod tests {
 
     #[test]
     fn text_in_vbox() {
-        let t1 = DefaultFactory::text("a");
-        let t2 = DefaultFactory::text("b");
-        let t3 = DefaultFactory::text("c");
+        let t1 = text("a");
+        let t2 = text("b");
+        let t3 = text("c");
 
-        let mut vbox = DefaultFactory::vbox()
+        let mut vbox = vbox()
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -246,13 +241,13 @@ mod tests {
 
     #[test]
     fn text_in_vbox_in_vbox() {
-        let t1 = DefaultFactory::text("a");
-        let t2 = DefaultFactory::text("b");
-        let t3 = DefaultFactory::text("c");
+        let t1 = text("a");
+        let t2 = text("b");
+        let t3 = text("c");
 
-        let mut vbox = DefaultFactory::vbox()
+        let mut vbox = vbox()
             .style(Style::new_default())
-            .child(DefaultFactory::vbox().child(t1).child(t2).child(t3));
+            .child(vbox().child(t1).child(t2).child(t3));
 
         vbox.measure(&mut 0_usize, Size::fixed(1000000, 2000000))
             .unwrap();
