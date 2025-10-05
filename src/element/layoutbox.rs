@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use crate::{
-    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext,
-    Style, StyleBuilder, Styled,
+    AlignItems, Axis, Error, Layout, MeasureContext, Position, RenderContext, Style, StyleBuilder,
+    Styled,
     children::lay_out_native,
     dimension::{Dim, MaybeDim},
     position::{Offset, Size},
@@ -14,10 +14,10 @@ pub struct LayoutBox {
     axis: Axis,
     offset: Offset,
     size: Size,
-    break_inside: bool,
     style: Arc<Style>,
     children: Vec<Box<dyn Layout>>,
     content_size: Option<Size>,
+    avoid_break: bool,
 }
 
 impl LayoutBox {
@@ -27,10 +27,10 @@ impl LayoutBox {
             axis,
             offset: Offset::zero(),
             size: Size::none(),
-            break_inside: true,
             style: StyleBuilder::new().build(),
             children: vec![],
             content_size: None,
+            avoid_break: false,
         }
     }
 
@@ -45,7 +45,7 @@ impl LayoutBox {
     }
 
     pub fn avoid_break(mut self) -> Self {
-        self.break_inside = false;
+        self.avoid_break = true;
         self
     }
 
@@ -543,10 +543,8 @@ impl Layout for LayoutBox {
     }
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
-        if !self.break_inside {
-            ctx.new_page(Some(
-                NewPageOptions::new().with_break_if_not_room(self.offset_ref(), self.size_ref()),
-            ));
+        if self.avoid_break {
+            ctx.check_page_break(self.offset.y, self.size.height.base_size(), true);
         }
 
         for child in self.iter() {
@@ -586,6 +584,10 @@ impl Layout for LayoutBox {
         }
 
         ctx.debug_frame(self.offset(), self.size());
+
+        if self.avoid_break {
+            ctx.release_page_break_reservation();
+        }
 
         Ok(())
     }

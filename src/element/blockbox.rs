@@ -277,6 +277,8 @@ impl Layout for BlockBox {
     }
 
     fn render(&self, ctx: &mut dyn RenderContext) -> Result<(), Error> {
+        ctx.check_page_break(self.offset.y, self.size.height.base_size(), true);
+
         for child in self.iter() {
             child.render(ctx)?;
         }
@@ -314,6 +316,8 @@ impl Layout for BlockBox {
         }
 
         ctx.debug_frame(self.offset(), self.size());
+
+        ctx.release_page_break_reservation();
 
         Ok(())
     }

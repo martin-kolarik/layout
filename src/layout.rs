@@ -14,7 +14,10 @@ pub(crate) mod children;
 
 use crate::{Error, Stroke, Style, TextPosition};
 
-use self::position::{Offset, Quad, Size};
+use self::{
+    position::{Offset, Quad, Size},
+    unit::Unit,
+};
 
 pub trait Position {
     fn element(&self) -> &str;
@@ -88,17 +91,20 @@ pub trait MeasureContext {
 }
 
 pub trait RenderContext: MeasureContext {
-    fn new_page(&mut self, options: Option<NewPageOptions>) -> bool;
+    fn debug_frame(&mut self, offset: &Offset, size: &Size);
 
-    fn debug_frame(&mut self, content_position: &Offset, size: &Size);
+    fn check_page_break(&mut self, offset: Unit, height: Unit, reserve_height: bool) -> bool;
+    fn release_page_break_reservation(&mut self);
+
+    fn new_page(&mut self, options: Option<NewPageOptions>);
 
     fn line(&mut self, from: &Offset, to: &Offset, stroke: &Stroke);
     fn text(
         &mut self,
-        content_position: &Offset,
+        offset: &Offset,
         style: &Style,
         text: &TextPosition,
-        position_is_baseline: bool,
+        offset_is_baseline: bool,
     );
 }
 
