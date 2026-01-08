@@ -1,5 +1,6 @@
 use crate::{
-    Axis, BlockBox, Filling, Layout, LayoutBox, Offset, PageBreak, Text, Wrap, dimension::Dim, unit::Fill,
+    Axis, BlockBox, Filling, Layout, LayoutBox, PageBreak, Text, Wrap, dimension::Dim,
+    position::Offset, unit::Fill,
 };
 
 pub fn bbox(offset: Offset) -> BlockBox {
@@ -19,7 +20,8 @@ pub fn hcbox(layout: impl Layout + 'static) -> LayoutBox {
 }
 
 pub fn hfill(weight: impl Into<Fill>) -> Filling {
-    hfilling().grow(weight)
+    let weight = weight.into();
+    hfilling().grow(weight).shrink(weight)
 }
 
 pub fn hspace(size: impl Into<Dim>) -> Filling {
@@ -43,7 +45,8 @@ pub fn vcbox(layout: impl Layout + 'static) -> LayoutBox {
 }
 
 pub fn vfill(weight: impl Into<Fill>) -> Filling {
-    vfilling().grow(weight)
+    let weight = weight.into();
+    vfilling().grow(weight).shrink(weight)
 }
 
 pub fn vspace(size: impl Into<Dim>) -> Filling {

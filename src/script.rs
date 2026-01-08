@@ -2,14 +2,14 @@ use smol_str::SmolStr;
 
 use crate::{
     AlignItems, Border, Layout, Rgba, StyleBuilder, bbox, hbox, hfill, hfilling, hspace, hwrap,
-    position::Quad,
+    position::{Offset, Quad},
     text,
     unit::{Fill, Pt, Unit},
     vbox, vbreak, vfill, vfilling, vspace, vwrap,
 };
 
 pub enum Element {
-    Bbox(Vec<Format>, Vec<Element>),
+    Bbox(Offset, Vec<Format>, Vec<Element>),
 
     Hbox(Vec<Format>, Vec<Element>),
     HboxNoBreak(Vec<Format>, Vec<Element>),
@@ -56,8 +56,8 @@ impl From<Format> for Vec<Format> {
 
 pub fn lay_out(element: &Element) -> Box<dyn Layout> {
     match element {
-        Element::Bbox(format, children) => {
-            let mut bbox = bbox();
+        Element::Bbox(offset, format, children) => {
+            let mut bbox = bbox(offset.clone());
             apply_format(&mut bbox, &format);
             Box::new(
                 children
