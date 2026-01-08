@@ -16,10 +16,10 @@ pub struct BlockBox {
 }
 
 impl BlockBox {
-    pub fn new() -> Self {
+    pub fn new(offset: Offset) -> Self {
         Self {
             mark: None,
-            offset: Offset::zero(),
+            offset,
             size: Size::content(),
             style: Style::new(),
             children: vec![],

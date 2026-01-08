@@ -1,9 +1,9 @@
 use crate::{
-    Axis, BlockBox, Filling, Layout, LayoutBox, PageBreak, Text, Wrap, dimension::Dim, unit::Fill,
+    Axis, BlockBox, Filling, Layout, LayoutBox, Offset, PageBreak, Text, Wrap, dimension::Dim, unit::Fill,
 };
 
-pub fn bbox() -> BlockBox {
-    BlockBox::new()
+pub fn bbox(offset: Offset) -> BlockBox {
+    BlockBox::new(offset)
 }
 
 pub fn hbox() -> LayoutBox {
