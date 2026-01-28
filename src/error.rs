@@ -1,5 +1,6 @@
 use allsorts::error::{ParseError, ReadWriteError, ShapingError};
 use allsorts::subset::SubsetError;
+use smol_str::SmolStr;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -13,11 +14,11 @@ pub enum Error {
     #[error("Font parse error: {0}")]
     FontSubset(#[from] SubsetError),
     #[error("Font subsetting error: {0}")]
-    LockError(String),
+    LockError(SmolStr),
     #[error("Font '{0}' cannot be read, it seems to be empty")]
-    MalformedFont(String),
+    MalformedFont(SmolStr),
     #[error("Error creating pdf document: {0}")]
-    PdfWrite(String),
+    PdfWrite(SmolStr),
     #[error("Font '{0}' is unknown")]
-    UnknownFont(String),
+    UnknownFont(SmolStr),
 }
