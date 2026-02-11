@@ -5,8 +5,8 @@ pub use color::*;
 
 #[cfg(feature = "layout")]
 mod debug;
-#[cfg(feature = "layout")]
-pub use debug::*;
+// #[cfg(feature = "layout")]
+// pub use debug::*;
 
 #[cfg(feature = "layout")]
 mod element;

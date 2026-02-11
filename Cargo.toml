@@ -6,7 +6,7 @@ edition = "2024"
 [features]
 default = ["color"]
 color = ["oklab", "rgb", "ufmt"]
-layout = ["allsorts", "rtext", "thiserror", "tracing"]
+layout = ["allsorts", "image", "rtext", "thiserror", "tracing"]
 
 [dependencies]
 rtext = { git = "https://github.com/martin-kolarik/rtext.git", optional = true }
@@ -27,3 +27,4 @@ tracing = { version = "^0.1", default-features = false, features = [
 ufmt = { version = "^0.2", features = [
     "std",
 ], default-features = false, optional = true }
+image = { version = "^0.24", default-features = false, optional = true }

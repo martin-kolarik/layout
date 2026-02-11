@@ -1,6 +1,7 @@
-mod axis;
-
+use image::DynamicImage;
 use std::sync::Arc;
+
+mod axis;
 
 pub use axis::*;
 
@@ -98,6 +99,7 @@ pub trait RenderContext: MeasureContext {
 
     fn new_page(&mut self, options: Option<NewPageOptions>);
 
+    fn image(&mut self, from: &Offset, to: &Offset, image: DynamicImage);
     fn line(&mut self, from: &Offset, to: &Offset, stroke: &Stroke);
     fn text(
         &mut self,
