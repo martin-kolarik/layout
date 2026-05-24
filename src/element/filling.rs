@@ -70,9 +70,9 @@ impl Position for Filling {
         &self.size
     }
 
-    fn size_after_lay_out(&self) -> Size {
+    fn size_after_lay_out(&self) -> Option<Size> {
         // TODO
-        self.content_size().cloned().unwrap_or_else(|| Size::zero())
+        self.content_size().cloned()
     }
 
     fn size_mut(&mut self) -> &mut Size {

@@ -94,12 +94,15 @@ pub fn lay_out_native<'a>(
             offset = axis.advance_dim(&offset, line_gap);
             line_size = axis.extend_dim(&line_size, line_gap);
         }
-        line_size = axis.extend_size(&line_size, child.size_after_wrap_ref(), respect_baseline);
 
-        *child.offset_mut() = offset.clone();
-        offset = axis.advance_dim(&offset, axis.base_size(child.size_after_wrap_ref()));
+        if let Some(size_after_wrap) = child.size_after_wrap_ref().cloned() {
+            line_size = axis.extend_size(&line_size, &size_after_wrap, respect_baseline);
 
-        line.push(child);
+            *child.offset_mut() = offset.clone();
+            offset = axis.advance_dim(&offset, axis.base_size(&size_after_wrap));
+
+            line.push(child);
+        }
     }
 
     if !line.is_empty() {

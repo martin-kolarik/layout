@@ -33,13 +33,13 @@ pub trait Position {
     fn size(&self) -> &Size;
     fn size_mut(&mut self) -> &mut Size;
 
-    fn size_after_wrap_ref(&self) -> &Size {
-        self.size()
+    fn size_after_wrap_ref(&self) -> Option<&Size> {
+        Some(self.size())
     }
 
     // TODO
-    fn size_after_lay_out(&self) -> Size {
-        self.size().clone()
+    fn size_after_lay_out(&self) -> Option<Size> {
+        Some(self.size().clone())
     }
 
     fn content_size(&self) -> Option<&Size> {

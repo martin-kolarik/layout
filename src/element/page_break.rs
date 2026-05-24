@@ -53,12 +53,12 @@ impl Position for PageBreak {
         &mut self.size
     }
 
-    fn size_after_wrap_ref(&self) -> &Size {
-        &Size::NONE
+    fn size_after_wrap_ref(&self) -> Option<&Size> {
+        None
     }
 
-    fn size_after_lay_out(&self) -> Size {
-        Size::NONE
+    fn size_after_lay_out(&self) -> Option<Size> {
+        None
     }
 
     fn content_size(&self) -> Option<&Size> {

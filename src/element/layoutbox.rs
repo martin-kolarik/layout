@@ -348,7 +348,7 @@ impl Layout for LayoutBox {
         );
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
-        let self_ascent = self.size_after_wrap_ref().ascent();
+        let self_ascent = self.size_after_wrap_ref().and_then(|size| size.ascent());
         if matches!(
             (align_items, room.depth(), self_ascent),
             (AlignItems::Baseline, Some(_), Some(_))
@@ -414,18 +414,24 @@ impl Layout for LayoutBox {
             let mut line_size = Size::zero();
             let mut first_child = Some(());
 
-            for child in line.content_mut() {
+            // childrens wipped after wrapping are already removed from lay_out_native, so the filter here is double check
+            for child in line
+                .content_mut()
+                .iter_mut()
+                .filter(|child| child.size_after_wrap_ref().is_some())
+            {
                 let first = first_child.take();
                 if first.is_some() {
                     if matches!(axis, Axis::Vertical) {
-                        first_ascent = first_ascent.max(child.size_after_wrap_ref().ascent());
+                        first_ascent = first_ascent
+                            .max(child.size_after_wrap_ref().and_then(|size| size.ascent()));
                     }
                 } else {
                     position = axis.advance_dim(&position, axis_gap);
                     line_size = axis.extend_dim(&line_size, axis_gap);
                 }
 
-                let child_size = child.size_after_wrap_ref();
+                let child_size = child.size_after_wrap_ref().unwrap();
 
                 // Resolve axis streches.
                 let child_axis_size =
@@ -484,7 +490,7 @@ impl Layout for LayoutBox {
                     Axis::Horizontal => (child_axis_size, child_cross_size),
                     Axis::Vertical => (child_cross_size, child_axis_size),
                 };
-                let child_depth = child.size_after_wrap_ref().depth();
+                let child_depth = child.size_after_wrap_ref().and_then(|size| size.depth());
                 let child_size = match child_depth {
                     Some(depth) => Size::fixed_depth(width, height, depth),
                     None => Size::fixed(width, height),
@@ -493,19 +499,21 @@ impl Layout for LayoutBox {
                 // recurse into
                 child.lay_out(ctx, cross_offsetted_position, child_size)?;
 
-                // line_child_size incorporates bounding box of child offsetted in both axes.
-                // line_child_size can be bigger than child_size.
-                let line_child_size = child.size_after_lay_out();
-                let line_child_size = axis.extend_dim(&line_child_size, child_axis_offset);
-                let line_child_size = cross.extend_dim(&line_child_size, child_cross_offset);
-
                 // move forward in main axis, gap is added at the loop begin
                 position = axis.advance_dim(&position, child_axis_size);
-                line_size = axis.extend_size(
-                    &line_size,
-                    &line_child_size,
-                    matches!(align_items, AlignItems::Baseline),
-                );
+
+                // line_child_size incorporates bounding box of child offsetted in both axes.
+                // line_child_size can be bigger than child_size.
+                if let Some(line_child_size) = child.size_after_lay_out() {
+                    let line_child_size = axis.extend_dim(&line_child_size, child_axis_offset);
+                    let line_child_size = cross.extend_dim(&line_child_size, child_cross_offset);
+
+                    line_size = axis.extend_size(
+                        &line_size,
+                        &line_child_size,
+                        matches!(align_items, AlignItems::Baseline),
+                    );
+                }
             }
 
             // Move forward in cross axis (over lines), gap is added at the loop begin.

@@ -215,7 +215,7 @@ impl Layout for BlockBox {
                 .first()
                 .unwrap()
                 .size_after_wrap_ref()
-                .ascent()
+                .and_then(|size| size.ascent())
         };
 
         let respect_baseline = matches!(self.style_ref().align_items(), AlignItems::Baseline);
@@ -240,7 +240,7 @@ impl Layout for BlockBox {
 
         // Resolve relative positioning of request and self ascents, when aligning to baseline.
         let align_items = self.style_ref().align_items();
-        let self_ascent = self.size_after_wrap_ref().ascent();
+        let self_ascent = self.size_after_wrap_ref().and_then(|size| size.ascent());
         if matches!(
             (align_items, room.depth(), self_ascent),
             (AlignItems::Baseline, Some(_), Some(_))
@@ -260,7 +260,7 @@ impl Layout for BlockBox {
                 .first()
                 .unwrap()
                 .size_after_wrap_ref()
-                .ascent()
+                .and_then(|size| size.ascent())
         };
 
         // Adopt final offset and size including padding
@@ -344,7 +344,7 @@ mod tests {
 
         let t3 = text("c");
 
-        let mut bbox = bbox()
+        let mut bbox = bbox(Offset::zero())
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -383,7 +383,7 @@ mod tests {
 
         let t3 = text("c");
 
-        let mut bbox = bbox()
+        let mut bbox = bbox(Offset::zero())
             .style(Style::new_default())
             .child(t1)
             .child(t2)
@@ -419,7 +419,7 @@ mod tests {
         let t2 = text("b").mark("t2");
         let t3 = text("c").mark("t3");
 
-        let mut bbox = bbox()
+        let mut bbox = bbox(Offset::zero())
             .style(Style::new_default())
             .mark("h1")
             .child(hbox().mark("h2").child(t1).child(t2).child(t3));
@@ -455,7 +455,7 @@ mod tests {
         let t2 = text("b");
         let t3 = text("c");
 
-        let mut bbox = bbox()
+        let mut bbox = bbox(Offset::zero())
             .style(Style::new_default())
             .child(vbox().child(t1).child(t2).child(t3));
 

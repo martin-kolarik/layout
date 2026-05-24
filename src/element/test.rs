@@ -51,7 +51,7 @@ impl MeasureContext for usize {
 }
 
 impl RenderContext for usize {
-    fn new_page(&mut self, _: Option<NewPageOptions>) -> bool {
+    fn new_page(&mut self, _: Option<NewPageOptions>) {
         todo!()
     }
 
@@ -64,6 +64,16 @@ impl RenderContext for usize {
     }
 
     fn text(&mut self, _: &Offset, _: &Style, _: &TextPosition, _: bool) {
+        todo!()
+    }
+
+    fn check_page_break(&mut self, _: crate::unit::Unit, _: crate::unit::Unit, _: bool) -> bool {
+        false
+    }
+
+    fn release_page_break_reservation(&mut self) {}
+
+    fn image(&mut self, _from: &Offset, _to: &Offset, _image: image::DynamicImage) {
         todo!()
     }
 }
