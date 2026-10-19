@@ -16,7 +16,7 @@ rgb = { version = "^0.8", default-features = false, features = [
     "argb",
 ], optional = true }
 
-allsorts = { version = "^0.16", default-features = false, features = [
+allsorts = { version = "^0.17", default-features = false, features = [
     "flate2_zlib",
 ], optional = true }
 image = { version = "^0.25", default-features = false, optional = true }
