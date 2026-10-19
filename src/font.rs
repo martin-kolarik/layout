@@ -114,26 +114,26 @@ impl GlyphPosition {
     }
 }
 
-impl From<&Features> for gsub::Features {
+impl From<&Features> for gsub::FeatureMask {
     fn from(features: &Features) -> Self {
         let mut mask = gsub::FeatureMask::default();
         if features.smcp.is_some() {
-            mask |= gsub::FeatureMask::SMCP;
+            mask |= gsub::Feature::SMCP;
         }
         if let Some(lnum) = features.lnum {
             if lnum {
-                mask |= gsub::FeatureMask::LNUM;
+                mask |= gsub::Feature::LNUM;
             } else {
-                mask |= gsub::FeatureMask::ONUM;
+                mask |= gsub::Feature::ONUM;
             }
         }
         if let Some(pnum) = features.pnum {
             if pnum {
-                mask |= gsub::FeatureMask::PNUM;
+                mask |= gsub::Feature::PNUM;
             } else {
-                mask |= gsub::FeatureMask::TNUM;
+                mask |= gsub::Feature::TNUM;
             }
         }
-        gsub::Features::Mask(mask)
+        mask
     }
 }
